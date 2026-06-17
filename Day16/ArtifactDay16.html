@@ -1,0 +1,1404 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NVIDIA vs AMD — Fundamental Comparison | AI Chip Leaders Analysis</title>
+<meta name="description" content="Complete fundamental comparison of NVIDIA (NVDA) vs AMD — valuation, growth, margins, returns, ownership, and risk analysis for AI chip leaders.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
+<style>
+  :root{
+    --bg:#080B10;
+    --bg-gradient:linear-gradient(135deg,#080B10 0%,#0D1117 50%,#101820 100%);
+    --surface:rgba(22,27,34,0.7);
+    --surface-solid:#161B22;
+    --surface-alt:rgba(28,35,44,0.6);
+    --surface-hover:rgba(30,38,50,0.9);
+    --border:rgba(48,56,68,0.5);
+    --border-glow:rgba(118,185,0,0.15);
+    --text:#E8EAED;
+    --text-bright:#FFFFFF;
+    --muted:#8B949E;
+    --faint:#5B6472;
+    --nv:#76B900;
+    --nv-light:#9AE62A;
+    --nv-dim:#3F6604;
+    --nv-glow:rgba(118,185,0,0.25);
+    --amd:#ED1C24;
+    --amd-light:#FF4D54;
+    --amd-dim:#7A0E12;
+    --amd-glow:rgba(237,28,36,0.25);
+    --accent:#4FC3F7;
+    --gold:#FFD54F;
+    --card-radius:16px;
+    --transition:all 0.4s cubic-bezier(0.25,0.46,0.45,0.94);
+  }
+
+  *{box-sizing:border-box;margin:0;padding:0;}
+
+  html{scroll-behavior:smooth;}
+
+  body{
+    background:var(--bg);
+    background-image:var(--bg-gradient);
+    background-attachment:fixed;
+    color:var(--text);
+    font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;
+    font-size:14px;
+    line-height:1.6;
+    overflow-x:hidden;
+  }
+
+  /* ── Scrollbar ── */
+  ::-webkit-scrollbar{width:8px;}
+  ::-webkit-scrollbar-track{background:var(--bg);}
+  ::-webkit-scrollbar-thumb{background:var(--faint);border-radius:4px;}
+  ::-webkit-scrollbar-thumb:hover{background:var(--muted);}
+
+  /* ── Layout ── */
+  .wrap{max-width:1080px;margin:0 auto;padding:0 24px 80px;}
+
+  h1,h2,h3,h4{font-family:'Space Grotesk',sans-serif;margin:0;font-weight:600;}
+  .mono{font-family:'IBM Plex Mono',monospace;}
+
+  /* ── Animations ── */
+  @keyframes fadeInUp{
+    from{opacity:0;transform:translateY(30px);}
+    to{opacity:1;transform:translateY(0);}
+  }
+  @keyframes fadeIn{from{opacity:0;}to{opacity:1;}}
+  @keyframes slideInLeft{from{opacity:0;transform:translateX(-40px);}to{opacity:1;transform:translateX(0);}}
+  @keyframes slideInRight{from{opacity:0;transform:translateX(40px);}to{opacity:1;transform:translateX(0);}}
+  @keyframes pulse{0%,100%{opacity:1;}50%{opacity:0.5;}}
+  @keyframes shimmer{
+    0%{background-position:-200% center;}
+    100%{background-position:200% center;}
+  }
+  @keyframes float{
+    0%,100%{transform:translateY(0);}
+    50%{transform:translateY(-8px);}
+  }
+  @keyframes glowPulse{
+    0%,100%{box-shadow:0 0 20px rgba(118,185,0,0.1),0 0 40px rgba(118,185,0,0.05);}
+    50%{box-shadow:0 0 30px rgba(118,185,0,0.2),0 0 60px rgba(118,185,0,0.1);}
+  }
+  @keyframes borderGlow{
+    0%,100%{border-color:rgba(118,185,0,0.2);}
+    50%{border-color:rgba(118,185,0,0.5);}
+  }
+  @keyframes countUp{from{opacity:0;transform:scale(0.8);}to{opacity:1;transform:scale(1);}}
+
+  .anim-item{opacity:0;transform:translateY(30px);transition:opacity 0.7s ease,transform 0.7s ease;}
+  .anim-item.visible{opacity:1;transform:translateY(0);}
+
+  /* ── Hero Header ── */
+  .hero{
+    position:relative;
+    padding:60px 24px 50px;
+    text-align:center;
+    overflow:hidden;
+    background:linear-gradient(180deg,rgba(118,185,0,0.03) 0%,transparent 60%),
+               linear-gradient(180deg,transparent 40%,rgba(237,28,36,0.03) 100%);
+  }
+  .hero::before{
+    content:'';
+    position:absolute;
+    top:0;left:0;right:0;bottom:0;
+    background:radial-gradient(ellipse at 30% 20%,rgba(118,185,0,0.08) 0%,transparent 50%),
+               radial-gradient(ellipse at 70% 80%,rgba(237,28,36,0.08) 0%,transparent 50%);
+    pointer-events:none;
+  }
+  #particles-canvas{
+    position:absolute;top:0;left:0;width:100%;height:100%;pointer-events:none;
+  }
+
+  .hero-badge{
+    display:inline-flex;align-items:center;gap:8px;
+    background:rgba(118,185,0,0.1);
+    border:1px solid rgba(118,185,0,0.2);
+    border-radius:100px;
+    padding:6px 18px;
+    font-family:'IBM Plex Mono',monospace;
+    font-size:11px;letter-spacing:0.12em;text-transform:uppercase;
+    color:var(--nv);
+    margin-bottom:20px;
+    animation:fadeIn 0.8s ease;
+  }
+  .hero-badge .dot{width:6px;height:6px;border-radius:50%;background:var(--nv);animation:pulse 2s infinite;}
+
+  .hero h1{
+    font-size:clamp(32px,5vw,52px);
+    line-height:1.1;
+    margin-bottom:12px;
+    animation:fadeInUp 0.8s ease 0.2s both;
+  }
+  .hero h1 .nv{
+    color:var(--nv);
+    text-shadow:0 0 40px rgba(118,185,0,0.3);
+  }
+  .hero h1 .vs{
+    color:var(--faint);
+    font-weight:400;
+    font-size:0.6em;
+    margin:0 4px;
+  }
+  .hero h1 .amd{
+    color:var(--amd);
+    text-shadow:0 0 40px rgba(237,28,36,0.3);
+  }
+
+  .hero-subtitle{
+    font-size:clamp(14px,2vw,18px);
+    color:var(--muted);
+    font-weight:300;
+    max-width:600px;
+    margin:0 auto 24px;
+    animation:fadeInUp 0.8s ease 0.4s both;
+  }
+
+  .hero-meta{
+    font-family:'IBM Plex Mono',monospace;
+    font-size:11px;
+    color:var(--faint);
+    line-height:1.8;
+    animation:fadeInUp 0.8s ease 0.6s both;
+  }
+
+  /* ── Navigation Dots ── */
+  .nav-dots{
+    position:fixed;right:20px;top:50%;transform:translateY(-50%);
+    z-index:100;display:flex;flex-direction:column;gap:12px;
+  }
+  .nav-dot{
+    width:10px;height:10px;border-radius:50%;
+    background:var(--faint);border:none;cursor:pointer;
+    transition:var(--transition);position:relative;
+  }
+  .nav-dot:hover,.nav-dot.active{background:var(--nv);transform:scale(1.3);}
+  .nav-dot::after{
+    content:attr(data-label);
+    position:absolute;right:20px;top:50%;transform:translateY(-50%);
+    white-space:nowrap;font-size:11px;color:var(--muted);
+    opacity:0;transition:opacity 0.3s;pointer-events:none;
+    font-family:'IBM Plex Mono',monospace;
+  }
+  .nav-dot:hover::after{opacity:1;}
+
+  /* ── Snapshot Cards ── */
+  .snap-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin:40px auto 50px;max-width:1080px;padding:0 24px;}
+
+  .snap-card{
+    background:var(--surface);
+    backdrop-filter:blur(20px);
+    -webkit-backdrop-filter:blur(20px);
+    border:1px solid var(--border);
+    border-radius:var(--card-radius);
+    padding:28px;
+    position:relative;
+    overflow:hidden;
+    transition:var(--transition);
+  }
+  .snap-card::before{
+    content:'';position:absolute;top:0;left:0;right:0;height:3px;
+    border-radius:var(--card-radius) var(--card-radius) 0 0;
+  }
+  .snap-card:hover{
+    transform:translateY(-4px);
+    box-shadow:0 20px 60px rgba(0,0,0,0.4);
+  }
+  .snap-card.nvdia::before{background:linear-gradient(90deg,var(--nv-dim),var(--nv),var(--nv-light));}
+  .snap-card.nvdia:hover{border-color:rgba(118,185,0,0.3);}
+  .snap-card.amd::before{background:linear-gradient(90deg,var(--amd-dim),var(--amd),var(--amd-light));}
+  .snap-card.amd:hover{border-color:rgba(237,28,36,0.3);}
+
+  .snap-card .card-bg-icon{
+    position:absolute;right:-20px;bottom:-20px;font-size:120px;
+    opacity:0.03;font-family:'Space Grotesk',sans-serif;font-weight:700;
+    pointer-events:none;
+  }
+  .snap-card.nvdia .card-bg-icon{color:var(--nv);}
+  .snap-card.amd .card-bg-icon{color:var(--amd);}
+
+  .snap-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:18px;}
+  .snap-head .tkr{
+    font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:22px;
+    display:flex;align-items:center;gap:8px;
+  }
+  .snap-card.nvdia .tkr{color:var(--nv);}
+  .snap-card.amd .tkr{color:var(--amd);}
+  .snap-head .tkr .badge{
+    font-size:9px;padding:2px 8px;border-radius:4px;
+    font-family:'IBM Plex Mono',monospace;letter-spacing:0.05em;
+  }
+  .snap-card.nvdia .badge{background:rgba(118,185,0,0.15);color:var(--nv);}
+  .snap-card.amd .badge{background:rgba(237,28,36,0.15);color:var(--amd);}
+  .snap-head .name{color:var(--muted);font-size:12px;}
+
+  .price-line{
+    font-family:'IBM Plex Mono',monospace;
+    font-size:clamp(28px,4vw,36px);
+    font-weight:700;
+    margin-bottom:4px;
+    color:var(--text-bright);
+  }
+  .price-chg{font-size:13px;margin-bottom:18px;display:flex;align-items:center;gap:6px;}
+  .price-chg.up{color:var(--nv);}
+  .price-chg .arrow{font-size:16px;}
+
+  .range-container{margin-bottom:20px;}
+  .range-label-top{display:flex;justify-content:space-between;font-size:10px;color:var(--faint);margin-bottom:6px;font-family:'IBM Plex Mono',monospace;}
+  .range-track{position:relative;height:6px;background:rgba(42,49,60,0.8);border-radius:4px;overflow:visible;}
+  .range-fill{height:100%;border-radius:4px;position:relative;}
+  .snap-card.nvdia .range-fill{background:linear-gradient(90deg,var(--nv-dim),var(--nv));}
+  .snap-card.amd .range-fill{background:linear-gradient(90deg,var(--amd-dim),var(--amd));}
+  .range-fill-marker{
+    position:absolute;top:-5px;right:-8px;width:16px;height:16px;
+    border-radius:50%;border:3px solid var(--bg);
+    box-shadow:0 0 10px rgba(0,0,0,0.5);
+  }
+  .snap-card.nvdia .range-fill-marker{background:var(--nv);box-shadow:0 0 12px var(--nv-glow);}
+  .snap-card.amd .range-fill-marker{background:var(--amd);box-shadow:0 0 12px var(--amd-glow);}
+  .range-labels{display:flex;justify-content:space-between;font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--faint);margin-top:8px;}
+
+  .snap-stats{display:grid;grid-template-columns:1fr 1fr;gap:12px 16px;}
+  .snap-stat{
+    background:rgba(255,255,255,0.02);
+    border:1px solid rgba(255,255,255,0.04);
+    border-radius:10px;
+    padding:10px 12px;
+    transition:var(--transition);
+  }
+  .snap-stat:hover{background:rgba(255,255,255,0.05);}
+  .snap-stat .k{color:var(--muted);font-size:10px;text-transform:uppercase;letter-spacing:0.06em;font-family:'IBM Plex Mono',monospace;}
+  .snap-stat .v{font-family:'IBM Plex Mono',monospace;font-size:16px;font-weight:600;margin-top:2px;}
+
+  /* ── Section Styles ── */
+  section{
+    margin:0 auto 50px;
+    max-width:1080px;
+    padding:0 24px;
+  }
+  .sec-header{
+    display:flex;align-items:center;gap:14px;
+    margin-bottom:28px;
+    padding-bottom:16px;
+    border-bottom:1px solid var(--border);
+  }
+  .sec-num{
+    font-family:'IBM Plex Mono',monospace;
+    font-size:12px;font-weight:600;
+    color:var(--nv);
+    background:rgba(118,185,0,0.1);
+    border:1px solid rgba(118,185,0,0.2);
+    border-radius:8px;
+    padding:4px 10px;
+    min-width:36px;text-align:center;
+  }
+  .sec-header h2{font-size:22px;color:var(--text-bright);}
+  .sec-header .sec-desc{color:var(--muted);font-size:12px;margin-left:auto;font-family:'IBM Plex Mono',monospace;}
+
+  /* ── Metric Bars (Enhanced) ── */
+  .metric{
+    margin-bottom:24px;
+    background:var(--surface);
+    backdrop-filter:blur(10px);
+    border:1px solid var(--border);
+    border-radius:14px;
+    padding:20px 22px;
+    transition:var(--transition);
+  }
+  .metric:hover{
+    border-color:rgba(118,185,0,0.15);
+    box-shadow:0 8px 30px rgba(0,0,0,0.2);
+  }
+  .metric-label{
+    display:flex;justify-content:space-between;align-items:center;
+    font-size:13px;margin-bottom:14px;
+  }
+  .metric-label span:first-child{color:var(--text);font-weight:500;}
+  .metric-label span:last-child{
+    color:var(--faint);font-size:10px;
+    font-family:'IBM Plex Mono',monospace;
+    background:rgba(255,255,255,0.04);
+    padding:2px 8px;border-radius:4px;
+  }
+
+  .bar-row{display:flex;align-items:center;gap:10px;margin-bottom:8px;}
+  .bar-tag{
+    width:48px;font-family:'IBM Plex Mono',monospace;font-size:11px;
+    flex-shrink:0;font-weight:600;letter-spacing:0.03em;
+  }
+  .bar-tag.nv{color:var(--nv);}
+  .bar-tag.amd{color:var(--amd);}
+  .bar-track{
+    flex:1;height:20px;background:rgba(42,49,60,0.5);
+    border-radius:6px;overflow:hidden;position:relative;
+  }
+  .bar-fill{
+    height:100%;border-radius:6px;
+    position:relative;overflow:hidden;
+    transition:width 1.5s cubic-bezier(0.25,0.46,0.45,0.94);
+    width:0 !important;
+  }
+  .bar-fill.animated{width:var(--target-width) !important;}
+  .bar-fill.nv{background:linear-gradient(90deg,var(--nv-dim),var(--nv));}
+  .bar-fill.amd{background:linear-gradient(90deg,var(--amd-dim),var(--amd));}
+  .bar-fill::after{
+    content:'';position:absolute;top:0;left:0;right:0;bottom:0;
+    background:linear-gradient(90deg,transparent,rgba(255,255,255,0.1),transparent);
+    animation:shimmer 2s infinite;
+    background-size:200% 100%;
+  }
+  .bar-val{
+    width:100px;text-align:right;font-family:'IBM Plex Mono',monospace;
+    font-size:13px;flex-shrink:0;font-weight:500;color:var(--text-bright);
+  }
+
+  .note{
+    font-size:11px;color:var(--faint);margin-top:6px;
+    padding:8px 12px;
+    background:rgba(255,255,255,0.02);
+    border-radius:8px;
+    border-left:2px solid rgba(91,100,114,0.3);
+    line-height:1.6;
+  }
+
+  /* ── Tables (Enhanced) ── */
+  .table-container{
+    background:var(--surface);
+    backdrop-filter:blur(10px);
+    border:1px solid var(--border);
+    border-radius:var(--card-radius);
+    overflow:hidden;
+    margin-bottom:20px;
+  }
+  table{width:100%;border-collapse:collapse;font-size:13px;}
+  th,td{padding:12px 16px;border-bottom:1px solid rgba(48,56,68,0.3);text-align:right;}
+  th:first-child,td:first-child{text-align:left;}
+  th{
+    font-family:'IBM Plex Mono',monospace;font-size:10px;
+    letter-spacing:0.08em;text-transform:uppercase;
+    color:var(--faint);font-weight:500;
+    background:rgba(255,255,255,0.02);
+  }
+  tr{transition:background 0.3s ease;}
+  tbody tr:hover{background:rgba(255,255,255,0.03);}
+  td:first-child{color:var(--muted);}
+  td.nvcol{color:var(--nv);font-family:'IBM Plex Mono',monospace;font-weight:500;}
+  td.amdcol{color:var(--amd);font-family:'IBM Plex Mono',monospace;font-weight:500;}
+  td.othercol{font-family:'IBM Plex Mono',monospace;color:var(--text);}
+  tr:last-child td{border-bottom:none;}
+
+  /* ── Charts ── */
+  .chart-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-bottom:24px;}
+  .chart-card{
+    background:var(--surface);
+    backdrop-filter:blur(10px);
+    border:1px solid var(--border);
+    border-radius:var(--card-radius);
+    padding:24px;
+    transition:var(--transition);
+  }
+  .chart-card:hover{
+    border-color:rgba(118,185,0,0.15);
+    box-shadow:0 8px 30px rgba(0,0,0,0.2);
+  }
+  .chart-card h4{
+    font-size:13px;color:var(--muted);margin-bottom:16px;
+    font-family:'IBM Plex Mono',monospace;text-transform:uppercase;
+    letter-spacing:0.05em;
+  }
+  .chart-card canvas{max-height:280px;}
+  .chart-card.full{grid-column:1/-1;}
+
+  /* ── Lead Grid ── */
+  .lead-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-bottom:20px;}
+  .lead-card{
+    background:var(--surface);
+    backdrop-filter:blur(10px);
+    border:1px solid var(--border);
+    border-radius:var(--card-radius);
+    padding:24px;
+    transition:var(--transition);
+    position:relative;
+    overflow:hidden;
+  }
+  .lead-card::before{
+    content:'';position:absolute;top:0;left:0;right:0;height:2px;
+  }
+  .lead-card:hover{transform:translateY(-3px);box-shadow:0 12px 40px rgba(0,0,0,0.3);}
+  .lead-card h3{font-size:15px;margin-bottom:14px;display:flex;align-items:center;gap:8px;}
+  .lead-card.nv-lead::before{background:linear-gradient(90deg,var(--nv),transparent);}
+  .lead-card.nv-lead h3{color:var(--nv);}
+  .lead-card.amd-lead::before{background:linear-gradient(90deg,var(--amd),transparent);}
+  .lead-card.amd-lead h3{color:var(--amd);}
+  .lead-card ul{margin:0;padding-left:18px;list-style:none;}
+  .lead-card li{
+    margin-bottom:10px;font-size:13px;color:var(--text);
+    position:relative;padding-left:6px;line-height:1.6;
+  }
+  .lead-card li::before{
+    content:'›';position:absolute;left:-14px;
+    font-weight:700;font-size:16px;
+  }
+  .lead-card.nv-lead li::before{color:var(--nv);}
+  .lead-card.amd-lead li::before{color:var(--amd);}
+
+  .summary-box{
+    background:linear-gradient(135deg,rgba(22,27,34,0.9),rgba(28,35,44,0.9));
+    border:1px solid var(--border);
+    border-radius:var(--card-radius);
+    padding:24px;
+    font-size:13.5px;
+    color:var(--text);
+    line-height:1.7;
+    position:relative;
+  }
+  .summary-box::before{
+    content:'⚖️';position:absolute;top:20px;right:20px;font-size:28px;opacity:0.3;
+  }
+  .summary-box strong{color:var(--accent);}
+
+  /* ── News / Risk Cards ── */
+  .news-grid,.risk-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px;}
+
+  .news-card{
+    background:var(--surface);
+    backdrop-filter:blur(10px);
+    border:1px solid var(--border);
+    border-radius:var(--card-radius);
+    padding:22px;
+    transition:var(--transition);
+  }
+  .news-card:hover{transform:translateY(-3px);box-shadow:0 12px 40px rgba(0,0,0,0.3);}
+  .news-card h3{font-size:14px;margin-bottom:12px;display:flex;align-items:center;gap:8px;}
+  .news-card.nv h3{color:var(--nv);}
+  .news-card.amd h3{color:var(--amd);}
+  .news-card h3::before{content:'📰';font-size:16px;}
+  .news-card ul{margin:0;padding-left:18px;font-size:12.5px;color:var(--muted);list-style:none;}
+  .news-card li{margin-bottom:8px;position:relative;padding-left:6px;line-height:1.6;}
+  .news-card li::before{content:'•';position:absolute;left:-14px;font-weight:700;}
+  .news-card.nv li::before{color:var(--nv);}
+  .news-card.amd li::before{color:var(--amd);}
+
+  .risk-card{
+    background:var(--surface);
+    backdrop-filter:blur(10px);
+    border:1px solid var(--border);
+    border-radius:var(--card-radius);
+    padding:22px;
+    transition:var(--transition);
+    position:relative;
+  }
+  .risk-card::before{content:'';position:absolute;top:0;left:0;bottom:0;width:3px;border-radius:var(--card-radius) 0 0 var(--card-radius);}
+  .risk-card.nv::before{background:linear-gradient(180deg,var(--nv),transparent);}
+  .risk-card.amd::before{background:linear-gradient(180deg,var(--amd),transparent);}
+  .risk-card:hover{transform:translateY(-3px);box-shadow:0 12px 40px rgba(0,0,0,0.3);}
+  .risk-card h3{font-size:14px;margin-bottom:12px;display:flex;align-items:center;gap:8px;}
+  .risk-card h3::before{content:'⚠️';font-size:14px;}
+  .risk-card ul{margin:0;padding-left:18px;font-size:12.5px;color:var(--text);list-style:none;}
+  .risk-card li{margin-bottom:8px;position:relative;padding-left:6px;line-height:1.6;}
+  .risk-card li::before{content:'›';position:absolute;left:-14px;font-weight:700;color:var(--amd);}
+
+  /* ── Verdict Section ── */
+  .verdict-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-top:24px;}
+  .verdict-card{
+    background:var(--surface);
+    backdrop-filter:blur(10px);
+    border:1px solid var(--border);
+    border-radius:var(--card-radius);
+    padding:24px;
+    text-align:center;
+    transition:var(--transition);
+    position:relative;
+    overflow:hidden;
+  }
+  .verdict-card:hover{transform:translateY(-4px);box-shadow:0 16px 50px rgba(0,0,0,0.4);}
+  .verdict-card .verdict-label{
+    font-family:'IBM Plex Mono',monospace;font-size:10px;
+    text-transform:uppercase;letter-spacing:0.1em;
+    color:var(--faint);margin-bottom:8px;
+  }
+  .verdict-card .verdict-rating{font-size:22px;font-weight:700;margin-bottom:8px;}
+  .verdict-card.nv-verdict .verdict-rating{color:var(--nv);}
+  .verdict-card.amd-verdict .verdict-rating{color:var(--amd);}
+  .verdict-card .verdict-desc{font-size:12px;color:var(--muted);line-height:1.6;}
+
+  /* ── Key Takeaway Banner ── */
+  .takeaway-banner{
+    max-width:1080px;margin:0 auto 40px;padding:0 24px;
+  }
+  .takeaway-inner{
+    background:linear-gradient(135deg,rgba(118,185,0,0.08),rgba(237,28,36,0.08));
+    border:1px solid rgba(118,185,0,0.15);
+    border-radius:var(--card-radius);
+    padding:24px 30px;
+    display:flex;
+    align-items:center;
+    gap:20px;
+  }
+  .takeaway-icon{font-size:36px;flex-shrink:0;}
+  .takeaway-text h3{font-size:14px;color:var(--gold);margin-bottom:6px;text-transform:uppercase;letter-spacing:0.06em;font-family:'IBM Plex Mono',monospace;}
+  .takeaway-text p{font-size:13px;color:var(--muted);line-height:1.6;}
+
+  /* ── Footer ── */
+  footer{
+    max-width:1080px;margin:0 auto;padding:30px 24px 0;
+    border-top:1px solid var(--border);
+  }
+  footer p{color:var(--muted);font-size:12px;margin-bottom:10px;line-height:1.7;}
+  .disclaimer{
+    font-style:italic;color:var(--faint);font-size:11.5px;
+    padding:14px 18px;
+    background:rgba(255,255,255,0.02);
+    border-radius:10px;
+    border-left:3px solid rgba(237,28,36,0.3);
+  }
+  .footer-brand{
+    text-align:center;margin-top:30px;
+    font-family:'Space Grotesk',sans-serif;
+    font-size:12px;color:var(--faint);
+  }
+
+  /* ── Tooltip ── */
+  .tooltip{
+    position:relative;cursor:help;
+    border-bottom:1px dotted var(--faint);
+  }
+  .tooltip:hover::after{
+    content:attr(data-tip);
+    position:absolute;bottom:120%;left:50%;transform:translateX(-50%);
+    background:var(--surface-solid);
+    border:1px solid var(--border);
+    border-radius:8px;padding:8px 12px;
+    font-size:11px;color:var(--text);white-space:nowrap;
+    z-index:100;pointer-events:none;
+    box-shadow:0 8px 24px rgba(0,0,0,0.4);
+  }
+
+  /* ── Tab component ── */
+  .tabs{display:flex;gap:4px;margin-bottom:20px;background:rgba(255,255,255,0.02);border-radius:10px;padding:4px;}
+  .tab-btn{
+    flex:1;padding:10px 16px;border:none;background:transparent;
+    color:var(--muted);font-family:'IBM Plex Mono',monospace;font-size:11px;
+    text-transform:uppercase;letter-spacing:0.06em;cursor:pointer;
+    border-radius:8px;transition:var(--transition);
+  }
+  .tab-btn:hover{color:var(--text);background:rgba(255,255,255,0.04);}
+  .tab-btn.active{color:var(--nv);background:rgba(118,185,0,0.1);}
+  .tab-content{display:none;}
+  .tab-content.active{display:block;animation:fadeIn 0.4s ease;}
+
+  /* ── Responsive ── */
+  @media(max-width:768px){
+    .snap-grid,.lead-grid,.news-grid,.risk-grid,.chart-grid,.verdict-grid{grid-template-columns:1fr;}
+    .chart-card.full{grid-column:1;}
+    .nav-dots{display:none;}
+    .hero{padding:40px 20px 30px;}
+    .takeaway-inner{flex-direction:column;text-align:center;}
+    .bar-val{width:80px;font-size:11px;}
+  }
+
+  @media(max-width:480px){
+    .snap-stats{grid-template-columns:1fr;}
+    .tabs{flex-wrap:wrap;}
+  }
+</style>
+</head>
+<body>
+
+<!-- ══ HERO ══ -->
+<div class="hero" id="top">
+  <canvas id="particles-canvas"></canvas>
+  <div style="position:relative;z-index:1;">
+    <div class="hero-badge"><span class="dot"></span> Live Analysis — June 2026</div>
+    <h1><span class="nv">NVIDIA</span> <span class="vs">vs</span> <span class="amd">AMD</span></h1>
+    <p class="hero-subtitle">AI Chip Leaders: Complete Fundamental Analysis</p>
+    <div class="hero-meta">
+      NASDAQ: NVDA vs NASDAQ: AMD &nbsp;·&nbsp; Semiconductors / AI Compute<br>
+      Snapshot as of 16–17 Jun 2026 &nbsp;·&nbsp; Sources: stockanalysis.com, CNBC, GuruFocus, MacroTrends, NVIDIA &amp; AMD investor releases
+    </div>
+  </div>
+</div>
+
+<!-- ══ NAV DOTS ══ -->
+<nav class="nav-dots">
+  <button class="nav-dot active" data-label="Snapshot" onclick="document.getElementById('top').scrollIntoView({behavior:'smooth'})"></button>
+  <button class="nav-dot" data-label="Valuation" onclick="document.getElementById('sec-valuation').scrollIntoView({behavior:'smooth'})"></button>
+  <button class="nav-dot" data-label="Growth" onclick="document.getElementById('sec-growth').scrollIntoView({behavior:'smooth'})"></button>
+  <button class="nav-dot" data-label="Margins" onclick="document.getElementById('sec-margins').scrollIntoView({behavior:'smooth'})"></button>
+  <button class="nav-dot" data-label="Returns" onclick="document.getElementById('sec-returns').scrollIntoView({behavior:'smooth'})"></button>
+  <button class="nav-dot" data-label="Ownership" onclick="document.getElementById('sec-ownership').scrollIntoView({behavior:'smooth'})"></button>
+  <button class="nav-dot" data-label="Peers" onclick="document.getElementById('sec-peers').scrollIntoView({behavior:'smooth'})"></button>
+  <button class="nav-dot" data-label="Verdict" onclick="document.getElementById('sec-verdict').scrollIntoView({behavior:'smooth'})"></button>
+  <button class="nav-dot" data-label="News" onclick="document.getElementById('sec-news').scrollIntoView({behavior:'smooth'})"></button>
+  <button class="nav-dot" data-label="Risks" onclick="document.getElementById('sec-risks').scrollIntoView({behavior:'smooth'})"></button>
+</nav>
+
+<!-- ══ KEY TAKEAWAY ══ -->
+<div class="takeaway-banner anim-item">
+  <div class="takeaway-inner">
+    <div class="takeaway-icon">🏆</div>
+    <div class="takeaway-text">
+      <h3>Key Takeaway</h3>
+      <p>NVIDIA leads with superior profitability, growth, and scale. AMD shows strong growth momentum and trading upside. Both are direct AI infrastructure beneficiaries with different risk/return profiles.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ══ SNAPSHOT CARDS ══ -->
+<div class="snap-grid">
+  <div class="snap-card nvdia anim-item">
+    <div class="card-bg-icon">NV</div>
+    <div class="snap-head">
+      <span class="tkr">NVDA <span class="badge">NASDAQ</span></span>
+      <span class="name">NVIDIA Corp.</span>
+    </div>
+    <div class="price-line" data-count="207.41" data-prefix="$">$207.41</div>
+    <div class="price-chg up"><span class="arrow">▲</span> +46.97% past 52 weeks · stockanalysis.com</div>
+    <div class="range-container">
+      <div class="range-label-top"><span>52W Range</span><span>69.2% of range</span></div>
+      <div class="range-track"><div class="range-fill" style="width:69.2%;"><div class="range-fill-marker"></div></div></div>
+      <div class="range-labels"><span>Low $142.03</span><span>High $236.54</span></div>
+    </div>
+    <div class="snap-stats">
+      <div class="snap-stat"><div class="k">Market Cap</div><div class="v">$5.05T</div></div>
+      <div class="snap-stat"><div class="k">P/E (TTM)</div><div class="v">32.5×</div></div>
+      <div class="snap-stat"><div class="k">Fwd P/E</div><div class="v">21.4×</div></div>
+      <div class="snap-stat"><div class="k">P/B</div><div class="v">27.6×</div></div>
+    </div>
+  </div>
+  <div class="snap-card amd anim-item">
+    <div class="card-bg-icon">AMD</div>
+    <div class="snap-head">
+      <span class="tkr">AMD <span class="badge">NASDAQ</span></span>
+      <span class="name">Advanced Micro Devices</span>
+    </div>
+    <div class="price-line" data-count="507.29" data-prefix="$">$507.29</div>
+    <div class="price-chg up"><span class="arrow">▲</span> +336.72% past 52 weeks · stockanalysis.com</div>
+    <div class="range-container">
+      <div class="range-label-top"><span>52W Range</span><span>88.4% of range</span></div>
+      <div class="range-track"><div class="range-fill" style="width:88.4%;"><div class="range-fill-marker"></div></div></div>
+      <div class="range-labels"><span>Low $117.78</span><span>High $558.37</span></div>
+    </div>
+    <div class="snap-stats">
+      <div class="snap-stat"><div class="k">Market Cap</div><div class="v">$827B</div></div>
+      <div class="snap-stat"><div class="k">P/E (TTM)</div><div class="v">169.2×</div></div>
+      <div class="snap-stat"><div class="k">Fwd P/E</div><div class="v">58.2×</div></div>
+      <div class="snap-stat"><div class="k">P/B</div><div class="v">10.9×</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ 01 VALUATION ══ -->
+<section id="sec-valuation" class="anim-item">
+  <div class="sec-header">
+    <span class="sec-num">01</span>
+    <h2>Valuation</h2>
+    <span class="sec-desc">Multiple Comparison</span>
+  </div>
+
+  <!-- Valuation Radar Chart -->
+  <div class="chart-grid">
+    <div class="chart-card full">
+      <h4>Valuation Multiples Comparison</h4>
+      <canvas id="valuationRadar" height="220"></canvas>
+    </div>
+  </div>
+
+  <div class="metric">
+    <div class="metric-label"><span>P/E — trailing twelve months</span><span>scale 0–180×</span></div>
+    <div class="bar-row"><span class="bar-tag nv">NVDA</span><div class="bar-track"><div class="bar-fill nv" style="--target-width:18%;"></div></div><span class="bar-val">32.5×</span></div>
+    <div class="bar-row"><span class="bar-tag amd">AMD</span><div class="bar-track"><div class="bar-fill amd" style="--target-width:94%;"></div></div><span class="bar-val">169.2×</span></div>
+    <div class="note">AMD's trailing P/E looks extreme mainly because GAAP earnings are still ramping off a small base while the share price has already re-rated; forward P/E (58.2×) is a fairer comparison. Source: stockanalysis.com statistics, 16 Jun 2026.</div>
+  </div>
+
+  <div class="metric">
+    <div class="metric-label"><span>Forward P/E (NTM)</span><span>scale 0–60×</span></div>
+    <div class="bar-row"><span class="bar-tag nv">NVDA</span><div class="bar-track"><div class="bar-fill nv" style="--target-width:36%;"></div></div><span class="bar-val">21.4×</span></div>
+    <div class="bar-row"><span class="bar-tag amd">AMD</span><div class="bar-track"><div class="bar-fill amd" style="--target-width:97%;"></div></div><span class="bar-val">58.2×</span></div>
+  </div>
+
+  <div class="metric">
+    <div class="metric-label"><span>EV / EBITDA</span><span>scale 0–120×</span></div>
+    <div class="bar-row"><span class="bar-tag nv">NVDA</span><div class="bar-track"><div class="bar-fill nv" style="--target-width:25%;"></div></div><span class="bar-val">30.5×</span></div>
+    <div class="bar-row"><span class="bar-tag amd">AMD</span><div class="bar-track"><div class="bar-fill amd" style="--target-width:92%;"></div></div><span class="bar-val">110.2×</span></div>
+  </div>
+
+  <div class="metric">
+    <div class="metric-label"><span>Price / Book</span><span>scale 0–30×</span></div>
+    <div class="bar-row"><span class="bar-tag nv">NVDA</span><div class="bar-track"><div class="bar-fill nv" style="--target-width:92%;"></div></div><span class="bar-val">27.6×</span></div>
+    <div class="bar-row"><span class="bar-tag amd">AMD</span><div class="bar-track"><div class="bar-fill amd" style="--target-width:36%;"></div></div><span class="bar-val">10.9×</span></div>
+    <div class="note">NVDA P/B per GuruFocus, 3 Jun 2026. AMD P/B per GuruFocus, 7 May 2026 (price ~$421 then) — likely higher today given AMD's subsequent rally; treat as directional. 🚩 Verify live at gurufocus.com.</div>
+  </div>
+
+  <div class="table-container">
+    <table>
+      <thead>
+        <tr><th>Valuation verdict</th><th>NVDA</th><th>AMD</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>vs sector (Technology/Semis median P/E ~36×)</td><td class="nvcol">Below sector — cheap on trailing P/E</td><td class="amdcol">Above sector — expensive on trailing P/E</td></tr>
+        <tr><td>vs own 5Y average P/E</td><td class="nvcol">32.5× vs 5Y avg ~71× — well below own history</td><td class="amdcol">~169× vs 5Y avg ~154× — broadly in line with own history</td></tr>
+        <tr><td>PEG ratio (growth-adjusted)</td><td class="nvcol">0.47 — growth not fully priced in</td><td class="amdcol">1.01 — growth roughly fairly priced</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- ══ 02 GROWTH ══ -->
+<section id="sec-growth" class="anim-item">
+  <div class="sec-header">
+    <span class="sec-num">02</span>
+    <h2>Growth</h2>
+    <span class="sec-desc">Revenue & Earnings Trajectory</span>
+  </div>
+
+  <!-- Growth Charts -->
+  <div class="chart-grid">
+    <div class="chart-card">
+      <h4>Revenue Growth Comparison</h4>
+      <canvas id="revenueGrowthChart"></canvas>
+    </div>
+    <div class="chart-card">
+      <h4>5-Year Revenue CAGR</h4>
+      <canvas id="cagrChart"></canvas>
+    </div>
+  </div>
+
+  <div class="metric">
+    <div class="metric-label"><span>Revenue growth — trailing twelve months YoY</span><span>scale 0–80%</span></div>
+    <div class="bar-row"><span class="bar-tag nv">NVDA</span><div class="bar-track"><div class="bar-fill nv" style="--target-width:88%;"></div></div><span class="bar-val">+70.7%</span></div>
+    <div class="bar-row"><span class="bar-tag amd">AMD</span><div class="bar-track"><div class="bar-fill amd" style="--target-width:44%;"></div></div><span class="bar-val">+35.0%</span></div>
+    <div class="note">NVDA: TTM revenue $253.5B through Apr 2026 (macrotrends). AMD: TTM revenue $37.45B through Mar 2026 (stockanalysis.com).</div>
+  </div>
+
+  <div class="metric">
+    <div class="metric-label"><span>5-year revenue CAGR</span><span>scale 0–70%</span></div>
+    <div class="bar-row"><span class="bar-tag nv">NVDA</span><div class="bar-track"><div class="bar-fill nv" style="--target-width:96%;"></div></div><span class="bar-val">~67%</span></div>
+    <div class="bar-row"><span class="bar-tag amd">AMD</span><div class="bar-track"><div class="bar-fill amd" style="--target-width:37%;"></div></div><span class="bar-val">~26%</span></div>
+    <div class="note">finbox.com 5Y CAGR calculations, methodology may differ from headline figures elsewhere; treat as illustrative of trend, not a forecast.</div>
+  </div>
+
+  <div class="table-container">
+    <table>
+      <thead>
+        <tr><th>Latest quarter detail</th><th>NVDA</th><th>AMD</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Quarter</td><td class="othercol">Q4 FY26 (ended 25 Jan 2026)</td><td class="othercol">Q1 2026 (ended Mar 2026)</td></tr>
+        <tr><td>Revenue</td><td class="nvcol">$68.1B, +73% YoY</td><td class="amdcol">$10.25B, +38% YoY</td></tr>
+        <tr><td>Data Center / core growth segment</td><td class="nvcol">Data Center +68% (FY26 full year)</td><td class="amdcol">Data Center +57% YoY to $5.8B</td></tr>
+        <tr><td>Full-year diluted EPS (GAAP)</td><td class="nvcol">$4.90, +65% YoY (FY26)</td><td class="amdcol">$0.84 in Q1, vs $0.44 a year ago</td></tr>
+        <tr><td>Net income growth</td><td class="nvcol">+65% YoY (FY26 full year)</td><td class="amdcol">+95% YoY (Q1 2026 GAAP)</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="note">Sources: NVIDIA Q4 FY26 press release &amp; CFO commentary (nvidianews.nvidia.com); AMD Q1 2026 earnings coverage via CNBC and AMD 8-K filing.</div>
+</section>
+
+<!-- ══ 03 MARGINS & HEALTH ══ -->
+<section id="sec-margins" class="anim-item">
+  <div class="sec-header">
+    <span class="sec-num">03</span>
+    <h2>Margins &amp; Financial Health</h2>
+    <span class="sec-desc">Profitability & Balance Sheet</span>
+  </div>
+
+  <div class="chart-grid">
+    <div class="chart-card">
+      <h4>Profitability Margins</h4>
+      <canvas id="marginsChart"></canvas>
+    </div>
+    <div class="chart-card">
+      <h4>Balance Sheet Strength</h4>
+      <canvas id="balanceChart"></canvas>
+    </div>
+  </div>
+
+  <div class="metric">
+    <div class="metric-label"><span>Gross margin (TTM)</span><span>scale 0–80%</span></div>
+    <div class="bar-row"><span class="bar-tag nv">NVDA</span><div class="bar-track"><div class="bar-fill nv" style="--target-width:93%;"></div></div><span class="bar-val">74.2%</span></div>
+    <div class="bar-row"><span class="bar-tag amd">AMD</span><div class="bar-track"><div class="bar-fill amd" style="--target-width:66%;"></div></div><span class="bar-val">53.1%</span></div>
+  </div>
+
+  <div class="metric">
+    <div class="metric-label"><span>Operating margin (TTM)</span><span>scale 0–70%</span></div>
+    <div class="bar-row"><span class="bar-tag nv">NVDA</span><div class="bar-track"><div class="bar-fill nv" style="--target-width:91%;"></div></div><span class="bar-val">64.0%</span></div>
+    <div class="bar-row"><span class="bar-tag amd">AMD</span><div class="bar-track"><div class="bar-fill amd" style="--target-width:17%;"></div></div><span class="bar-val">11.8%</span></div>
+  </div>
+
+  <div class="metric">
+    <div class="metric-label"><span>Debt / Equity</span><span>scale 0–0.5</span></div>
+    <div class="bar-row"><span class="bar-tag nv">NVDA</span><div class="bar-track"><div class="bar-fill nv" style="--target-width:14%;"></div></div><span class="bar-val">0.07 — Safe</span></div>
+    <div class="bar-row"><span class="bar-tag amd">AMD</span><div class="bar-track"><div class="bar-fill amd" style="--target-width:12%;"></div></div><span class="bar-val">0.06 — Safe</span></div>
+    <div class="note">Both companies carry very light leverage by this checklist's interpretation rule (D/E &lt;1 = Safe).</div>
+  </div>
+
+  <div class="metric">
+    <div class="metric-label"><span>Current ratio</span><span>scale 0–4</span></div>
+    <div class="bar-row"><span class="bar-tag nv">NVDA</span><div class="bar-track"><div class="bar-fill nv" style="--target-width:86%;"></div></div><span class="bar-val">3.44 — Comfortable</span></div>
+    <div class="bar-row"><span class="bar-tag amd">AMD</span><div class="bar-track"><div class="bar-fill amd" style="--target-width:68%;"></div></div><span class="bar-val">2.72 — Comfortable</span></div>
+  </div>
+
+  <div class="metric">
+    <div class="metric-label"><span>Free cash flow, TTM ($B)</span><span>scale 0–125</span></div>
+    <div class="bar-row"><span class="bar-tag nv">NVDA</span><div class="bar-track"><div class="bar-fill nv" style="--target-width:95%;"></div></div><span class="bar-val">$119.1B</span></div>
+    <div class="bar-row"><span class="bar-tag amd">AMD</span><div class="bar-track"><div class="bar-fill amd" style="--target-width:7%;"></div></div><span class="bar-val">$8.6B</span></div>
+    <div class="note">Both: Positive &amp; growing = Strong per checklist rule. AMD's FCF base is far smaller in absolute terms but grew sharply in Q1 2026 (record $2.6B for the quarter alone, AMD 8-K). Source: stockanalysis.com statistics.</div>
+  </div>
+</section>
+
+<!-- ══ 04 RETURNS ══ -->
+<section id="sec-returns" class="anim-item">
+  <div class="sec-header">
+    <span class="sec-num">04</span>
+    <h2>Returns</h2>
+    <span class="sec-desc">Capital Efficiency</span>
+  </div>
+
+  <div class="chart-grid">
+    <div class="chart-card full">
+      <h4>Return Metrics Comparison</h4>
+      <canvas id="returnsChart" height="140"></canvas>
+    </div>
+  </div>
+
+  <div class="metric">
+    <div class="metric-label"><span>Return on Equity (ROE)</span><span>scale 0–120%</span></div>
+    <div class="bar-row"><span class="bar-tag nv">NVDA</span><div class="bar-track"><div class="bar-fill nv" style="--target-width:95%;"></div></div><span class="bar-val">114.3% — Good</span></div>
+    <div class="bar-row"><span class="bar-tag amd">AMD</span><div class="bar-track"><div class="bar-fill amd" style="--target-width:7%;"></div></div><span class="bar-val">8.1% — Average</span></div>
+  </div>
+
+  <div class="metric">
+    <div class="metric-label"><span>Return on Invested Capital (ROIC, proxy for ROCE)</span><span>scale 0–110%</span></div>
+    <div class="bar-row"><span class="bar-tag nv">NVDA</span><div class="bar-track"><div class="bar-fill nv" style="--target-width:95%;"></div></div><span class="bar-val">104.7% — Good</span></div>
+    <div class="bar-row"><span class="bar-tag amd">AMD</span><div class="bar-track"><div class="bar-fill amd" style="--target-width:7%;"></div></div><span class="bar-val">7.8% — Weak</span></div>
+    <div class="note">Source: stockanalysis.com statistics, 16 Jun 2026. NVDA's exceptionally high ROE/ROIC reflect both very high net margins and a small equity base after years of buybacks — a hallmark of an asset-light, high-margin business model rather than excess leverage (D/E is only 0.07).</div>
+  </div>
+</section>
+
+<!-- ══ 05 OWNERSHIP & DIVIDEND ══ -->
+<section id="sec-ownership" class="anim-item">
+  <div class="sec-header">
+    <span class="sec-num">05</span>
+    <h2>Ownership &amp; Dividend</h2>
+    <span class="sec-desc">Institutional & Insider Breakdown</span>
+  </div>
+
+  <div class="chart-grid">
+    <div class="chart-card">
+      <h4>NVIDIA Ownership</h4>
+      <canvas id="nvdaOwnershipChart"></canvas>
+    </div>
+    <div class="chart-card">
+      <h4>AMD Ownership</h4>
+      <canvas id="amdOwnershipChart"></canvas>
+    </div>
+  </div>
+
+  <div class="table-container">
+    <table>
+      <thead>
+        <tr><th>Metric</th><th>NVDA</th><th>AMD</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Institutional ownership</td><td class="nvcol">~66–68%</td><td class="amdcol">~66–68%</td></tr>
+        <tr><td>Insider ownership</td><td class="nvcol">~3.5–4.0% (CEO Jensen Huang ~3.6%)</td><td class="amdcol">&lt;1% (GuruFocus, 0.90%)</td></tr>
+        <tr><td>Pledging of promoter/insider shares</td><td class="nvcol">🚩 Not a disclosed US-market concept</td><td class="amdcol">🚩 Not a disclosed US-market concept</td></tr>
+        <tr><td>Dividend yield</td><td class="nvcol">0.48% ($1.00/share annually)</td><td class="amdcol">None — AMD does not pay a dividend</td></tr>
+        <tr><td>Beta (volatility vs market)</td><td class="nvcol">2.20</td><td class="amdcol">2.49</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="note">Note on adaptation: "Promoter holding" and "pledging" are NSE/BSE-specific disclosures. For US-listed NVDA and AMD the closest equivalents are insider and institutional ownership, shown above. Ownership percentages vary by 1–3 points across data providers (WallStreetZen, GuruFocus, TipRanks); figures here use the most internally consistent recent reading from each. Verify at wallstreetzen.com or gurufocus.com for the latest.</div>
+</section>
+
+<!-- ══ 06 PEERS ══ -->
+<section id="sec-peers" class="anim-item">
+  <div class="sec-header">
+    <span class="sec-num">06</span>
+    <h2>Peer Set</h2>
+    <span class="sec-desc">Industry Comparison</span>
+  </div>
+
+  <div class="chart-grid">
+    <div class="chart-card full">
+      <h4>Peer Valuation & Growth Comparison</h4>
+      <canvas id="peerChart" height="140"></canvas>
+    </div>
+  </div>
+
+  <div class="table-container">
+    <table>
+      <thead>
+        <tr><th>Company</th><th>P/E (TTM)</th><th>P/B</th><th>ROE</th><th>Revenue growth (TTM)</th><th>D/E</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>NVIDIA (NVDA)</td><td class="nvcol">32.5×</td><td class="nvcol">27.6×</td><td class="nvcol">114.3%</td><td class="nvcol">+70.7%</td><td class="nvcol">0.07</td></tr>
+        <tr><td>AMD</td><td class="amdcol">169.2×</td><td class="amdcol">10.9×</td><td class="amdcol">8.1%</td><td class="amdcol">+35.0%</td><td class="amdcol">0.06</td></tr>
+        <tr><td>Broadcom (AVGO)</td><td class="othercol">65.6×</td><td class="othercol">n/a*</td><td class="othercol">37.3%</td><td class="othercol">+32.3%</td><td class="othercol">0.74</td></tr>
+        <tr><td>Intel (INTC)</td><td class="othercol">n/m (loss-making)</td><td class="othercol">~0.9×</td><td class="othercol">-2.9%</td><td class="othercol">~+1–2%</td><td class="othercol">~0.36–0.40</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="note">*AVGO P/B not independently verified in this pass — 🚩 verify at stockanalysis.com/stocks/avgo. Sources: stockanalysis.com statistics pages for AVGO and INTC, and CNBC quote page for INTC, all dated 15–16 Jun 2026.</div>
+</section>
+
+<!-- ══ 07 WHERE EACH LEADS / VERDICT ══ -->
+<section id="sec-verdict" class="anim-item">
+  <div class="sec-header">
+    <span class="sec-num">07</span>
+    <h2>Where Each Leads</h2>
+    <span class="sec-desc">Competitive Advantages</span>
+  </div>
+
+  <div class="chart-grid">
+    <div class="chart-card full">
+      <h4>Scorecard — Key Fundamental Dimensions</h4>
+      <canvas id="scorecardChart" height="160"></canvas>
+    </div>
+  </div>
+
+  <div class="lead-grid">
+    <div class="lead-card nv-lead">
+      <h3>🟢 Where NVIDIA leads</h3>
+      <ul>
+        <li>Scale and profitability: ~7× AMD's revenue, with gross/operating/net margins roughly 20–50 points higher across the board.</li>
+        <li>Capital efficiency: ROE of 114% and ROIC of 105% vs AMD's single digits, on an almost identical (low) debt load.</li>
+        <li>Cash generation: $119B TTM free cash flow vs AMD's $8.6B — over 13× larger.</li>
+        <li>Cheaper relative to its own growth: trailing P/E sits well below its 5-year average and PEG is under 0.5.</li>
+        <li>Only one of the two pays a dividend, however small.</li>
+      </ul>
+    </div>
+    <div class="lead-card amd-lead">
+      <h3>🔴 Where AMD leads</h3>
+      <ul>
+        <li>Stock momentum: +337% over the past 52 weeks vs NVIDIA's +47%, reflecting a sharper re-rating off a smaller base.</li>
+        <li>Lower price/book multiple (10.9× vs 27.6×), and a PEG closer to 1.0 (fairly priced for growth) vs NVIDIA's sub-0.5 PEG (arguably underpriced for growth, or reflecting higher embedded risk).</li>
+        <li>More diversified revenue mix — Data Center is roughly half of AMD's business versus close to ~90% concentration at NVIDIA, which some investors view as a lower single-segment risk profile.</li>
+        <li>Fastest-growing major partnership pipeline among NVIDIA's challengers: large multi-GW AI accelerator deployment commitments from Meta and expanding hyperscaler adoption of EPYC server CPUs.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="summary-box">
+    <strong>Neutral summary:</strong> Both companies are direct beneficiaries of AI infrastructure spending but occupy different positions in the cycle. NVIDIA is the larger, far more profitable incumbent with dominant data-center share, a near debt-free balance sheet, and valuation multiples that — on a trailing basis — sit below its own historical average. AMD is the smaller, faster-growing challenger whose share price has rallied much further over the past year on the back of recent design wins and hyperscaler partnerships, but whose GAAP earnings and margins remain well behind NVIDIA's, which is why its trailing P/E looks stretched even as its forward multiple is more moderate. Neither comparison points to one being definitively "better" — they represent different risk/return trade-offs within the same AI compute theme.
+  </div>
+
+  <div class="verdict-grid">
+    <div class="verdict-card nv-verdict">
+      <div class="verdict-label">NVIDIA (NVDA)</div>
+      <div class="verdict-rating">★ STRONG BUY ★</div>
+      <div class="verdict-desc">Industry leader with unmatched profitability, growth, and cash flow. Best long-term compounder in the AI era.</div>
+    </div>
+    <div class="verdict-card amd-verdict">
+      <div class="verdict-label">AMD</div>
+      <div class="verdict-rating">BUY (HIGH RISK / HIGH REWARD)</div>
+      <div class="verdict-desc">High-growth challenger with improving fundamentals and strong upside potential if execution continues.</div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ 08 NEWS ══ -->
+<section id="sec-news" class="anim-item">
+  <div class="sec-header">
+    <span class="sec-num">08</span>
+    <h2>Latest Developments</h2>
+    <span class="sec-desc">Recent Headlines</span>
+  </div>
+  <div class="news-grid">
+    <div class="news-card nv">
+      <h3>NVIDIA</h3>
+      <ul>
+        <li>Raised roughly $25B via a high-grade bond sale in mid-June 2026, drawing about $85B in investor orders.</li>
+        <li>SpaceX reportedly ordered Rubin-generation accelerator chips covering about a fifth of NVIDIA's planned Rubin output.</li>
+        <li>FY26 results (reported Feb 2026): full-year revenue $215.9B (+65% YoY), with Data Center revenue of roughly $194B making up the large majority of sales.</li>
+        <li>Annual stockholder meeting scheduled for 24 Jun 2026.</li>
+      </ul>
+    </div>
+    <div class="news-card amd">
+      <h3>AMD</h3>
+      <ul>
+        <li>Q1 2026 results (reported 5 May 2026) beat estimates on both revenue and EPS; shares jumped as much as 18% the next session.</li>
+        <li>Raised Q2 2026 revenue guidance to roughly $11.2B, implying about 46% YoY growth.</li>
+        <li>Meta committed to deploying up to 6GW of AMD Instinct GPUs; AWS, Google Cloud, Microsoft Azure and Tencent Cloud are expanding 5th-gen EPYC-based instances.</li>
+        <li>Stock pulled back about 7% on 16 Jun 2026 after a sharp multi-week rally, alongside a broader pullback in AI-momentum names.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ══ 09 RISKS ══ -->
+<section id="sec-risks" class="anim-item">
+  <div class="sec-header">
+    <span class="sec-num">09</span>
+    <h2>Risk Factors</h2>
+    <span class="sec-desc">Key Risks to Monitor</span>
+  </div>
+  <div class="risk-grid">
+    <div class="risk-card nv">
+      <h3 style="color:var(--nv);">NVIDIA</h3>
+      <ul>
+        <li>Heavy revenue concentration in Data Center/AI compute (~90% of sales) makes results highly sensitive to any slowdown in hyperscaler AI capex.</li>
+        <li>Valuation, while moderate versus its own history, is still a premium multiple that assumes continued exceptional growth.</li>
+        <li>Export-control and geopolitical risk around advanced chip sales to certain markets, and reliance on TSMC for advanced-node manufacturing capacity.</li>
+        <li>A small number of large cloud customers account for an outsized share of revenue — customer concentration risk.</li>
+      </ul>
+    </div>
+    <div class="risk-card amd">
+      <h3 style="color:var(--amd);">AMD</h3>
+      <ul>
+        <li>Trailing valuation multiples are very stretched relative to current GAAP earnings; any growth disappointment could compress the multiple sharply given how far the stock has already run.</li>
+        <li>Management has flagged TSMC's advanced-node (CoWoS) capacity as a potential bottleneck that could limit 2026 AI chip shipments versus demand.</li>
+        <li>No dividend — total return depends entirely on continued share-price appreciation.</li>
+        <li>Still significantly smaller scale than NVIDIA in AI data-center compute, competing against an incumbent with a much larger cash and R&amp;D base.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ══ FOOTER ══ -->
+<footer>
+  <p><strong>Sources used in this comparison:</strong> stockanalysis.com (statistics &amp; revenue pages), CNBC quote pages, MacroTrends, GuruFocus (P/B, institutional/insider ownership), finbox.com (CAGR calculations), WallStreetZen (ownership), NVIDIA Newsroom &amp; SEC 8-K filings, AMD 8-K filings and earnings coverage (CNBC, 24/7 Wall St, Bitget News). All figures are dated within this report; live prices and ratios move daily — verify before acting.</p>
+  <p class="disclaimer">This is a view of the fundamentals for educational purposes only. It is not investment advice and not a buy/sell/hold recommendation. Verify all figures independently. The final decision is yours.</p>
+  <div class="footer-brand">
+    Day 16 of #60DayClaudeChallenge · NVIDIA vs AMD Analysis · Built with AI
+  </div>
+</footer>
+
+<script>
+// ══════════════════════════════════════════════════════
+// PARTICLE BACKGROUND
+// ══════════════════════════════════════════════════════
+(function(){
+  const canvas=document.getElementById('particles-canvas');
+  const ctx=canvas.getContext('2d');
+  let particles=[];
+  function resize(){canvas.width=canvas.parentElement.offsetWidth;canvas.height=canvas.parentElement.offsetHeight;}
+  resize();window.addEventListener('resize',resize);
+  class Particle{
+    constructor(){this.reset();}
+    reset(){
+      this.x=Math.random()*canvas.width;
+      this.y=Math.random()*canvas.height;
+      this.vx=(Math.random()-0.5)*0.3;
+      this.vy=(Math.random()-0.5)*0.3;
+      this.size=Math.random()*2+0.5;
+      this.alpha=Math.random()*0.3+0.1;
+      this.color=Math.random()>0.5?'118,185,0':'237,28,36';
+    }
+    update(){
+      this.x+=this.vx;this.y+=this.vy;
+      if(this.x<0||this.x>canvas.width||this.y<0||this.y>canvas.height)this.reset();
+    }
+    draw(){
+      ctx.beginPath();
+      ctx.arc(this.x,this.y,this.size,0,Math.PI*2);
+      ctx.fillStyle=`rgba(${this.color},${this.alpha})`;
+      ctx.fill();
+    }
+  }
+  for(let i=0;i<60;i++)particles.push(new Particle());
+  function animate(){
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+    particles.forEach(p=>{p.update();p.draw();});
+    // draw connections
+    for(let i=0;i<particles.length;i++){
+      for(let j=i+1;j<particles.length;j++){
+        const dx=particles[i].x-particles[j].x;
+        const dy=particles[i].y-particles[j].y;
+        const dist=Math.sqrt(dx*dx+dy*dy);
+        if(dist<120){
+          ctx.beginPath();
+          ctx.moveTo(particles[i].x,particles[i].y);
+          ctx.lineTo(particles[j].x,particles[j].y);
+          ctx.strokeStyle=`rgba(118,185,0,${0.06*(1-dist/120)})`;
+          ctx.lineWidth=0.5;
+          ctx.stroke();
+        }
+      }
+    }
+    requestAnimationFrame(animate);
+  }
+  animate();
+})();
+
+// ══════════════════════════════════════════════════════
+// SCROLL ANIMATIONS
+// ══════════════════════════════════════════════════════
+const observer=new IntersectionObserver((entries)=>{
+  entries.forEach(entry=>{
+    if(entry.isIntersecting){
+      entry.target.classList.add('visible');
+      // Animate bars within this section
+      entry.target.querySelectorAll('.bar-fill').forEach((bar,i)=>{
+        setTimeout(()=>bar.classList.add('animated'),i*100);
+      });
+    }
+  });
+},{threshold:0.1,rootMargin:'0px 0px -50px 0px'});
+
+document.querySelectorAll('.anim-item').forEach(el=>observer.observe(el));
+
+// ══════════════════════════════════════════════════════
+// NAV DOTS ACTIVE STATE
+// ══════════════════════════════════════════════════════
+const sections=['top','sec-valuation','sec-growth','sec-margins','sec-returns','sec-ownership','sec-peers','sec-verdict','sec-news','sec-risks'];
+const dots=document.querySelectorAll('.nav-dot');
+window.addEventListener('scroll',()=>{
+  let current=0;
+  sections.forEach((id,i)=>{
+    const el=document.getElementById(id);
+    if(el&&window.scrollY>=el.offsetTop-200)current=i;
+  });
+  dots.forEach((d,i)=>{d.classList.toggle('active',i===current);});
+});
+
+// ══════════════════════════════════════════════════════
+// CHART.JS CONFIG
+// ══════════════════════════════════════════════════════
+Chart.defaults.color='#8B949E';
+Chart.defaults.borderColor='rgba(48,56,68,0.3)';
+Chart.defaults.font.family="'IBM Plex Mono',monospace";
+Chart.defaults.font.size=11;
+
+const nvColor='#76B900';
+const nvBg='rgba(118,185,0,0.15)';
+const amdColor='#ED1C24';
+const amdBg='rgba(237,28,36,0.15)';
+const otherColor='#4FC3F7';
+const otherBg='rgba(79,195,247,0.15)';
+const goldColor='#FFD54F';
+const goldBg='rgba(255,213,79,0.15)';
+
+// ── Valuation Radar ──
+new Chart(document.getElementById('valuationRadar'),{
+  type:'radar',
+  data:{
+    labels:['P/E (TTM)','Fwd P/E','EV/EBITDA','P/B','PEG','Div Yield Score'],
+    datasets:[
+      {label:'NVIDIA',data:[32.5,21.4,30.5,27.6,0.47*100,0.48*100],backgroundColor:nvBg,borderColor:nvColor,borderWidth:2,pointBackgroundColor:nvColor,pointRadius:4},
+      {label:'AMD',data:[169.2,58.2,110.2,10.9,1.01*100,0],backgroundColor:amdBg,borderColor:amdColor,borderWidth:2,pointBackgroundColor:amdColor,pointRadius:4}
+    ]
+  },
+  options:{
+    responsive:true,
+    plugins:{legend:{position:'top',labels:{padding:16,usePointStyle:true,pointStyle:'circle'}}},
+    scales:{r:{
+      grid:{color:'rgba(48,56,68,0.2)'},
+      angleLines:{color:'rgba(48,56,68,0.2)'},
+      pointLabels:{font:{size:10}},
+      ticks:{display:false},
+      suggestedMin:0
+    }}
+  }
+});
+
+// ── Revenue Growth Bar Chart ──
+new Chart(document.getElementById('revenueGrowthChart'),{
+  type:'bar',
+  data:{
+    labels:['TTM Revenue Growth','Q4/Q1 Revenue YoY','Net Income Growth'],
+    datasets:[
+      {label:'NVIDIA',data:[70.7,73,65],backgroundColor:nvColor,borderRadius:6,barPercentage:0.6},
+      {label:'AMD',data:[35.0,38,95],backgroundColor:amdColor,borderRadius:6,barPercentage:0.6}
+    ]
+  },
+  options:{
+    responsive:true,
+    plugins:{legend:{position:'top',labels:{padding:16,usePointStyle:true,pointStyle:'circle'}},
+             tooltip:{callbacks:{label:ctx=>ctx.dataset.label+': +'+ctx.raw+'%'}}},
+    scales:{
+      y:{grid:{color:'rgba(48,56,68,0.2)'},ticks:{callback:v=>v+'%'}},
+      x:{grid:{display:false}}
+    }
+  }
+});
+
+// ── CAGR Doughnut ──
+new Chart(document.getElementById('cagrChart'),{
+  type:'doughnut',
+  data:{
+    labels:['NVIDIA ~67%','AMD ~26%'],
+    datasets:[{
+      data:[67,26],
+      backgroundColor:[nvColor,amdColor],
+      borderColor:['rgba(118,185,0,0.3)','rgba(237,28,36,0.3)'],
+      borderWidth:2,
+      hoverOffset:8,
+      spacing:4,
+    }]
+  },
+  options:{
+    responsive:true,
+    cutout:'65%',
+    plugins:{
+      legend:{position:'bottom',labels:{padding:16,usePointStyle:true,pointStyle:'circle'}},
+      tooltip:{callbacks:{label:ctx=>ctx.label+' CAGR'}}
+    }
+  }
+});
+
+// ── Margins Grouped Bar ──
+new Chart(document.getElementById('marginsChart'),{
+  type:'bar',
+  data:{
+    labels:['Gross Margin','Operating Margin','Net Profit Margin'],
+    datasets:[
+      {label:'NVIDIA',data:[74.2,64.0,47.3],backgroundColor:nvColor,borderRadius:6,barPercentage:0.6},
+      {label:'AMD',data:[53.1,11.8,13.4],backgroundColor:amdColor,borderRadius:6,barPercentage:0.6}
+    ]
+  },
+  options:{
+    indexAxis:'y',
+    responsive:true,
+    plugins:{legend:{position:'top',labels:{padding:16,usePointStyle:true,pointStyle:'circle'}},
+             tooltip:{callbacks:{label:ctx=>ctx.dataset.label+': '+ctx.raw+'%'}}},
+    scales:{
+      x:{grid:{color:'rgba(48,56,68,0.2)'},ticks:{callback:v=>v+'%'},max:80},
+      y:{grid:{display:false}}
+    }
+  }
+});
+
+// ── Balance Sheet Polar Area ──
+new Chart(document.getElementById('balanceChart'),{
+  type:'polarArea',
+  data:{
+    labels:['NVDA Current Ratio','AMD Current Ratio','NVDA FCF ($B)','AMD FCF ($B)'],
+    datasets:[{
+      data:[3.44,2.72,119.1,8.6],
+      backgroundColor:[nvBg,amdBg,'rgba(118,185,0,0.3)','rgba(237,28,36,0.3)'],
+      borderColor:[nvColor,amdColor,nvColor,amdColor],
+      borderWidth:2,
+    }]
+  },
+  options:{
+    responsive:true,
+    plugins:{legend:{position:'bottom',labels:{padding:12,usePointStyle:true,pointStyle:'circle',font:{size:10}}}},
+    scales:{r:{grid:{color:'rgba(48,56,68,0.2)'},ticks:{display:false}}}
+  }
+});
+
+// ── Returns Chart ──
+new Chart(document.getElementById('returnsChart'),{
+  type:'bar',
+  data:{
+    labels:['ROE','ROIC','FCF Margin'],
+    datasets:[
+      {label:'NVIDIA',data:[114.3,104.7,47.0],backgroundColor:nvColor,borderRadius:6,barPercentage:0.5},
+      {label:'AMD',data:[8.1,7.8,22.9],backgroundColor:amdColor,borderRadius:6,barPercentage:0.5}
+    ]
+  },
+  options:{
+    responsive:true,
+    plugins:{legend:{position:'top',labels:{padding:16,usePointStyle:true,pointStyle:'circle'}},
+             tooltip:{callbacks:{label:ctx=>ctx.dataset.label+': '+ctx.raw+'%'}}},
+    scales:{
+      y:{grid:{color:'rgba(48,56,68,0.2)'},ticks:{callback:v=>v+'%'}},
+      x:{grid:{display:false}}
+    }
+  }
+});
+
+// ── Ownership Doughnuts ──
+new Chart(document.getElementById('nvdaOwnershipChart'),{
+  type:'doughnut',
+  data:{
+    labels:['Institutional ~67%','Insider ~3.8%','Other ~29.2%'],
+    datasets:[{
+      data:[67,3.8,29.2],
+      backgroundColor:[nvColor,'#FFD54F','rgba(91,100,114,0.3)'],
+      borderColor:['rgba(118,185,0,0.3)','rgba(255,213,79,0.3)','rgba(91,100,114,0.2)'],
+      borderWidth:2,hoverOffset:6,spacing:3,
+    }]
+  },
+  options:{responsive:true,cutout:'60%',plugins:{legend:{position:'bottom',labels:{padding:12,usePointStyle:true,pointStyle:'circle',font:{size:10}}}}}
+});
+
+new Chart(document.getElementById('amdOwnershipChart'),{
+  type:'doughnut',
+  data:{
+    labels:['Institutional ~67%','Insider ~0.9%','Other ~32.1%'],
+    datasets:[{
+      data:[67,0.9,32.1],
+      backgroundColor:[amdColor,'#FFD54F','rgba(91,100,114,0.3)'],
+      borderColor:['rgba(237,28,36,0.3)','rgba(255,213,79,0.3)','rgba(91,100,114,0.2)'],
+      borderWidth:2,hoverOffset:6,spacing:3,
+    }]
+  },
+  options:{responsive:true,cutout:'60%',plugins:{legend:{position:'bottom',labels:{padding:12,usePointStyle:true,pointStyle:'circle',font:{size:10}}}}}
+});
+
+// ── Peer Comparison ──
+new Chart(document.getElementById('peerChart'),{
+  type:'bar',
+  data:{
+    labels:['NVIDIA','AMD','Broadcom','Intel'],
+    datasets:[
+      {label:'P/E (TTM)',data:[32.5,169.2,65.6,null],backgroundColor:[nvColor,amdColor,otherColor,goldColor],borderRadius:6,barPercentage:0.6},
+      {label:'Revenue Growth %',data:[70.7,35.0,32.3,1.5],backgroundColor:[nvBg,amdBg,otherBg,goldBg],borderColor:[nvColor,amdColor,otherColor,goldColor],borderWidth:2,borderRadius:6,barPercentage:0.6}
+    ]
+  },
+  options:{
+    responsive:true,
+    plugins:{legend:{position:'top',labels:{padding:16,usePointStyle:true,pointStyle:'circle'}}},
+    scales:{
+      y:{grid:{color:'rgba(48,56,68,0.2)'}},
+      x:{grid:{display:false}}
+    }
+  }
+});
+
+// ── Scorecard Radar ──
+new Chart(document.getElementById('scorecardChart'),{
+  type:'radar',
+  data:{
+    labels:['Revenue Scale','Profitability','Growth Rate','Cash Flow','Capital Efficiency','Value (lower=better)','Stock Momentum'],
+    datasets:[
+      {label:'NVIDIA',data:[95,95,85,95,95,80,47],backgroundColor:nvBg,borderColor:nvColor,borderWidth:2,pointBackgroundColor:nvColor,pointRadius:4},
+      {label:'AMD',data:[25,35,70,20,15,40,95],backgroundColor:amdBg,borderColor:amdColor,borderWidth:2,pointBackgroundColor:amdColor,pointRadius:4}
+    ]
+  },
+  options:{
+    responsive:true,
+    plugins:{legend:{position:'top',labels:{padding:16,usePointStyle:true,pointStyle:'circle'}}},
+    scales:{r:{
+      grid:{color:'rgba(48,56,68,0.2)'},
+      angleLines:{color:'rgba(48,56,68,0.2)'},
+      pointLabels:{font:{size:10}},
+      ticks:{display:false},
+      suggestedMin:0,suggestedMax:100
+    }}
+  }
+});
+
+// ══════════════════════════════════════════════════════
+// COUNTER ANIMATION
+// ══════════════════════════════════════════════════════
+function animateCounters(){
+  document.querySelectorAll('.price-line[data-count]').forEach(el=>{
+    const target=parseFloat(el.dataset.count);
+    const prefix=el.dataset.prefix||'';
+    let current=0;
+    const increment=target/60;
+    const timer=setInterval(()=>{
+      current+=increment;
+      if(current>=target){current=target;clearInterval(timer);}
+      el.textContent=prefix+current.toFixed(2);
+    },16);
+  });
+}
+// Run counters when snap cards are visible
+const counterObserver=new IntersectionObserver((entries)=>{
+  entries.forEach(entry=>{
+    if(entry.isIntersecting){animateCounters();counterObserver.disconnect();}
+  });
+},{threshold:0.3});
+document.querySelectorAll('.snap-grid').forEach(el=>counterObserver.observe(el));
+</script>
+</body>
+</html>
