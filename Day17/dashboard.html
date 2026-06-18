@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tata Punch · Fuel Cost Dashboard</title>
+<style>
+  :root{
+    --navy:#0a0f1e;
+    --navy-2:#0d1426;
+    --glass:rgba(255,255,255,0.05);
+    --glass-brd:rgba(255,255,255,0.10);
+    --text:#e8ecf6;
+    --sub:#8d96b3;
+    --e85:#f59e0b;
+    --petrol:#3b82f6;
+    --diesel:#9ca3af;
+    --cng:#10b981;
+    --ev:#a855f7;
+    --diesel-glow:#7dd3fc;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  body{
+    background:
+      radial-gradient(circle at 15% 0%, rgba(59,130,246,0.10), transparent 45%),
+      radial-gradient(circle at 85% 10%, rgba(157,123,255,0.08), transparent 40%),
+      var(--navy);
+    color:var(--text);
+    font-family:'Segoe UI', system-ui, -apple-system, sans-serif;
+    min-height:100vh;
+    padding:18px;
+  }
+  .wrap{max-width:1320px; margin:0 auto;}
+
+  /* ---------- header ---------- */
+  header{
+    text-align:center;
+    padding:26px 16px 22px;
+    margin-bottom:22px;
+    border-radius:18px;
+    background:var(--glass);
+    border:1px solid var(--glass-brd);
+    backdrop-filter:blur(14px);
+  }
+  header h1{
+    font-size:clamp(20px,4vw,32px);
+    font-weight:700;
+    letter-spacing:0.3px;
+  }
+  header h1 span{color:var(--diesel-glow);}
+  header p{margin-top:8px; color:var(--sub); font-size:clamp(12px,2.4vw,14px);}
+
+  /* ---------- generic section ---------- */
+  section{margin-bottom:26px;}
+  .section-title{
+    font-size:clamp(15px,2.6vw,18px);
+    font-weight:600;
+    margin-bottom:12px;
+    color:var(--text);
+    display:flex; align-items:center; gap:8px;
+  }
+  .section-title .dot{width:8px;height:8px;border-radius:50%;background:var(--diesel-glow);box-shadow:0 0 8px var(--diesel-glow);}
+
+  .card{
+    background:var(--glass);
+    border:1px solid var(--glass-brd);
+    border-radius:16px;
+    backdrop-filter:blur(14px);
+    padding:18px;
+  }
+
+  /* ---------- KPI grid ---------- */
+  .kpi-grid{
+    display:grid;
+    grid-template-columns:repeat(5,1fr);
+    gap:14px;
+  }
+  .kpi{
+    text-align:center;
+    padding:18px 10px;
+    transition:transform .25s ease;
+  }
+  .kpi:hover{transform:translateY(-4px);}
+  .kpi .label{font-size:11px; color:var(--sub); text-transform:uppercase; letter-spacing:0.6px; margin-bottom:8px;}
+  .kpi .value{font-size:clamp(18px,3vw,24px); font-weight:700;}
+  .kpi .unit{font-size:11px; color:var(--sub); margin-top:4px;}
+  .kpi.diesel{border-color:rgba(125,211,252,0.5); box-shadow:0 0 22px rgba(125,211,252,0.12);}
+  .kpi.diesel .value{color:var(--diesel-glow);}
+  .kpi.e85 .value{color:var(--e85);}
+  .kpi.warn .value{color:#fb923c;}
+  .kpi.cost .value{color:#6ee7b7;}
+
+  /* ---------- charts row ---------- */
+  .charts-row{
+    display:grid;
+    grid-template-columns:1.3fr 1fr;
+    gap:16px;
+  }
+  .chart-card svg{width:100%; height:auto; display:block;}
+  .legend{display:flex; flex-wrap:wrap; gap:14px; margin-top:10px; justify-content:center;}
+  .legend-item{display:flex; align-items:center; gap:6px; font-size:12px; color:var(--sub);}
+  .legend-swatch{width:10px;height:10px;border-radius:3px;}
+
+  .tooltip{
+    position:fixed;
+    pointer-events:none;
+    background:#10162b;
+    border:1px solid var(--glass-brd);
+    color:var(--text);
+    padding:8px 12px;
+    border-radius:8px;
+    font-size:12px;
+    box-shadow:0 8px 24px rgba(0,0,0,0.5);
+    opacity:0;
+    transition:opacity .12s ease;
+    z-index:50;
+    white-space:nowrap;
+  }
+  .tooltip.show{opacity:1;}
+
+  /* ---------- age bucket table ---------- */
+  table{width:100%; border-collapse:collapse; font-size:13px;}
+  th,td{padding:10px 8px; text-align:center; border-bottom:1px solid var(--glass-brd);}
+  th{color:var(--sub); font-weight:600; font-size:11px; text-transform:uppercase; letter-spacing:0.4px;}
+  td.fuel-name{text-align:left; font-weight:600;}
+  th.active-bucket, td.active-bucket{background:rgba(125,211,252,0.08); border-radius:4px;}
+  .na{color:var(--sub); opacity:0.5;}
+  .row-diesel td{color:var(--diesel-glow);}
+
+  /* ---------- gauge ---------- */
+  .gauge-wrap{display:flex; flex-direction:column; align-items:center;}
+  .gauge-wrap svg{max-width:320px; width:100%;}
+  #gaugeArc{
+    stroke-dashoffset:408.4;
+    transition:stroke-dashoffset 1.6s cubic-bezier(.2,.8,.2,1);
+  }
+  .gauge-wrap.animate #gaugeArc{stroke-dashoffset:175.2;}
+  .verdict{
+    margin-top:6px;
+    text-align:center;
+    max-width:480px;
+    font-size:13.5px;
+    color:var(--sub);
+    line-height:1.5;
+  }
+  .verdict b{color:var(--text);}
+
+  /* ---------- fuel cards ---------- */
+  .fuel-grid{
+    display:grid;
+    grid-template-columns:repeat(5,1fr);
+    gap:14px;
+  }
+  .fuel-card{
+    padding:18px 16px;
+    border-top:3px solid var(--sub);
+    display:flex; flex-direction:column; gap:10px;
+  }
+  .fuel-card h3{font-size:15px; display:flex; align-items:center; gap:8px;}
+  .fuel-card .swatch{width:10px;height:10px;border-radius:50%;}
+  .fuel-card ul{list-style:none; font-size:12.5px; color:var(--sub); line-height:1.7;}
+  .fuel-card .best{font-size:12px; color:var(--text); margin-top:auto; padding-top:8px; border-top:1px solid var(--glass-brd);}
+  .fuel-card.cng{border-color:var(--cng);}
+  .fuel-card.diesel{border-color:var(--diesel); box-shadow:0 0 26px rgba(125,211,252,0.22); border-width:3px; border-color:var(--diesel-glow); position:relative;}
+  .fuel-card.diesel::before{
+    content:"YOUR VEHICLE";
+    position:absolute; top:-10px; left:16px;
+    background:var(--diesel-glow); color:#04121f;
+    font-size:9px; font-weight:700; letter-spacing:0.6px;
+    padding:3px 8px; border-radius:6px;
+  }
+  .fuel-card.e85{border-color:var(--e85);}
+  .fuel-card.ev{border-color:var(--ev);}
+  .fuel-card.petrol{border-color:var(--petrol);}
+
+  footer{text-align:center; color:var(--sub); font-size:11px; padding:18px 0 6px;}
+
+  /* ---------- responsive ---------- */
+  @media (max-width:1080px){
+    .kpi-grid{grid-template-columns:repeat(3,1fr);}
+    .fuel-grid{grid-template-columns:repeat(3,1fr);}
+    .charts-row{grid-template-columns:1fr;}
+  }
+  @media (max-width:680px){
+    .kpi-grid{grid-template-columns:repeat(2,1fr);}
+    .fuel-grid{grid-template-columns:repeat(2,1fr);}
+    table{font-size:11px;}
+    th,td{padding:7px 4px;}
+  }
+  @media (max-width:420px){
+    .kpi-grid{grid-template-columns:1fr 1fr;}
+    .fuel-grid{grid-template-columns:1fr;}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <h1>Tata Punch · <span>Diesel</span> · Age: 2y · 2000 km/mo</h1>
+    <p>City + Highway + Mixed usage &nbsp;|&nbsp; Cost benchmarked across CNG, Diesel, E85 (Flex-Fuel), EV &amp; Petrol (E20)</p>
+  </header>
+
+  <!-- KPI CARDS -->
+  <section>
+    <div class="kpi-grid">
+      <div class="card kpi diesel">
+        <div class="label">Your Cost / km</div>
+        <div class="value">₹4.67</div>
+        <div class="unit">Diesel avg</div>
+      </div>
+      <div class="card kpi e85">
+        <div class="label">E85 Cost / km</div>
+        <div class="value">₹6.37</div>
+        <div class="unit">Flex-Fuel avg</div>
+      </div>
+      <div class="card kpi warn">
+        <div class="label">E85 Premium vs Petrol</div>
+        <div class="value">+3.6%</div>
+        <div class="unit">running penalty</div>
+      </div>
+      <div class="card kpi">
+        <div class="label">E85 Break-even Price</div>
+        <div class="value">₹79.11</div>
+        <div class="unit">per litre, vs Petrol</div>
+      </div>
+      <div class="card kpi cost">
+        <div class="label">Your Monthly Cost</div>
+        <div class="value">₹9,348</div>
+        <div class="unit">2000 km · Diesel</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- BAR + DOUGHNUT -->
+  <section class="charts-row">
+    <div class="card chart-card">
+      <div class="section-title"><span class="dot"></span>Cost per km by Fuel</div>
+      <svg id="barChart" viewBox="0 0 400 250" xmlns="http://www.w3.org/2000/svg">
+        <line x1="20" y1="220" x2="380" y2="220" stroke="rgba(255,255,255,0.15)" stroke-width="1"/>
+        <line x1="20" y1="20" x2="20" y2="220" stroke="rgba(255,255,255,0.15)" stroke-width="1"/>
+        <!-- gridlines -->
+        <line x1="20" y1="163" x2="380" y2="163" stroke="rgba(255,255,255,0.06)" stroke-width="1"/>
+        <line x1="20" y1="106" x2="380" y2="106" stroke="rgba(255,255,255,0.06)" stroke-width="1"/>
+        <line x1="20" y1="49"  x2="380" y2="49"  stroke="rgba(255,255,255,0.06)" stroke-width="1"/>
+
+        <!-- bars -->
+        <rect class="bar" data-tip="CNG · ₹3.32/km" x="20"  y="125" width="50" height="95"  fill="var(--cng)" rx="5"/>
+        <rect class="bar" data-tip="Diesel · ₹4.67/km" x="92"  y="87"  width="50" height="133" fill="var(--diesel-glow)" rx="5"/>
+        <rect class="bar" data-tip="E85 (Flex-Fuel) · ₹6.37/km" x="164" y="38"  width="50" height="182" fill="var(--e85)" rx="5"/>
+        <rect class="bar" data-tip="Electric (EV) · ₹1.75/km" x="236" y="170" width="50" height="50"  fill="var(--ev)" rx="5"/>
+        <rect class="bar" data-tip="Petrol (E20) · ₹6.15/km" x="308" y="44"  width="50" height="176" fill="var(--petrol)" rx="5"/>
+
+        <!-- value labels -->
+        <text x="45"  y="118" text-anchor="middle" font-size="11" fill="#cfd6ea">3.32</text>
+        <text x="117" y="80"  text-anchor="middle" font-size="11" fill="#cfd6ea">4.67</text>
+        <text x="189" y="31"  text-anchor="middle" font-size="11" fill="#cfd6ea">6.37</text>
+        <text x="261" y="163" text-anchor="middle" font-size="11" fill="#cfd6ea">1.75</text>
+        <text x="333" y="37"  text-anchor="middle" font-size="11" fill="#cfd6ea">6.15</text>
+
+        <!-- x labels -->
+        <text x="45"  y="236" text-anchor="middle" font-size="10.5" fill="var(--sub)">CNG</text>
+        <text x="117" y="236" text-anchor="middle" font-size="10.5" fill="var(--sub)">Diesel</text>
+        <text x="189" y="236" text-anchor="middle" font-size="10.5" fill="var(--sub)">E85</text>
+        <text x="261" y="236" text-anchor="middle" font-size="10.5" fill="var(--sub)">EV</text>
+        <text x="333" y="236" text-anchor="middle" font-size="10.5" fill="var(--sub)">Petrol</text>
+      </svg>
+    </div>
+
+    <div class="card chart-card">
+      <div class="section-title"><span class="dot"></span>CO₂ Emitted / km Share</div>
+      <svg id="donutChart" viewBox="0 0 220 220" xmlns="http://www.w3.org/2000/svg">
+        <g transform="translate(110,110) rotate(-90)">
+          <circle class="seg" data-tip="CNG · 0.125 kg/km (19.7%)"  r="80" cx="0" cy="0" fill="none" stroke="var(--cng)"  stroke-width="32" stroke-dasharray="99.07 403.58"  stroke-dashoffset="0"/>
+          <circle class="seg" data-tip="Diesel · 0.179 kg/km (28.1%)" r="80" cx="0" cy="0" fill="none" stroke="var(--diesel-glow)" stroke-width="32" stroke-dasharray="141.30 361.35" stroke-dashoffset="-99.07"/>
+          <circle class="seg" data-tip="E85 (Flex-Fuel) · 0.070 kg/km (11.0%)" r="80" cx="0" cy="0" fill="none" stroke="var(--e85)" stroke-width="32" stroke-dasharray="55.19 447.46" stroke-dashoffset="-240.37"/>
+          <circle class="seg" data-tip="Electric (EV) · 0.091 kg/km (14.3%)" r="80" cx="0" cy="0" fill="none" stroke="var(--ev)" stroke-width="32" stroke-dasharray="72.13 430.52" stroke-dashoffset="-295.56"/>
+          <circle class="seg" data-tip="Petrol (E20) · 0.171 kg/km (26.8%)" r="80" cx="0" cy="0" fill="none" stroke="var(--petrol)" stroke-width="32" stroke-dasharray="134.95 367.70" stroke-dashoffset="-367.69"/>
+        </g>
+        <text x="110" y="105" text-anchor="middle" font-size="13" fill="var(--text)" font-weight="700">CO₂/km</text>
+        <text x="110" y="122" text-anchor="middle" font-size="10" fill="var(--sub)">by fuel type</text>
+      </svg>
+      <div class="legend">
+        <div class="legend-item"><span class="legend-swatch" style="background:var(--cng)"></span>CNG</div>
+        <div class="legend-item"><span class="legend-swatch" style="background:var(--diesel-glow)"></span>Diesel</div>
+        <div class="legend-item"><span class="legend-swatch" style="background:var(--e85)"></span>E85</div>
+        <div class="legend-item"><span class="legend-swatch" style="background:var(--ev)"></span>EV</div>
+        <div class="legend-item"><span class="legend-swatch" style="background:var(--petrol)"></span>Petrol</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- LINE CHART -->
+  <section>
+    <div class="card chart-card">
+      <div class="section-title"><span class="dot"></span>Cost / km vs Vehicle Age (0–12 yrs)</div>
+      <svg id="lineChart" viewBox="0 0 600 290" xmlns="http://www.w3.org/2000/svg">
+        <!-- axes -->
+        <line x1="40" y1="260" x2="580" y2="260" stroke="rgba(255,255,255,0.15)"/>
+        <line x1="40" y1="20"  x2="40"  y2="260" stroke="rgba(255,255,255,0.15)"/>
+        <!-- gridlines y -->
+        <line x1="40" y1="200" x2="580" y2="200" stroke="rgba(255,255,255,0.05)"/>
+        <line x1="40" y1="140" x2="580" y2="140" stroke="rgba(255,255,255,0.05)"/>
+        <line x1="40" y1="80"  x2="580" y2="80"  stroke="rgba(255,255,255,0.05)"/>
+
+        <!-- x-axis labels -->
+        <text x="40"  y="276" font-size="10" fill="var(--sub)" text-anchor="middle">0</text>
+        <text x="130" y="276" font-size="10" fill="var(--sub)" text-anchor="middle">2</text>
+        <text x="220" y="276" font-size="10" fill="var(--sub)" text-anchor="middle">4</text>
+        <text x="310" y="276" font-size="10" fill="var(--sub)" text-anchor="middle">6</text>
+        <text x="400" y="276" font-size="10" fill="var(--sub)" text-anchor="middle">8</text>
+        <text x="490" y="276" font-size="10" fill="var(--sub)" text-anchor="middle">10</text>
+        <text x="580" y="276" font-size="10" fill="var(--sub)" text-anchor="middle">12 yrs</text>
+
+        <!-- vehicle age marker (2 yrs) -->
+        <line x1="130" y1="20" x2="130" y2="260" stroke="var(--diesel-glow)" stroke-width="1.6" stroke-dasharray="4 4"/>
+        <text x="136" y="32" font-size="10.5" fill="var(--diesel-glow)">Your car · 2y</text>
+
+        <!-- trend lines -->
+        <polyline fill="none" stroke="var(--cng)" stroke-width="2.4" points="40,170 130,165.8 220,161.6 310,157.4 400,153.5 490,149.3 580,145.1"/>
+        <polyline fill="none" stroke="var(--diesel-glow)" stroke-width="2.8" points="40,141.5 130,134.9 220,128.3 310,121.7 400,115.1 490,108.2 580,101.9"/>
+        <polyline fill="none" stroke="var(--ev)" stroke-width="2.4" points="40,209.9 130,207.5 220,205.1 310,202.7 400,200.6 490,198.2 580,195.8"/>
+        <polyline fill="none" stroke="var(--petrol)" stroke-width="2.4" points="40,99.5 130,91.4 220,83.6 310,75.8 400,67.7 490,59.9 580,52.1"/>
+        <polyline fill="none" stroke="var(--e85)" stroke-width="2.4" points="40,76.1 130,67.1 220,58.1 310,49.1 400,40.1 490,31.1 580,22.1"/>
+
+        <!-- marker dot on diesel line at age 2 -->
+        <circle cx="130" cy="134.9" r="5" fill="var(--diesel-glow)" stroke="#0a0f1e" stroke-width="2"/>
+      </svg>
+      <div class="legend">
+        <div class="legend-item"><span class="legend-swatch" style="background:var(--cng)"></span>CNG</div>
+        <div class="legend-item"><span class="legend-swatch" style="background:var(--diesel-glow)"></span>Diesel (yours)</div>
+        <div class="legend-item"><span class="legend-swatch" style="background:var(--e85)"></span>E85</div>
+        <div class="legend-item"><span class="legend-swatch" style="background:var(--ev)"></span>EV</div>
+        <div class="legend-item"><span class="legend-swatch" style="background:var(--petrol)"></span>Petrol</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- AGE BUCKET TABLE -->
+  <section>
+    <div class="card">
+      <div class="section-title"><span class="dot"></span>Cost &amp; Maintenance by Age Bucket <span style="color:var(--sub); font-weight:400; font-size:12px;">(your car: 2y → New 0–2y)</span></div>
+      <table>
+        <thead>
+          <tr>
+            <th>Fuel</th>
+            <th class="active-bucket">New (0–2y)</th>
+            <th>Mid-life (3–5y)</th>
+            <th>Aged (6–9y)</th>
+            <th>Old (10+y)</th>
+          </tr>
+          <tr style="font-size:10px;">
+            <th></th>
+            <th class="active-bucket">cpkm / maint</th>
+            <th>cpkm / maint</th>
+            <th>cpkm / maint</th>
+            <th>cpkm / maint</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="fuel-name">CNG</td>
+            <td class="active-bucket">₹3.08 / ₹0.50</td>
+            <td>₹3.24 / ₹0.66</td>
+            <td>₹3.49 / ₹0.70</td>
+            <td class="na">—</td>
+          </tr>
+          <tr class="row-diesel">
+            <td class="fuel-name">Diesel</td>
+            <td class="active-bucket na">— (no data)</td>
+            <td>₹4.35 / ₹0.70</td>
+            <td>₹4.69 / ₹1.14</td>
+            <td>₹5.29 / ₹1.41</td>
+          </tr>
+          <tr>
+            <td class="fuel-name">E85 (Flex-Fuel)</td>
+            <td class="active-bucket">₹6.31 / ₹0.43</td>
+            <td>₹6.67 / ₹0.58</td>
+            <td class="na">—</td>
+            <td class="na">—</td>
+          </tr>
+          <tr>
+            <td class="fuel-name">Electric (EV)</td>
+            <td class="active-bucket">₹1.71 / ₹0.21</td>
+            <td>₹1.82 / ₹0.27</td>
+            <td class="na">—</td>
+            <td class="na">—</td>
+          </tr>
+          <tr>
+            <td class="fuel-name">Petrol (E20)</td>
+            <td class="active-bucket na">—</td>
+            <td>₹5.85 / ₹0.57</td>
+            <td>₹6.33 / ₹0.41</td>
+            <td class="na">—</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- GAUGE -->
+  <section>
+    <div class="card gauge-wrap" id="gaugeWrap">
+      <div class="section-title"><span class="dot"></span>E85 Viability Score</div>
+      <svg viewBox="0 0 300 175" xmlns="http://www.w3.org/2000/svg">
+        <path d="M 20 150 A 130 130 0 0 1 280 150" fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="22" stroke-linecap="round"/>
+        <path id="gaugeArc" d="M 20 150 A 130 130 0 0 1 280 150" fill="none" stroke="var(--e85)" stroke-width="22" stroke-linecap="round" stroke-dasharray="408.4 408.4"/>
+        <text x="150" y="118" text-anchor="middle" font-size="38" font-weight="700" fill="var(--text)">5.71</text>
+        <text x="150" y="140" text-anchor="middle" font-size="12" fill="var(--sub)">out of 10</text>
+        <text x="22"  y="170" font-size="10" fill="var(--sub)">0</text>
+        <text x="270" y="170" font-size="10" fill="var(--sub)">10</text>
+      </svg>
+      <p class="verdict"><b>Verdict:</b> E85 scores well on emissions (3/3) and refuel speed (2/2), but a zero on raw cost/km drags it to a middling <b>5.71/10</b> — it's the cleanest-burning option here, yet the priciest to actually drive.</p>
+    </div>
+  </section>
+
+  <!-- FUEL CARDS -->
+  <section>
+    <div class="section-title"><span class="dot"></span>Fuel-by-Fuel Breakdown</div>
+    <div class="fuel-grid">
+
+      <div class="card fuel-card cng">
+        <h3><span class="swatch" style="background:var(--cng)"></span>CNG</h3>
+        <ul>
+          <li>✅ Cheapest combustion fuel — ₹3.32/km</li>
+          <li>✅ Lower CO₂ than petrol &amp; diesel</li>
+          <li>❌ Refuel takes longer (~8 min)</li>
+          <li>❌ Thin station network on highways</li>
+        </ul>
+        <div class="best">🚗 Best for: dense city, stop-start driving</div>
+      </div>
+
+      <div class="card fuel-card diesel">
+        <h3><span class="swatch" style="background:var(--diesel-glow)"></span>Diesel</h3>
+        <ul>
+          <li>✅ Strong mileage at 19.6 km/l for highway runs</li>
+          <li>✅ Quick 5-min refuel, same as petrol</li>
+          <li>❌ Highest maintenance/km — ₹1.00/km</li>
+          <li>❌ Highest CO₂/km of all 5 fuels</li>
+        </ul>
+        <div class="best">🚗 Best for: mixed city + highway, high monthly km — fits your Punch</div>
+      </div>
+
+      <div class="card fuel-card e85">
+        <h3><span class="swatch" style="background:var(--e85)"></span>E85 (Flex-Fuel)</h3>
+        <ul>
+          <li>✅ Lowest CO₂/km of every fuel — 0.070 kg/km</li>
+          <li>✅ Fast 5-min refuel like petrol/diesel</li>
+          <li>❌ Costliest to run — ₹6.37/km despite cheaper pump price</li>
+          <li>❌ Weakest mileage among combustion fuels</li>
+        </ul>
+        <div class="best">🚗 Best for: eco-first drivers where E85 is heavily subsidised</div>
+      </div>
+
+      <div class="card fuel-card ev">
+        <h3><span class="swatch" style="background:var(--ev)"></span>Electric (EV)</h3>
+        <ul>
+          <li>✅ Cheapest running cost by far — ₹1.75/km</li>
+          <li>✅ Lowest maintenance — ₹0.23/km</li>
+          <li>❌ 45-min recharge vs 5–8 min for liquid/gas</li>
+          <li>❌ Shortest range-equivalent per charge</li>
+        </ul>
+        <div class="best">🚗 Best for: city commuters with home/office charging</div>
+      </div>
+
+      <div class="card fuel-card petrol">
+        <h3><span class="swatch" style="background:var(--petrol)"></span>Petrol (E20)</h3>
+        <ul>
+          <li>✅ Lower CO₂/km than diesel</li>
+          <li>✅ Widest refuel availability, 5-min fill</li>
+          <li>❌ Second-priciest fuel — ₹6.15/km</li>
+          <li>❌ Highest fuel price/unit — ₹100</li>
+        </ul>
+        <div class="best">🚗 Best for: mixed driving without diesel/CNG access</div>
+      </div>
+
+    </div>
+  </section>
+
+  <footer>Computed from day17_e85_dataset_optimised.csv · Day 17 · #60DayClaudeChallenge</footer>
+</div>
+
+<div class="tooltip" id="tooltip"></div>
+
+<script>
+  // animate gauge on load
+  window.addEventListener('load', () => {
+    requestAnimationFrame(() => {
+      document.getElementById('gaugeWrap').classList.add('animate');
+    });
+  });
+
+  // tooltips for bar + donut
+  const tooltip = document.getElementById('tooltip');
+  document.querySelectorAll('[data-tip]').forEach(el => {
+    el.addEventListener('mousemove', (e) => {
+      tooltip.textContent = el.getAttribute('data-tip');
+      tooltip.style.left = (e.clientX + 14) + 'px';
+      tooltip.style.top = (e.clientY + 14) + 'px';
+      tooltip.classList.add('show');
+      el.style.filter = 'brightness(1.25)';
+    });
+    el.addEventListener('mouseleave', () => {
+      tooltip.classList.remove('show');
+      el.style.filter = '';
+    });
+  });
+</script>
+</body>
+</html>
