@@ -1,0 +1,1780 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>Face Puzzle — Snap, Scramble, Solve!</title>
+<meta name="description" content="A fun face puzzle game: take a selfie, scramble it into tiles, and race to solve it. Supports 3×3, 4×4, and 5×5 grids with timer, move counter, and leaderboard.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Outfit:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+
+  :root {
+    --bg-deep: #06060f;
+    --bg-primary: #0b0b1e;
+    --bg-elevated: #111128;
+    --bg-card: rgba(255,255,255,0.03);
+    --bg-glass: rgba(255,255,255,0.045);
+    --bg-glass-hover: rgba(255,255,255,0.08);
+    --border-subtle: rgba(255,255,255,0.06);
+    --border-glass: rgba(255,255,255,0.09);
+    --border-active: rgba(255,255,255,0.18);
+    --text-primary: #eeeeff;
+    --text-secondary: #a0a0d0;
+    --text-muted: #6060a0;
+    --text-dim: #4040780;
+    --accent-purple: #8b5cf6;
+    --accent-violet: #a855f7;
+    --accent-pink: #ec4899;
+    --accent-rose: #f43f5e;
+    --accent-cyan: #06b6d4;
+    --accent-emerald: #10b981;
+    --accent-amber: #f59e0b;
+    --accent-blue: #3b82f6;
+    --success: #22c55e;
+    --success-glow: rgba(34,197,94,0.25);
+    --warning: #f59e0b;
+    --danger: #ef4444;
+    --glow-purple: rgba(139,92,246,0.35);
+    --glow-pink: rgba(236,72,153,0.3);
+    --glow-cyan: rgba(6,182,212,0.25);
+    --gradient-hero: linear-gradient(135deg, #8b5cf6 0%, #a855f7 25%, #ec4899 50%, #f43f5e 75%, #f59e0b 100%);
+    --gradient-card: linear-gradient(135deg, rgba(139,92,246,0.08), rgba(236,72,153,0.05));
+    --gradient-border: linear-gradient(135deg, rgba(139,92,246,0.3), rgba(236,72,153,0.2), rgba(6,182,212,0.15));
+    --r-sm: 10px;
+    --r-md: 16px;
+    --r-lg: 22px;
+    --r-xl: 30px;
+    --r-full: 9999px;
+    --shadow-sm: 0 2px 8px rgba(0,0,0,0.3);
+    --shadow-md: 0 4px 24px rgba(0,0,0,0.4);
+    --shadow-lg: 0 8px 40px rgba(0,0,0,0.5);
+    --shadow-glow: 0 0 60px rgba(139,92,246,0.12), 0 0 120px rgba(236,72,153,0.06);
+    --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+    --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+
+  html { height:100%; overflow-x:hidden; scroll-behavior:smooth; }
+
+  body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    background: var(--bg-deep);
+    color: var(--text-primary);
+    min-height: 100vh;
+    position: relative;
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  /* ── Animated Mesh Background ─────────────────────────── */
+  .bg-mesh {
+    position: fixed; inset:0; z-index:0; pointer-events:none;
+    overflow:hidden;
+  }
+  .bg-mesh .orb {
+    position:absolute; border-radius:50%; filter:blur(100px);
+    animation: orbFloat linear infinite;
+  }
+  .bg-mesh .orb-1 {
+    width:600px; height:600px; top:-10%; left:-10%;
+    background: radial-gradient(circle, rgba(139,92,246,0.15) 0%, transparent 70%);
+    animation-duration:25s;
+  }
+  .bg-mesh .orb-2 {
+    width:500px; height:500px; top:50%; right:-15%;
+    background: radial-gradient(circle, rgba(236,72,153,0.12) 0%, transparent 70%);
+    animation-duration:30s; animation-delay:-10s;
+  }
+  .bg-mesh .orb-3 {
+    width:400px; height:400px; bottom:-5%; left:30%;
+    background: radial-gradient(circle, rgba(6,182,212,0.10) 0%, transparent 70%);
+    animation-duration:22s; animation-delay:-5s;
+  }
+  .bg-mesh .orb-4 {
+    width:350px; height:350px; top:30%; left:50%;
+    background: radial-gradient(circle, rgba(245,158,11,0.07) 0%, transparent 70%);
+    animation-duration:28s; animation-delay:-15s;
+  }
+  @keyframes orbFloat {
+    0%, 100% { transform: translate(0, 0) scale(1); }
+    25% { transform: translate(80px, -60px) scale(1.1); }
+    50% { transform: translate(-40px, 80px) scale(0.9); }
+    75% { transform: translate(60px, 40px) scale(1.05); }
+  }
+
+  /* ── Grid Noise Overlay ───────────────────────────────── */
+  .bg-grid {
+    position:fixed; inset:0; z-index:0; pointer-events:none;
+    background-image:
+      linear-gradient(rgba(255,255,255,0.015) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,0.015) 1px, transparent 1px);
+    background-size: 60px 60px;
+    mask-image: radial-gradient(ellipse 70% 70% at 50% 50%, black 20%, transparent 70%);
+    -webkit-mask-image: radial-gradient(ellipse 70% 70% at 50% 50%, black 20%, transparent 70%);
+  }
+
+  /* ── Floating Particles (Canvas) ──────────────────────── */
+  #particleCanvas {
+    position:fixed; inset:0; z-index:0; pointer-events:none;
+  }
+
+  /* ── Confetti Canvas ──────────────────────────────────── */
+  #confettiCanvas {
+    position:fixed; inset:0; z-index:2000; pointer-events:none;
+  }
+
+  /* ── App Wrapper ──────────────────────────────────────── */
+  .app-wrap {
+    position:relative; z-index:1;
+    min-height:100vh;
+    display:flex; flex-direction:column; align-items:center;
+    padding:20px 16px 40px;
+  }
+
+  /* ── Header ───────────────────────────────────────────── */
+  .header {
+    text-align:center; margin-bottom:28px;
+    animation: headerIn 1s var(--ease-out-expo) both;
+  }
+  .header .logo {
+    font-family:'Outfit',sans-serif;
+    font-size:clamp(2rem, 6vw, 3.2rem);
+    font-weight:900;
+    letter-spacing:-0.03em;
+    line-height:1.1;
+    background: var(--gradient-hero);
+    background-size:200% 200%;
+    -webkit-background-clip:text; background-clip:text;
+    -webkit-text-fill-color:transparent;
+    animation: gradientShift 6s ease infinite;
+    position:relative;
+    display:inline-block;
+  }
+  .header .logo::after {
+    content:'';
+    position:absolute; bottom:-4px; left:10%; right:10%; height:2px;
+    background:var(--gradient-hero);
+    background-size:200% 200%;
+    border-radius:2px;
+    opacity:0.4;
+    animation: gradientShift 6s ease infinite;
+  }
+  .header .tagline {
+    font-size:0.9rem; color:var(--text-muted);
+    margin-top:10px; font-weight:400;
+    letter-spacing:0.6px;
+    animation: fadeUp 0.8s 0.3s var(--ease-out-expo) both;
+  }
+  @keyframes headerIn {
+    from { opacity:0; transform:translateY(-30px) scale(0.95); }
+    to { opacity:1; transform:translateY(0) scale(1); }
+  }
+  @keyframes gradientShift {
+    0%, 100% { background-position:0% 50%; }
+    50% { background-position:100% 50%; }
+  }
+  @keyframes fadeUp {
+    from { opacity:0; transform:translateY(12px); }
+    to { opacity:1; transform:translateY(0); }
+  }
+
+  /* ── Screen System ────────────────────────────────────── */
+  .screen { display:none; width:100%; max-width:660px; }
+  .screen.active {
+    display:flex; flex-direction:column; align-items:center;
+    animation: screenIn 0.6s var(--ease-out-expo) both;
+  }
+  @keyframes screenIn {
+    from { opacity:0; transform:translateY(24px) scale(0.98); }
+    to { opacity:1; transform:translateY(0) scale(1); }
+  }
+
+  /* ── Glass Card ───────────────────────────────────────── */
+  .glass-card {
+    position:relative;
+    background: var(--bg-glass);
+    backdrop-filter:blur(30px); -webkit-backdrop-filter:blur(30px);
+    border:1px solid var(--border-glass);
+    border-radius:var(--r-xl);
+    padding:32px;
+    width:100%;
+    box-shadow: var(--shadow-glow);
+    overflow:hidden;
+  }
+  .glass-card::before {
+    content:'';
+    position:absolute; top:0; left:0; right:0; height:1px;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.12), transparent);
+  }
+
+  /* ── Buttons ──────────────────────────────────────────── */
+  .btn {
+    display:inline-flex; align-items:center; justify-content:center; gap:8px;
+    padding:14px 30px; border:none; border-radius:var(--r-md);
+    font-family:'Inter',sans-serif; font-size:0.92rem; font-weight:600;
+    cursor:pointer; position:relative; overflow:hidden;
+    transition: all 0.4s var(--ease-out-expo);
+    letter-spacing:0.015em; text-decoration:none;
+    -webkit-tap-highlight-color:transparent;
+    outline:none;
+  }
+  .btn .ripple {
+    position:absolute; border-radius:50%;
+    background:rgba(255,255,255,0.25);
+    transform:scale(0); animation: rippleAnim 0.6s ease-out forwards;
+    pointer-events:none;
+  }
+  @keyframes rippleAnim {
+    to { transform:scale(4); opacity:0; }
+  }
+  .btn:active { transform:scale(0.96); }
+
+  .btn-primary {
+    background: var(--gradient-hero); background-size:200% 200%;
+    color:#fff;
+    box-shadow: 0 4px 24px var(--glow-purple), 0 1px 3px rgba(0,0,0,0.3);
+    animation: gradientShift 4s ease infinite;
+  }
+  .btn-primary:hover {
+    box-shadow: 0 8px 40px var(--glow-purple), 0 4px 16px var(--glow-pink);
+    transform:translateY(-3px);
+  }
+
+  .btn-ghost {
+    background:transparent;
+    color:var(--text-secondary);
+    border:1px solid var(--border-glass);
+  }
+  .btn-ghost:hover {
+    background:var(--bg-glass-hover);
+    border-color:var(--border-active);
+    color:var(--text-primary);
+    transform:translateY(-1px);
+  }
+
+  .btn-glow-green {
+    background: linear-gradient(135deg, #10b981, #059669);
+    color:#fff;
+    box-shadow:0 4px 20px rgba(16,185,129,0.3);
+  }
+  .btn-glow-green:hover {
+    box-shadow:0 8px 30px rgba(16,185,129,0.45);
+    transform:translateY(-3px);
+  }
+
+  .btn-lg { padding:16px 40px; font-size:1rem; border-radius:var(--r-lg); }
+  .btn-sm { padding:10px 20px; font-size:0.82rem; border-radius:var(--r-md); }
+  .btn-icon { font-size:1.15em; }
+
+  .btn-group { display:flex; gap:12px; flex-wrap:wrap; justify-content:center; margin-top:24px; }
+
+  /* ── Camera Screen ────────────────────────────────────── */
+  .camera-wrap {
+    position:relative; width:100%;
+    border-radius:var(--r-lg); overflow:hidden;
+    background:#000; aspect-ratio:1/1;
+    border:1px solid var(--border-subtle);
+  }
+  #cameraVideo {
+    width:100%; height:100%; object-fit:cover;
+    transform:scaleX(-1); display:block;
+  }
+  #cameraCanvas { display:none; }
+
+  .cam-overlay {
+    position:absolute; inset:0;
+    display:flex; flex-direction:column;
+    justify-content:flex-end; align-items:center;
+    padding-bottom:20px;
+    background: linear-gradient(transparent 40%, rgba(0,0,0,0.55) 100%);
+    pointer-events:none;
+  }
+  .cam-guide {
+    position:absolute; top:50%; left:50%;
+    transform:translate(-50%,-50%);
+    width:60%; aspect-ratio:1; border-radius:50%;
+    border:2px solid rgba(255,255,255,0.15);
+    box-shadow: 0 0 0 4000px rgba(0,0,0,0.2);
+    animation: guideBreath 4s ease-in-out infinite;
+  }
+  .cam-guide::before, .cam-guide::after {
+    content:''; position:absolute; border-radius:50%;
+  }
+  .cam-guide::before {
+    inset:-8px;
+    border:1px dashed rgba(139,92,246,0.25);
+    animation: guideSpin 20s linear infinite;
+  }
+  .cam-guide::after {
+    inset:-16px;
+    border:1px dashed rgba(236,72,153,0.15);
+    animation: guideSpin 30s linear infinite reverse;
+  }
+  @keyframes guideBreath {
+    0%, 100% { transform:translate(-50%,-50%) scale(1); border-color:rgba(255,255,255,0.15); }
+    50% { transform:translate(-50%,-50%) scale(1.02); border-color:rgba(139,92,246,0.35); }
+  }
+  @keyframes guideSpin { to { transform:rotate(360deg); } }
+
+  .cam-label {
+    position:absolute; bottom:12px; left:50%; transform:translateX(-50%);
+    font-size:0.75rem; color:rgba(255,255,255,0.5);
+    letter-spacing:2px; text-transform:uppercase;
+    font-weight:500;
+  }
+
+  /* ── Camera Error / Fallback ──────────────────────────── */
+  .cam-fallback {
+    display:none; text-align:center; padding:24px 16px;
+  }
+  .cam-fallback .fallback-icon {
+    width:80px; height:80px; margin:0 auto 20px;
+    border-radius:50%;
+    background:var(--gradient-card);
+    border:1px solid var(--border-glass);
+    display:flex; align-items:center; justify-content:center;
+    font-size:2rem;
+    animation: iconPulse 3s ease-in-out infinite;
+  }
+  @keyframes iconPulse {
+    0%,100% { transform:scale(1); box-shadow:0 0 0 0 var(--glow-purple); }
+    50% { transform:scale(1.05); box-shadow:0 0 30px var(--glow-purple); }
+  }
+  .cam-fallback h3 {
+    font-family:'Outfit',sans-serif; font-size:1.15rem;
+    font-weight:700; margin-bottom:6px; color:var(--text-primary);
+  }
+  .cam-fallback p {
+    color:var(--text-muted); font-size:0.85rem; line-height:1.7;
+    max-width:380px; margin:0 auto 20px;
+  }
+  .cam-fallback .fallback-divider {
+    display:flex; align-items:center; gap:12px;
+    margin:20px 0; color:var(--text-muted); font-size:0.75rem;
+    text-transform:uppercase; letter-spacing:2px;
+  }
+  .cam-fallback .fallback-divider::before,
+  .cam-fallback .fallback-divider::after {
+    content:''; flex:1; height:1px;
+    background: linear-gradient(90deg, transparent, var(--border-glass), transparent);
+  }
+
+  .sample-grid {
+    display:grid; grid-template-columns:repeat(3,1fr);
+    gap:10px; max-width:320px; margin:0 auto;
+  }
+  .sample-card {
+    position:relative; aspect-ratio:1;
+    border-radius:var(--r-md); overflow:hidden;
+    border:2px solid var(--border-glass);
+    cursor:pointer;
+    transition: all 0.4s var(--ease-out-expo);
+  }
+  .sample-card:hover {
+    border-color:var(--accent-purple);
+    transform:translateY(-4px) scale(1.03);
+    box-shadow:0 8px 30px var(--glow-purple);
+  }
+  .sample-card canvas { width:100%; height:100%; display:block; }
+  .sample-card .sample-label {
+    position:absolute; bottom:0; left:0; right:0;
+    padding:6px 4px;
+    background:linear-gradient(transparent, rgba(0,0,0,0.8));
+    font-size:0.65rem; color:rgba(255,255,255,0.7);
+    text-align:center; letter-spacing:0.5px; font-weight:500;
+  }
+
+  /* ── Snapshot Preview ─────────────────────────────────── */
+  .snapshot-wrap {
+    display:none; width:100%;
+    border-radius:var(--r-lg); overflow:hidden;
+    position:relative;
+    border:1px solid var(--border-glass);
+  }
+  .snapshot-wrap img {
+    width:100%; display:block; aspect-ratio:1; object-fit:cover;
+  }
+  .snapshot-wrap .flash-fx {
+    position:absolute; inset:0; background:#fff;
+    opacity:0; pointer-events:none;
+  }
+  .snapshot-wrap .flash-fx.fire { animation: flashBang 0.5s ease-out; }
+  @keyframes flashBang {
+    0% { opacity:0.95; } 100% { opacity:0; }
+  }
+  .snapshot-badge {
+    position:absolute; top:14px; right:14px;
+    background:rgba(0,0,0,0.5); backdrop-filter:blur(8px);
+    border:1px solid rgba(255,255,255,0.1);
+    border-radius:var(--r-full);
+    padding:6px 14px; font-size:0.7rem; color:rgba(255,255,255,0.7);
+    letter-spacing:1px; text-transform:uppercase; font-weight:600;
+  }
+
+  /* ── Difficulty Screen ────────────────────────────────── */
+  .diff-preview {
+    width:100px; height:100px; border-radius:50%;
+    object-fit:cover; margin:0 auto;
+    border:3px solid transparent;
+    background-image: var(--gradient-hero);
+    background-origin:border-box;
+    background-clip:content-box,border-box;
+    box-shadow:0 0 30px var(--glow-purple);
+    animation: previewGlow 3s ease-in-out infinite alternate;
+  }
+  @keyframes previewGlow {
+    from { box-shadow:0 0 20px var(--glow-purple); }
+    to { box-shadow:0 0 40px var(--glow-pink); }
+  }
+
+  .section-heading {
+    font-family:'Outfit',sans-serif;
+    font-size:1.3rem; font-weight:700;
+    text-align:center; margin:20px 0 4px;
+    color:var(--text-primary);
+  }
+  .section-sub {
+    text-align:center; font-size:0.82rem;
+    color:var(--text-muted); margin-bottom:20px;
+  }
+
+  .diff-grid {
+    display:grid; grid-template-columns:repeat(3,1fr);
+    gap:14px;
+  }
+  .diff-card {
+    position:relative;
+    background:var(--bg-card);
+    border:2px solid var(--border-glass);
+    border-radius:var(--r-lg);
+    padding:28px 14px 22px; text-align:center;
+    cursor:pointer;
+    transition: all 0.45s var(--ease-out-expo);
+    overflow:hidden;
+  }
+  .diff-card::before {
+    content:''; position:absolute; inset:0;
+    background: var(--gradient-card); opacity:0;
+    transition:opacity 0.4s;
+  }
+  .diff-card:hover::before { opacity:1; }
+  .diff-card:hover {
+    border-color:var(--accent-purple);
+    transform:translateY(-6px) scale(1.02);
+    box-shadow:0 12px 40px var(--glow-purple);
+  }
+  .diff-card .dc-visual {
+    position:relative; z-index:1;
+    width:48px; height:48px; margin:0 auto 12px;
+    border-radius:var(--r-md);
+    display:flex; align-items:center; justify-content:center;
+    font-size:1.5rem;
+  }
+  .diff-card.easy .dc-visual { background:rgba(16,185,129,0.12); }
+  .diff-card.medium .dc-visual { background:rgba(245,158,11,0.12); }
+  .diff-card.hard .dc-visual { background:rgba(239,68,68,0.12); }
+
+  .diff-card .dc-grid-preview {
+    display:grid; gap:2px; width:28px; height:28px;
+  }
+  .diff-card.easy .dc-grid-preview { grid-template-columns:repeat(3,1fr); }
+  .diff-card.medium .dc-grid-preview { grid-template-columns:repeat(4,1fr); }
+  .diff-card.hard .dc-grid-preview { grid-template-columns:repeat(5,1fr); }
+  .dc-grid-preview span {
+    background:currentColor; border-radius:1px; opacity:0.6;
+  }
+  .diff-card.easy .dc-grid-preview span { color:var(--accent-emerald); }
+  .diff-card.medium .dc-grid-preview span { color:var(--accent-amber); }
+  .diff-card.hard .dc-grid-preview span { color:var(--accent-rose); }
+
+  .diff-card .dc-title {
+    position:relative; z-index:1;
+    font-family:'Outfit',sans-serif;
+    font-size:1.1rem; font-weight:700;
+    color:var(--text-primary);
+  }
+  .diff-card .dc-meta {
+    position:relative; z-index:1;
+    font-size:0.72rem; color:var(--text-muted);
+    margin-top:4px; font-weight:500;
+  }
+  .diff-card .dc-badge {
+    position:relative; z-index:1;
+    display:inline-block; margin-top:10px;
+    padding:3px 10px; border-radius:var(--r-full);
+    font-size:0.65rem; font-weight:700;
+    text-transform:uppercase; letter-spacing:0.8px;
+  }
+  .diff-card.easy .dc-badge { background:rgba(16,185,129,0.12); color:var(--accent-emerald); }
+  .diff-card.medium .dc-badge { background:rgba(245,158,11,0.12); color:var(--accent-amber); }
+  .diff-card.hard .dc-badge { background:rgba(239,68,68,0.12); color:var(--accent-rose); }
+
+  /* ── Game Screen ──────────────────────────────────────── */
+  #gameScreen { max-width:920px; }
+
+  .game-hud {
+    display:flex; justify-content:center; align-items:center;
+    flex-wrap:wrap; gap:10px;
+    margin-bottom:18px; width:100%;
+  }
+  .hud-pill {
+    display:inline-flex; align-items:center; gap:8px;
+    background:var(--bg-glass); backdrop-filter:blur(16px);
+    border:1px solid var(--border-glass);
+    border-radius:var(--r-full);
+    padding:10px 20px; font-size:0.88rem; font-weight:500;
+    transition: all 0.3s var(--ease-out-expo);
+  }
+  .hud-pill:hover { background:var(--bg-glass-hover); border-color:var(--border-active); }
+  .hud-pill .h-icon { font-size:1rem; }
+  .hud-pill .h-val {
+    font-family:'JetBrains Mono',monospace;
+    font-weight:700; font-size:0.9rem;
+    font-variant-numeric:tabular-nums;
+  }
+  .hud-pill.h-timer .h-val { color:var(--accent-purple); }
+  .hud-pill.h-moves .h-val { color:var(--accent-pink); }
+  .hud-pill.h-correct .h-val { color:var(--success); }
+
+  .game-layout {
+    display:flex; gap:28px; align-items:flex-start;
+    justify-content:center; width:100%; flex-wrap:wrap;
+  }
+
+  .board-col { position:relative; }
+
+  .puzzle-board {
+    position:relative;
+    background: rgba(0,0,0,0.35);
+    border:2px solid var(--border-glass);
+    border-radius:var(--r-lg);
+    overflow:hidden;
+    touch-action:none;
+    box-shadow: inset 0 0 60px rgba(0,0,0,0.3), 0 12px 50px rgba(0,0,0,0.5);
+  }
+  .board-gridlines {
+    position:absolute; inset:0;
+    pointer-events:none; z-index:1;
+    opacity:0.08;
+  }
+
+  .puzzle-piece {
+    position:absolute; cursor:grab;
+    transition: box-shadow 0.3s, border-color 0.3s, filter 0.3s;
+    border:1.5px solid rgba(255,255,255,0.06);
+    background-size:cover; background-repeat:no-repeat;
+    user-select:none; -webkit-user-select:none;
+    touch-action:none; will-change:left,top;
+    z-index:2;
+  }
+  .puzzle-piece:hover {
+    border-color:rgba(255,255,255,0.15);
+    z-index:5;
+    filter:brightness(1.05);
+  }
+  .puzzle-piece.dragging {
+    cursor:grabbing; z-index:100;
+    border-color:var(--accent-violet);
+    box-shadow:0 0 25px var(--glow-purple), 0 12px 40px rgba(0,0,0,0.6);
+    filter:brightness(1.1);
+    transition:none;
+  }
+  .puzzle-piece.correct {
+    border-color:var(--success);
+    box-shadow:0 0 14px var(--success-glow);
+  }
+  .puzzle-piece.swap-anim {
+    transition: left 0.35s var(--ease-out-expo), top 0.35s var(--ease-out-expo);
+  }
+  .puzzle-piece.pop {
+    animation: popIn 0.35s var(--ease-spring);
+  }
+  @keyframes popIn {
+    0% { transform:scale(1); }
+    50% { transform:scale(1.1); }
+    100% { transform:scale(1); }
+  }
+
+  /* ── Side Panel ───────────────────────────────────────── */
+  .side-panel {
+    display:flex; flex-direction:column; align-items:center; gap:14px;
+    min-width:140px;
+  }
+  .ref-img-wrap {
+    position:relative; border-radius:var(--r-md); overflow:hidden;
+    border:2px solid var(--border-glass);
+    box-shadow:var(--shadow-md);
+    transition:all 0.4s var(--ease-out-expo);
+    cursor:pointer;
+  }
+  .ref-img-wrap:hover {
+    border-color:var(--accent-purple);
+    transform:scale(1.06);
+    box-shadow:0 8px 30px var(--glow-purple);
+  }
+  .ref-img-wrap img {
+    width:140px; height:140px; object-fit:cover; display:block;
+    opacity:0.55; transition:opacity 0.3s;
+  }
+  .ref-img-wrap:hover img { opacity:1; }
+  .ref-img-wrap .ref-tag {
+    position:absolute; bottom:0; left:0; right:0;
+    background:linear-gradient(transparent, rgba(0,0,0,0.8));
+    padding:8px 0 6px; text-align:center;
+    font-size:0.6rem; color:rgba(255,255,255,0.5);
+    text-transform:uppercase; letter-spacing:1.5px; font-weight:600;
+  }
+
+  /* ── Progress Ring ────────────────────────────────────── */
+  .progress-ring-wrap {
+    width:80px; height:80px; position:relative;
+  }
+  .progress-ring-wrap svg { transform:rotate(-90deg); }
+  .progress-ring-bg {
+    fill:none; stroke:var(--border-glass); stroke-width:4;
+  }
+  .progress-ring-fill {
+    fill:none; stroke:url(#progressGrad); stroke-width:4;
+    stroke-linecap:round;
+    transition: stroke-dashoffset 0.5s var(--ease-out-expo);
+  }
+  .progress-ring-text {
+    position:absolute; inset:0;
+    display:flex; align-items:center; justify-content:center;
+    font-family:'JetBrains Mono',monospace;
+    font-size:0.8rem; font-weight:700; color:var(--text-primary);
+  }
+
+  /* ── Win Overlay ──────────────────────────────────────── */
+  .win-overlay {
+    display:none; position:fixed; inset:0; z-index:1500;
+    background:rgba(6,6,15,0.88);
+    backdrop-filter:blur(20px); -webkit-backdrop-filter:blur(20px);
+    justify-content:center; align-items:center;
+    padding:20px; overflow-y:auto;
+  }
+  .win-overlay.active { display:flex; animation: fadeIn 0.5s var(--ease-out-expo); }
+
+  .win-card {
+    background:var(--bg-elevated);
+    border:1px solid var(--border-glass);
+    border-radius:var(--r-xl);
+    padding:40px 36px 32px;
+    max-width:500px; width:100%;
+    text-align:center;
+    animation:cardPop 0.6s var(--ease-spring) both;
+    box-shadow: var(--shadow-glow), var(--shadow-lg);
+    position:relative; overflow:hidden;
+  }
+  .win-card::before {
+    content:''; position:absolute; top:0; left:0; right:0; height:3px;
+    background:var(--gradient-hero); background-size:200% 200%;
+    animation:gradientShift 4s ease infinite;
+  }
+  .win-card::after {
+    content:''; position:absolute; top:3px; left:0; right:0; height:80px;
+    background:linear-gradient(180deg, rgba(139,92,246,0.06), transparent);
+    pointer-events:none;
+  }
+  @keyframes cardPop {
+    from { opacity:0; transform:scale(0.8) translateY(30px); }
+    to { opacity:1; transform:scale(1) translateY(0); }
+  }
+  @keyframes fadeIn { from{opacity:0;} to{opacity:1;} }
+
+  .win-trophy {
+    font-size:4.5rem; margin-bottom:8px;
+    animation: trophyBounce 0.8s 0.2s var(--ease-spring) both;
+    position:relative; z-index:1;
+  }
+  @keyframes trophyBounce {
+    0% { opacity:0; transform:scale(0.2) rotate(-20deg); }
+    60% { transform:scale(1.15) rotate(5deg); }
+    100% { opacity:1; transform:scale(1) rotate(0); }
+  }
+
+  .win-heading {
+    font-family:'Outfit',sans-serif;
+    font-size:2rem; font-weight:900;
+    background:var(--gradient-hero); background-size:200% 200%;
+    -webkit-background-clip:text; background-clip:text;
+    -webkit-text-fill-color:transparent;
+    animation: gradientShift 4s ease infinite;
+    margin-bottom:24px; position:relative; z-index:1;
+  }
+
+  .win-stats-row {
+    display:grid; grid-template-columns:repeat(3,1fr);
+    gap:12px; margin-bottom:28px;
+    position:relative; z-index:1;
+  }
+  .ws-card {
+    background:var(--bg-glass);
+    border:1px solid var(--border-glass);
+    border-radius:var(--r-md);
+    padding:18px 10px;
+    animation: wsIn 0.5s var(--ease-out-expo) both;
+  }
+  .ws-card:nth-child(1) { animation-delay:0.3s; }
+  .ws-card:nth-child(2) { animation-delay:0.4s; }
+  .ws-card:nth-child(3) { animation-delay:0.5s; }
+  @keyframes wsIn {
+    from { opacity:0; transform:translateY(12px); }
+    to { opacity:1; transform:translateY(0); }
+  }
+  .ws-card .ws-label {
+    font-size:0.65rem; color:var(--text-muted);
+    text-transform:uppercase; letter-spacing:1.2px;
+    margin-bottom:6px; font-weight:600;
+  }
+  .ws-card .ws-value {
+    font-family:'Outfit',sans-serif;
+    font-size:1.35rem; font-weight:700;
+    color:var(--text-primary);
+  }
+
+  /* ── Leaderboard ──────────────────────────────────────── */
+  .lb-section {
+    margin-top:20px; text-align:left; width:100%;
+    position:relative; z-index:1;
+  }
+  .lb-header {
+    font-family:'Outfit',sans-serif;
+    font-size:0.95rem; font-weight:700;
+    color:var(--text-secondary);
+    margin-bottom:12px;
+    display:flex; align-items:center; gap:8px;
+  }
+  .lb-table { width:100%; border-collapse:collapse; }
+  .lb-table th {
+    font-size:0.65rem; color:var(--text-muted);
+    text-transform:uppercase; letter-spacing:1px;
+    padding:8px 8px; text-align:left;
+    border-bottom:1px solid var(--border-glass);
+    font-weight:600;
+  }
+  .lb-table td {
+    font-size:0.82rem; color:var(--text-secondary);
+    padding:10px 8px;
+    border-bottom:1px solid rgba(255,255,255,0.025);
+    font-variant-numeric:tabular-nums;
+    font-family:'JetBrains Mono',monospace;
+  }
+  .lb-table tbody tr { transition:background 0.2s; }
+  .lb-table tbody tr:hover { background:rgba(255,255,255,0.02); }
+  .lb-table tbody tr:first-child td { color:var(--success); font-weight:600; }
+  .rank-badge {
+    display:inline-flex; align-items:center; justify-content:center;
+    width:24px; height:24px; border-radius:50%;
+    font-size:0.7rem; font-weight:800;
+    font-family:'Inter',sans-serif;
+  }
+  .r-1 { background:linear-gradient(135deg,#ffd700,#f59e0b); color:#1a1000; }
+  .r-2 { background:linear-gradient(135deg,#cbd5e1,#94a3b8); color:#1a1a2e; }
+  .r-3 { background:linear-gradient(135deg,#d97706,#b45309); color:#fff; }
+  .r-x { background:var(--bg-glass); color:var(--text-muted); }
+
+  .no-records {
+    text-align:center; color:var(--text-muted);
+    font-size:0.82rem; padding:20px; font-style:italic;
+  }
+
+  /* ── Responsive ───────────────────────────────────────── */
+  @media(max-width:650px) {
+    .app-wrap { padding:14px 10px 30px; }
+    .glass-card { padding:22px 16px; }
+    .diff-grid { gap:8px; }
+    .diff-card { padding:20px 8px 16px; }
+    .diff-card .dc-title { font-size:0.95rem; }
+    .game-layout { gap:16px; }
+    .hud-pill { padding:8px 14px; font-size:0.8rem; }
+    .hud-pill .h-val { font-size:0.82rem; }
+    .side-panel { flex-direction:row; flex-wrap:wrap; justify-content:center; }
+    .ref-img-wrap img { width:100px; height:100px; }
+    .progress-ring-wrap { width:60px; height:60px; }
+    .win-card { padding:28px 20px 24px; }
+    .win-heading { font-size:1.6rem; }
+    .ws-card .ws-value { font-size:1.1rem; }
+    .btn { padding:12px 22px; font-size:0.85rem; }
+    .btn-lg { padding:14px 30px; font-size:0.92rem; }
+  }
+  @media(max-width:400px) {
+    .diff-grid { grid-template-columns:1fr; max-width:200px; margin:0 auto; }
+    .sample-grid { grid-template-columns:repeat(3,1fr); gap:6px; max-width:240px; }
+  }
+
+  /* ── Scrollbar ────────────────────────────────────────── */
+  ::-webkit-scrollbar { width:5px; }
+  ::-webkit-scrollbar-track { background:transparent; }
+  ::-webkit-scrollbar-thumb { background:rgba(139,92,246,0.25); border-radius:3px; }
+
+  /* ── Selection ────────────────────────────────────────── */
+  ::selection { background:rgba(139,92,246,0.3); color:#fff; }
+</style>
+</head>
+<body>
+
+<!-- Background Effects -->
+<div class="bg-mesh">
+  <div class="orb orb-1"></div>
+  <div class="orb orb-2"></div>
+  <div class="orb orb-3"></div>
+  <div class="orb orb-4"></div>
+</div>
+<div class="bg-grid"></div>
+<canvas id="particleCanvas"></canvas>
+<canvas id="confettiCanvas"></canvas>
+
+<div class="app-wrap">
+
+  <!-- Header -->
+  <header class="header">
+    <div class="logo">🧩 Face Puzzle</div>
+    <p class="tagline">Snap your face · Scramble it · Solve it</p>
+  </header>
+
+  <!-- ═══ Screen 1: Camera ═══ -->
+  <section id="cameraScreen" class="screen active">
+    <div class="glass-card">
+
+      <!-- Live Camera View -->
+      <div class="camera-wrap" id="cameraWrap">
+        <video id="cameraVideo" autoplay playsinline muted></video>
+        <div class="cam-overlay" id="camOverlay">
+          <div class="cam-guide"></div>
+          <span class="cam-label">Position your face</span>
+        </div>
+      </div>
+
+      <!-- Fallback: No Camera -->
+      <div class="cam-fallback" id="camFallback">
+        <div class="fallback-icon">📷</div>
+        <h3>No Camera? No Problem!</h3>
+        <p>Camera access isn't available. Pick one of these vibrant sample images below to play the puzzle!</p>
+        <div class="fallback-divider"><span>Choose an image</span></div>
+        <div class="sample-grid" id="sampleGrid"></div>
+      </div>
+
+      <!-- Snapshot Preview -->
+      <div class="snapshot-wrap" id="snapshotWrap">
+        <img id="snapshotImg" alt="Your captured photo">
+        <div class="flash-fx" id="flashFx"></div>
+        <span class="snapshot-badge">📸 Captured</span>
+      </div>
+
+      <canvas id="cameraCanvas"></canvas>
+
+      <div class="btn-group" id="cameraBtns">
+        <button id="btnSnap" class="btn btn-primary btn-lg">
+          <span class="btn-icon">📸</span> Take Photo
+        </button>
+        <button id="btnRetake" class="btn btn-ghost" style="display:none">
+          <span class="btn-icon">🔄</span> Retake
+        </button>
+        <button id="btnUse" class="btn btn-glow-green" style="display:none">
+          <span class="btn-icon">✅</span> Use This Photo
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ Screen 2: Difficulty ═══ -->
+  <section id="difficultyScreen" class="screen">
+    <div class="glass-card">
+      <img id="diffPreview" class="diff-preview" alt="Your photo">
+      <div class="section-heading">Choose Your Challenge</div>
+      <div class="section-sub">How many pieces can you handle?</div>
+      <div class="diff-grid">
+        <div class="diff-card easy" data-size="3" id="dc3">
+          <div class="dc-visual">
+            <div class="dc-grid-preview">
+              <span></span><span></span><span></span>
+              <span></span><span></span><span></span>
+              <span></span><span></span><span></span>
+            </div>
+          </div>
+          <div class="dc-title">3 × 3</div>
+          <div class="dc-meta">9 pieces</div>
+          <span class="dc-badge">Easy</span>
+        </div>
+        <div class="diff-card medium" data-size="4" id="dc4">
+          <div class="dc-visual">
+            <div class="dc-grid-preview">
+              <span></span><span></span><span></span><span></span>
+              <span></span><span></span><span></span><span></span>
+              <span></span><span></span><span></span><span></span>
+              <span></span><span></span><span></span><span></span>
+            </div>
+          </div>
+          <div class="dc-title">4 × 4</div>
+          <div class="dc-meta">16 pieces</div>
+          <span class="dc-badge">Medium</span>
+        </div>
+        <div class="diff-card hard" data-size="5" id="dc5">
+          <div class="dc-visual">
+            <div class="dc-grid-preview">
+              <span></span><span></span><span></span><span></span><span></span>
+              <span></span><span></span><span></span><span></span><span></span>
+              <span></span><span></span><span></span><span></span><span></span>
+              <span></span><span></span><span></span><span></span><span></span>
+              <span></span><span></span><span></span><span></span><span></span>
+            </div>
+          </div>
+          <div class="dc-title">5 × 5</div>
+          <div class="dc-meta">25 pieces</div>
+          <span class="dc-badge">Hard</span>
+        </div>
+      </div>
+      <div class="btn-group">
+        <button id="btnNewPhotoDiff" class="btn btn-ghost btn-sm">
+          <span class="btn-icon">📷</span> New Photo
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ Screen 3: Game ═══ -->
+  <section id="gameScreen" class="screen">
+    <div class="game-hud">
+      <div class="hud-pill h-timer">
+        <span class="h-icon">⏱️</span>
+        <span class="h-val" id="hudTimer">00:00.0</span>
+      </div>
+      <div class="hud-pill h-moves">
+        <span class="h-icon">👆</span>
+        <span class="h-val" id="hudMoves">0 moves</span>
+      </div>
+      <div class="hud-pill h-correct">
+        <span class="h-icon">✅</span>
+        <span class="h-val" id="hudCorrect">0 / 0</span>
+      </div>
+    </div>
+    <div class="game-layout">
+      <div class="board-col">
+        <div class="puzzle-board" id="puzzleBoard">
+          <canvas class="board-gridlines" id="gridCanvas"></canvas>
+        </div>
+      </div>
+      <div class="side-panel">
+        <div class="ref-img-wrap">
+          <img id="refImg" alt="Reference">
+          <span class="ref-tag">Reference</span>
+        </div>
+
+        <!-- Progress Ring -->
+        <div class="progress-ring-wrap" id="progressRingWrap">
+          <svg width="100%" height="100%" viewBox="0 0 80 80">
+            <defs>
+              <linearGradient id="progressGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#8b5cf6"/>
+                <stop offset="50%" stop-color="#ec4899"/>
+                <stop offset="100%" stop-color="#10b981"/>
+              </linearGradient>
+            </defs>
+            <circle class="progress-ring-bg" cx="40" cy="40" r="34"/>
+            <circle class="progress-ring-fill" id="progressRing" cx="40" cy="40" r="34"
+              stroke-dasharray="213.6" stroke-dashoffset="213.6"/>
+          </svg>
+          <span class="progress-ring-text" id="progressText">0%</span>
+        </div>
+
+        <button id="btnPlayAgainGame" class="btn btn-ghost btn-sm">
+          <span class="btn-icon">🔀</span> Reshuffle
+        </button>
+        <button id="btnNewPhotoGame" class="btn btn-ghost btn-sm">
+          <span class="btn-icon">📷</span> New Photo
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ Win Overlay ═══ -->
+  <div class="win-overlay" id="winOverlay">
+    <div class="win-card">
+      <div class="win-trophy">🏆</div>
+      <div class="win-heading">Puzzle Complete!</div>
+      <div class="win-stats-row">
+        <div class="ws-card">
+          <div class="ws-label">Time</div>
+          <div class="ws-value" id="winTime">00:00.0</div>
+        </div>
+        <div class="ws-card">
+          <div class="ws-label">Moves</div>
+          <div class="ws-value" id="winMoves">0</div>
+        </div>
+        <div class="ws-card">
+          <div class="ws-label">Grid</div>
+          <div class="ws-value" id="winGrid">3×3</div>
+        </div>
+      </div>
+      <div class="lb-section" id="lbSection">
+        <div class="lb-header">🏅 Top 5 Best Times</div>
+        <table class="lb-table">
+          <thead><tr><th>#</th><th>Time</th><th>Moves</th><th>Grid</th><th>Date</th></tr></thead>
+          <tbody id="lbBody"></tbody>
+        </table>
+        <div class="no-records" id="noRecords" style="display:none">No records yet!</div>
+      </div>
+      <div class="btn-group">
+        <button id="btnPlayAgainWin" class="btn btn-primary">
+          <span class="btn-icon">🔄</span> Play Again
+        </button>
+        <button id="btnNewPhotoWin" class="btn btn-ghost">
+          <span class="btn-icon">📷</span> New Photo
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+(function(){
+"use strict";
+
+/* ═══════════════════════════════════════════════════════════
+   DOM REFERENCES
+   ═══════════════════════════════════════════════════════════ */
+const $ = function(id){ return document.getElementById(id); };
+const cameraScreen   = $("cameraScreen");
+const diffScreen     = $("difficultyScreen");
+const gameScreen     = $("gameScreen");
+const cameraVideo    = $("cameraVideo");
+const cameraCanvas   = $("cameraCanvas");
+const cameraWrap     = $("cameraWrap");
+const camOverlay     = $("camOverlay");
+const camFallback    = $("camFallback");
+const sampleGrid     = $("sampleGrid");
+const snapshotWrap   = $("snapshotWrap");
+const snapshotImg    = $("snapshotImg");
+const flashFx        = $("flashFx");
+const btnSnap        = $("btnSnap");
+const btnRetake      = $("btnRetake");
+const btnUse         = $("btnUse");
+const btnNewPhotoDiff= $("btnNewPhotoDiff");
+const btnNewPhotoGame= $("btnNewPhotoGame");
+const btnNewPhotoWin = $("btnNewPhotoWin");
+const btnPlayAgainGame=$("btnPlayAgainGame");
+const btnPlayAgainWin= $("btnPlayAgainWin");
+const diffPreview    = $("diffPreview");
+const puzzleBoard    = $("puzzleBoard");
+const gridCanvas     = $("gridCanvas");
+const hudTimer       = $("hudTimer");
+const hudMoves       = $("hudMoves");
+const hudCorrect     = $("hudCorrect");
+const refImg         = $("refImg");
+const progressRing   = $("progressRing");
+const progressText   = $("progressText");
+const winOverlay     = $("winOverlay");
+const winTime        = $("winTime");
+const winMoves       = $("winMoves");
+const winGrid        = $("winGrid");
+const lbBody         = $("lbBody");
+const noRecords      = $("noRecords");
+const confettiCanvas = $("confettiCanvas");
+const particleCanvas = $("particleCanvas");
+
+/* ═══════════════════════════════════════════════════════════
+   STATE
+   ═══════════════════════════════════════════════════════════ */
+let capturedDataURL = null;
+let gridSize    = 3;
+let pieces      = [];
+let timerRef    = null;
+let startTime   = 0;
+let elapsedMs   = 0;
+let moveCount   = 0;
+let gameActive  = false;
+let boardPx     = 0;
+let cellPx      = 0;
+let dragState   = null;
+let cameraStream= null;
+let hasCameraAccess = false;
+
+/* ═══════════════════════════════════════════════════════════
+   FLOATING PARTICLES (Canvas)
+   ═══════════════════════════════════════════════════════════ */
+function initParticles(){
+  const c=particleCanvas, ctx=c.getContext("2d");
+  let w,h;
+  function resize(){ w=c.width=innerWidth; h=c.height=innerHeight; }
+  resize(); addEventListener("resize",resize);
+
+  const dots=[];
+  const colors=["rgba(139,92,246,","rgba(236,72,153,","rgba(6,182,212,","rgba(245,158,11,"];
+  for(let i=0;i<40;i++){
+    dots.push({
+      x:Math.random()*w, y:Math.random()*h,
+      r:1+Math.random()*2,
+      vx:(Math.random()-0.5)*0.3,
+      vy:(Math.random()-0.5)*0.3,
+      c:colors[~~(Math.random()*colors.length)],
+      a:0.08+Math.random()*0.12
+    });
+  }
+  function draw(){
+    ctx.clearRect(0,0,w,h);
+    dots.forEach(function(d){
+      d.x+=d.vx; d.y+=d.vy;
+      if(d.x<0)d.x=w; if(d.x>w)d.x=0;
+      if(d.y<0)d.y=h; if(d.y>h)d.y=0;
+      ctx.beginPath();
+      ctx.arc(d.x,d.y,d.r,0,Math.PI*2);
+      ctx.fillStyle=d.c+d.a+")";
+      ctx.fill();
+    });
+    for(let i=0;i<dots.length;i++){
+      for(let j=i+1;j<dots.length;j++){
+        const dx=dots[i].x-dots[j].x, dy=dots[i].y-dots[j].y;
+        const dist=Math.sqrt(dx*dx+dy*dy);
+        if(dist<150){
+          ctx.beginPath();
+          ctx.moveTo(dots[i].x,dots[i].y);
+          ctx.lineTo(dots[j].x,dots[j].y);
+          ctx.strokeStyle="rgba(139,92,246,"+(0.04*(1-dist/150))+")";
+          ctx.lineWidth=0.5;
+          ctx.stroke();
+        }
+      }
+    }
+    requestAnimationFrame(draw);
+  }
+  draw();
+}
+initParticles();
+
+/* ═══════════════════════════════════════════════════════════
+   BUTTON RIPPLE EFFECT
+   ═══════════════════════════════════════════════════════════ */
+document.addEventListener("click",function(e){
+  var btn=e.target.closest(".btn");
+  if(!btn) return;
+  var rect=btn.getBoundingClientRect();
+  var rip=document.createElement("span");
+  rip.className="ripple";
+  var size=Math.max(rect.width,rect.height)*2;
+  rip.style.width=rip.style.height=size+"px";
+  rip.style.left=(e.clientX-rect.left-size/2)+"px";
+  rip.style.top=(e.clientY-rect.top-size/2)+"px";
+  btn.appendChild(rip);
+  setTimeout(function(){ rip.remove(); },600);
+});
+
+/* ═══════════════════════════════════════════════════════════
+   SCREEN NAVIGATION
+   ═══════════════════════════════════════════════════════════ */
+function showScreen(s){
+  [cameraScreen,diffScreen,gameScreen].forEach(function(sc){ sc.classList.remove("active"); });
+  s.classList.add("active");
+}
+
+/* ═══════════════════════════════════════════════════════════
+   GENERATE SAMPLE / FALLBACK IMAGES
+   ═══════════════════════════════════════════════════════════ */
+var sampleImages = [];
+var sampleMeta = [
+  { name:"Aurora", colors:["#7c3aed","#ec4899","#f97316","#06b6d4"], pattern:"radial" },
+  { name:"Nebula", colors:["#3b82f6","#8b5cf6","#ec4899","#10b981"], pattern:"spiral" },
+  { name:"Prism",  colors:["#f43f5e","#f59e0b","#10b981","#3b82f6"], pattern:"diamond" },
+  { name:"Cosmos", colors:["#6366f1","#a855f7","#ec4899","#14b8a6"], pattern:"waves" },
+  { name:"Flame",  colors:["#ef4444","#f97316","#eab308","#f43f5e"], pattern:"flow" },
+  { name:"Ocean",  colors:["#0ea5e9","#06b6d4","#8b5cf6","#3b82f6"], pattern:"ripple" }
+];
+
+function generateSampleImage(meta, size){
+  var cv = document.createElement("canvas");
+  cv.width = cv.height = size;
+  var ctx = cv.getContext("2d");
+  var cx=size/2, cy=size/2;
+
+  // Background
+  var bg = ctx.createLinearGradient(0,0,size,size);
+  bg.addColorStop(0, meta.colors[0]);
+  bg.addColorStop(0.5, meta.colors[1]);
+  bg.addColorStop(1, meta.colors[2]);
+  ctx.fillStyle=bg; ctx.fillRect(0,0,size,size);
+
+  // Pattern overlay
+  ctx.globalCompositeOperation="overlay";
+  if(meta.pattern==="radial"){
+    for(var i=0;i<5;i++){
+      var rg=ctx.createRadialGradient(cx+Math.sin(i)*60,cy+Math.cos(i)*60,0,cx,cy,size*0.6);
+      rg.addColorStop(0,meta.colors[i%4]); rg.addColorStop(1,"transparent");
+      ctx.fillStyle=rg; ctx.fillRect(0,0,size,size);
+    }
+  } else if(meta.pattern==="spiral"){
+    for(var a=0;a<Math.PI*8;a+=0.15){
+      var r=a*size/50;
+      var x=cx+Math.cos(a)*r, y=cy+Math.sin(a)*r;
+      ctx.beginPath(); ctx.arc(x,y,3+a/3,0,Math.PI*2);
+      ctx.fillStyle=meta.colors[~~(a)%4]; ctx.globalAlpha=0.3; ctx.fill();
+    }
+  } else if(meta.pattern==="diamond"){
+    for(var dx=0;dx<size;dx+=30){
+      for(var dy=0;dy<size;dy+=30){
+        ctx.save(); ctx.translate(dx+15,dy+15); ctx.rotate(Math.PI/4);
+        ctx.fillStyle=meta.colors[(dx+dy)%4===0?0:(dx+dy)%4===1?1:(dx+dy)%4===2?2:3];
+        ctx.globalAlpha=0.15; ctx.fillRect(-10,-10,20,20);
+        ctx.restore();
+      }
+    }
+  } else if(meta.pattern==="waves"){
+    for(var wy=0;wy<size;wy+=8){
+      ctx.beginPath();
+      for(var wx=0;wx<=size;wx+=2){
+        ctx.lineTo(wx, wy+Math.sin(wx*0.03+wy*0.05)*20);
+      }
+      ctx.strokeStyle=meta.colors[~~(wy/8)%4]; ctx.globalAlpha=0.15;
+      ctx.lineWidth=2; ctx.stroke();
+    }
+  } else if(meta.pattern==="flow"){
+    for(var fi=0;fi<200;fi++){
+      var fx=Math.random()*size, fy=Math.random()*size;
+      var fr=5+Math.random()*25;
+      ctx.beginPath(); ctx.arc(fx,fy,fr,0,Math.PI*2);
+      ctx.fillStyle=meta.colors[fi%4]; ctx.globalAlpha=0.08; ctx.fill();
+    }
+  } else {
+    for(var ri=0;ri<6;ri++){
+      ctx.beginPath(); ctx.arc(cx,cy,size*0.1*(ri+1),0,Math.PI*2);
+      ctx.strokeStyle=meta.colors[ri%4]; ctx.globalAlpha=0.12;
+      ctx.lineWidth=3; ctx.stroke();
+    }
+  }
+
+  // Face-like shapes
+  ctx.globalCompositeOperation="source-over";
+  ctx.globalAlpha=1;
+
+  // Head circle
+  var headGrad = ctx.createRadialGradient(cx,cy-size*0.05,size*0.05,cx,cy-size*0.05,size*0.28);
+  headGrad.addColorStop(0,"rgba(255,255,255,0.08)");
+  headGrad.addColorStop(1,"rgba(255,255,255,0.02)");
+  ctx.fillStyle=headGrad;
+  ctx.beginPath(); ctx.arc(cx,cy-size*0.05,size*0.28,0,Math.PI*2); ctx.fill();
+
+  // Eyes
+  ctx.fillStyle="rgba(255,255,255,0.15)";
+  ctx.beginPath(); ctx.ellipse(cx-size*0.09, cy-size*0.1, size*0.04, size*0.025, 0, 0, Math.PI*2); ctx.fill();
+  ctx.beginPath(); ctx.ellipse(cx+size*0.09, cy-size*0.1, size*0.04, size*0.025, 0, 0, Math.PI*2); ctx.fill();
+
+  // Pupils
+  ctx.fillStyle="rgba(255,255,255,0.25)";
+  ctx.beginPath(); ctx.arc(cx-size*0.09, cy-size*0.1, size*0.015, 0, Math.PI*2); ctx.fill();
+  ctx.beginPath(); ctx.arc(cx+size*0.09, cy-size*0.1, size*0.015, 0, Math.PI*2); ctx.fill();
+
+  // Smile
+  ctx.beginPath();
+  ctx.arc(cx, cy+size*0.02, size*0.1, 0.1*Math.PI, 0.9*Math.PI);
+  ctx.strokeStyle="rgba(255,255,255,0.12)"; ctx.lineWidth=2.5; ctx.stroke();
+
+  // Vignette
+  ctx.globalCompositeOperation="source-over";
+  var vig=ctx.createRadialGradient(cx,cy,size*0.2,cx,cy,size*0.72);
+  vig.addColorStop(0,"transparent");
+  vig.addColorStop(1,"rgba(0,0,0,0.35)");
+  ctx.fillStyle=vig; ctx.fillRect(0,0,size,size);
+
+  return cv.toDataURL("image/jpeg",0.92);
+}
+
+function buildSampleGrid(){
+  sampleGrid.innerHTML="";
+  sampleImages=[];
+  sampleMeta.forEach(function(meta, idx){
+    var url = generateSampleImage(meta, 400);
+    sampleImages.push(url);
+
+    var card=document.createElement("div");
+    card.className="sample-card";
+    card.style.animationDelay=(idx*0.08)+"s";
+
+    var img=document.createElement("img");
+    img.src=url; img.alt=meta.name;
+    img.style.width="100%"; img.style.height="100%";
+    img.style.objectFit="cover"; img.style.display="block";
+
+    var label=document.createElement("div");
+    label.className="sample-label";
+    label.textContent=meta.name;
+
+    card.appendChild(img);
+    card.appendChild(label);
+    card.addEventListener("click",function(){
+      capturedDataURL=url;
+      snapshotImg.src=url;
+      cameraWrap.style.display="none";
+      camFallback.style.display="none";
+      snapshotWrap.style.display="block";
+      flashFx.classList.remove("fire"); void flashFx.offsetWidth; flashFx.classList.add("fire");
+      btnSnap.style.display="none";
+      btnRetake.style.display="inline-flex";
+      btnUse.style.display="inline-flex";
+    });
+    sampleGrid.appendChild(card);
+  });
+}
+
+/* ═══════════════════════════════════════════════════════════
+   CAMERA
+   ═══════════════════════════════════════════════════════════ */
+async function initCamera(){
+  try {
+    cameraStream = await navigator.mediaDevices.getUserMedia({
+      video:{ facingMode:"user", width:{ideal:1280}, height:{ideal:1280} },
+      audio:false
+    });
+    cameraVideo.srcObject=cameraStream;
+    cameraWrap.style.display="block";
+    camOverlay.style.display="flex";
+    camFallback.style.display="none";
+    btnSnap.disabled=false;
+    hasCameraAccess=true;
+  } catch(err){
+    cameraWrap.style.display="none";
+    camOverlay.style.display="none";
+    camFallback.style.display="block";
+    btnSnap.style.display="none";
+    hasCameraAccess=false;
+    buildSampleGrid();
+  }
+}
+
+function stopCamera(){
+  if(cameraStream){
+    cameraStream.getTracks().forEach(function(t){t.stop();});
+    cameraStream=null;
+  }
+}
+
+function takeSnapshot(){
+  var vw=cameraVideo.videoWidth, vh=cameraVideo.videoHeight;
+  var sz=Math.min(vw,vh);
+  var sx=(vw-sz)/2, sy=(vh-sz)/2;
+  cameraCanvas.width=600; cameraCanvas.height=600;
+  var ctx=cameraCanvas.getContext("2d");
+  ctx.save(); ctx.translate(600,0); ctx.scale(-1,1);
+  ctx.drawImage(cameraVideo,sx,sy,sz,sz,0,0,600,600);
+  ctx.restore();
+  capturedDataURL=cameraCanvas.toDataURL("image/jpeg",0.92);
+  snapshotImg.src=capturedDataURL;
+
+  cameraWrap.style.display="none";
+  camOverlay.style.display="none";
+  snapshotWrap.style.display="block";
+  flashFx.classList.remove("fire"); void flashFx.offsetWidth; flashFx.classList.add("fire");
+
+  btnSnap.style.display="none";
+  btnRetake.style.display="inline-flex";
+  btnUse.style.display="inline-flex";
+  stopCamera();
+}
+
+function retakePhoto(){
+  snapshotWrap.style.display="none";
+  btnRetake.style.display="none";
+  btnUse.style.display="none";
+  capturedDataURL=null;
+
+  if(hasCameraAccess){
+    cameraWrap.style.display="block";
+    camOverlay.style.display="flex";
+    btnSnap.style.display="inline-flex";
+    initCamera();
+  } else {
+    camFallback.style.display="block";
+    buildSampleGrid();
+  }
+}
+
+function usePhoto(){
+  diffPreview.src=capturedDataURL;
+  showScreen(diffScreen);
+}
+
+function goNewPhoto(){
+  stopTimer(); gameActive=false;
+  winOverlay.classList.remove("active");
+  snapshotWrap.style.display="none";
+  capturedDataURL=null;
+  btnRetake.style.display="none";
+  btnUse.style.display="none";
+
+  if(hasCameraAccess){
+    cameraWrap.style.display="block";
+    camOverlay.style.display="flex";
+    btnSnap.style.display="inline-flex";
+  } else {
+    camFallback.style.display="block";
+    btnSnap.style.display="none";
+    buildSampleGrid();
+  }
+  showScreen(cameraScreen);
+  if(hasCameraAccess) initCamera();
+}
+
+/* ═══════════════════════════════════════════════════════════
+   PUZZLE LOGIC
+   ═══════════════════════════════════════════════════════════ */
+function countInv(arr){
+  var inv=0;
+  for(var i=0;i<arr.length;i++)
+    for(var j=i+1;j<arr.length;j++)
+      if(arr[i]>arr[j])inv++;
+  return inv;
+}
+
+function solvablePermutation(n){
+  var total=n*n, idx=[];
+  for(var i=0;i<total;i++) idx.push(i);
+  for(var i=total-1;i>0;i--){
+    var j=~~(Math.random()*(i+1));
+    var t=idx[i]; idx[i]=idx[j]; idx[j]=t;
+  }
+  if(countInv(idx)%2!==0){
+    var t=idx[0]; idx[0]=idx[1]; idx[1]=t;
+  }
+  var sorted=true;
+  for(var i=0;i<total;i++){if(idx[i]!==i){sorted=false;break;}}
+  if(sorted){
+    var t=idx[0]; idx[0]=idx[1]; idx[1]=t;
+    if(countInv(idx)%2!==0){
+      var t2=idx[total-2]; idx[total-2]=idx[total-1]; idx[total-1]=t2;
+    }
+  }
+  return idx;
+}
+
+function drawGridLines(){
+  gridCanvas.width=boardPx; gridCanvas.height=boardPx;
+  var ctx=gridCanvas.getContext("2d");
+  ctx.strokeStyle="rgba(255,255,255,0.5)";
+  ctx.lineWidth=1;
+  for(var i=1;i<gridSize;i++){
+    var p=i*cellPx;
+    ctx.beginPath(); ctx.moveTo(p,0); ctx.lineTo(p,boardPx); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(0,p); ctx.lineTo(boardPx,p); ctx.stroke();
+  }
+}
+
+function updateProgressRing(){
+  var total=gridSize*gridSize;
+  var correct=0;
+  pieces.forEach(function(p){ if(p.cur===p.cor) correct++; });
+  var pct=correct/total;
+  var circ=2*Math.PI*34;
+  progressRing.style.strokeDashoffset = circ*(1-pct);
+  progressText.textContent=Math.round(pct*100)+"%";
+}
+
+function startGame(size){
+  gridSize=size; gameActive=true;
+  moveCount=0; elapsedMs=0; pieces=[];
+
+  var vw=Math.min(innerWidth-60,520);
+  var maxB=Math.min(vw,420);
+  cellPx=Math.floor(maxB/gridSize);
+  boardPx=cellPx*gridSize;
+
+  puzzleBoard.style.width=boardPx+"px";
+  puzzleBoard.style.height=boardPx+"px";
+  var oldPieces=puzzleBoard.querySelectorAll(".puzzle-piece");
+  oldPieces.forEach(function(p){p.remove();});
+
+  refImg.src=capturedDataURL;
+  drawGridLines();
+
+  var total=gridSize*gridSize;
+  var scram=solvablePermutation(gridSize);
+
+  for(var i=0;i<total;i++){
+    var cRow=Math.floor(i/gridSize), cCol=i%gridSize;
+    var sPos=scram[i];
+    var sRow=Math.floor(sPos/gridSize), sCol=sPos%gridSize;
+    var bgX=-(cCol*cellPx), bgY=-(cRow*cellPx);
+
+    var el=document.createElement("div");
+    el.className="puzzle-piece";
+    el.style.width=cellPx+"px"; el.style.height=cellPx+"px";
+    el.style.left=(sCol*cellPx)+"px"; el.style.top=(sRow*cellPx)+"px";
+    el.style.backgroundImage="url("+capturedDataURL+")";
+    el.style.backgroundSize=boardPx+"px "+boardPx+"px";
+    el.style.backgroundPosition=bgX+"px "+bgY+"px";
+
+    puzzleBoard.appendChild(el);
+    pieces.push({ el:el, cor:i, cur:sPos });
+  }
+
+  updateStats(); updateProgressRing();
+  showScreen(gameScreen);
+  startTimer();
+  setupDrag();
+}
+
+/* ═══════════════════════════════════════════════════════════
+   TIMER
+   ═══════════════════════════════════════════════════════════ */
+function startTimer(){
+  stopTimer();
+  startTime=Date.now();
+  timerRef=setInterval(function(){
+    elapsedMs=Date.now()-startTime;
+    hudTimer.textContent=fmtTime(elapsedMs);
+  },50);
+}
+function stopTimer(){ if(timerRef){clearInterval(timerRef);timerRef=null;} }
+
+function fmtTime(ms){
+  var s=ms/1000, m=Math.floor(s/60);
+  s=s%60; var t=Math.floor((s*10)%10);
+  s=Math.floor(s);
+  return String(m).padStart(2,"0")+":"+String(s).padStart(2,"0")+"."+t;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   STATS
+   ═══════════════════════════════════════════════════════════ */
+function updateStats(){
+  hudMoves.textContent=moveCount+" move"+(moveCount!==1?"s":"");
+  var cor=0, total=gridSize*gridSize;
+  pieces.forEach(function(p){
+    if(p.cur===p.cor){ p.el.classList.add("correct"); cor++; }
+    else { p.el.classList.remove("correct"); }
+  });
+  hudCorrect.textContent=cor+" / "+total;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   DRAG & DROP
+   ═══════════════════════════════════════════════════════════ */
+function setupDrag(){
+  puzzleBoard.addEventListener("mousedown",ptrStart,false);
+  puzzleBoard.addEventListener("touchstart",ptrStart,{passive:false});
+  document.addEventListener("mousemove",ptrMove,false);
+  document.addEventListener("touchmove",ptrMove,{passive:false});
+  document.addEventListener("mouseup",ptrEnd,false);
+  document.addEventListener("touchend",ptrEnd,false);
+  document.addEventListener("touchcancel",ptrEnd,false);
+}
+
+function ptrPos(e){
+  if(e.touches&&e.touches.length>0) return {x:e.touches[0].clientX,y:e.touches[0].clientY};
+  return {x:e.clientX,y:e.clientY};
+}
+
+function ptrStart(e){
+  if(!gameActive)return;
+  var tgt=e.target.closest(".puzzle-piece");
+  if(!tgt)return;
+  e.preventDefault();
+  var pos=ptrPos(e);
+  var bRect=puzzleBoard.getBoundingClientRect();
+  var pRect=tgt.getBoundingClientRect();
+  var piece=pieces.find(function(p){return p.el===tgt;});
+  dragState={
+    el:tgt, piece:piece,
+    offX:pos.x-pRect.left, offY:pos.y-pRect.top,
+    bRect:bRect,
+    origL:parseInt(tgt.style.left),
+    origT:parseInt(tgt.style.top)
+  };
+  tgt.classList.add("dragging");
+  tgt.style.zIndex=100;
+}
+
+function ptrMove(e){
+  if(!dragState)return;
+  e.preventDefault();
+  var pos=ptrPos(e);
+  var nl=pos.x-dragState.bRect.left-dragState.offX;
+  var nt=pos.y-dragState.bRect.top-dragState.offY;
+  dragState.el.style.left=nl+"px";
+  dragState.el.style.top=nt+"px";
+}
+
+function ptrEnd(e){
+  if(!dragState)return;
+  var el=dragState.el;
+  el.classList.remove("dragging");
+  el.style.zIndex="";
+
+  var cx=parseInt(el.style.left)+cellPx/2;
+  var cy=parseInt(el.style.top)+cellPx/2;
+  var tCol=Math.round((cx-cellPx/2)/cellPx);
+  var tRow=Math.round((cy-cellPx/2)/cellPx);
+  tCol=Math.max(0,Math.min(gridSize-1,tCol));
+  tRow=Math.max(0,Math.min(gridSize-1,tRow));
+
+  var tIdx=tRow*gridSize+tCol;
+  var sIdx=dragState.piece.cur;
+
+  if(tIdx!==sIdx){
+    var other=pieces.find(function(p){return p.cur===tIdx && p!==dragState.piece;});
+    if(other){
+      other.cur=sIdx;
+      other.el.classList.add("swap-anim");
+      var oCol=sIdx%gridSize, oRow=Math.floor(sIdx/gridSize);
+      other.el.style.left=(oCol*cellPx)+"px";
+      other.el.style.top=(oRow*cellPx)+"px";
+      setTimeout(function(){other.el.classList.remove("swap-anim");},400);
+
+      dragState.piece.cur=tIdx;
+      moveCount++;
+    }
+  }
+
+  el.classList.add("swap-anim");
+  var fCol=dragState.piece.cur%gridSize;
+  var fRow=Math.floor(dragState.piece.cur/gridSize);
+  el.style.left=(fCol*cellPx)+"px";
+  el.style.top=(fRow*cellPx)+"px";
+  setTimeout(function(){el.classList.remove("swap-anim");},400);
+
+  dragState=null;
+  updateStats();
+  updateProgressRing();
+  checkWin();
+}
+
+/* ═══════════════════════════════════════════════════════════
+   WIN DETECTION
+   ═══════════════════════════════════════════════════════════ */
+function checkWin(){
+  for(var i=0;i<pieces.length;i++){
+    if(pieces[i].cur!==pieces[i].cor)return;
+  }
+  gameActive=false; stopTimer();
+  elapsedMs=Date.now()-startTime;
+
+  pieces.forEach(function(p){
+    p.el.classList.add("correct","pop");
+  });
+
+  setTimeout(showWin,700);
+}
+
+function showWin(){
+  var ts=fmtTime(elapsedMs);
+  var gs=gridSize+"×"+gridSize;
+  winTime.textContent=ts;
+  winMoves.textContent=moveCount;
+  winGrid.textContent=gs;
+  saveScore(elapsedMs,moveCount,gridSize);
+  renderLeaderboard();
+  winOverlay.classList.add("active");
+  fireConfetti();
+}
+
+/* ═══════════════════════════════════════════════════════════
+   LEADERBOARD
+   ═══════════════════════════════════════════════════════════ */
+function getScores(){
+  try{return JSON.parse(localStorage.getItem("facePuzzleScores")||"[]");}catch(e){return [];}
+}
+function saveScore(ms,moves,sz){
+  var scores=getScores();
+  scores.push({
+    time:ms, moves:moves, grid:sz,
+    date:new Date().toLocaleDateString("en-US",{month:"short",day:"numeric",year:"numeric"})
+  });
+  scores.sort(function(a,b){return a.time-b.time;});
+  while(scores.length>5) scores.pop();
+  localStorage.setItem("facePuzzleScores",JSON.stringify(scores));
+}
+function renderLeaderboard(){
+  var scores=getScores();
+  lbBody.innerHTML="";
+  if(!scores.length){ noRecords.style.display="block"; return; }
+  noRecords.style.display="none";
+  scores.forEach(function(s,i){
+    var tr=document.createElement("tr");
+    var rc= i===0?"r-1":i===1?"r-2":i===2?"r-3":"r-x";
+    tr.innerHTML=
+      '<td><span class="rank-badge '+rc+'">'+(i+1)+'</span></td>'+
+      '<td>'+fmtTime(s.time)+'</td>'+
+      '<td>'+s.moves+'</td>'+
+      '<td>'+s.grid+'×'+s.grid+'</td>'+
+      '<td style="font-family:Inter,sans-serif">'+s.date+'</td>';
+    lbBody.appendChild(tr);
+  });
+}
+
+/* ═══════════════════════════════════════════════════════════
+   CONFETTI
+   ═══════════════════════════════════════════════════════════ */
+function fireConfetti(){
+  var c=confettiCanvas, ctx=c.getContext("2d");
+  c.width=innerWidth; c.height=innerHeight;
+  var parts=[], cols=["#8b5cf6","#ec4899","#f43f5e","#10b981","#f59e0b","#06b6d4","#ffd700","#a855f7"];
+  for(var i=0;i<180;i++){
+    parts.push({
+      x:Math.random()*c.width,
+      y:Math.random()*c.height-c.height,
+      w:4+Math.random()*7, h:8+Math.random()*7,
+      vx:(Math.random()-0.5)*5,
+      vy:2+Math.random()*5,
+      col:cols[~~(Math.random()*cols.length)],
+      rot:Math.random()*360,
+      rs:(Math.random()-0.5)*12,
+      op:1
+    });
+  }
+  var f=0,mx=240;
+  function anim(){
+    ctx.clearRect(0,0,c.width,c.height);
+    f++;
+    var alive=false;
+    parts.forEach(function(p){
+      p.x+=p.vx; p.y+=p.vy; p.vy+=0.06; p.rot+=p.rs;
+      if(f>mx-80) p.op-=0.013;
+      if(p.op<=0)return;
+      alive=true;
+      ctx.save();
+      ctx.translate(p.x,p.y);
+      ctx.rotate(p.rot*Math.PI/180);
+      ctx.globalAlpha=Math.max(0,p.op);
+      ctx.fillStyle=p.col;
+      ctx.fillRect(-p.w/2,-p.h/2,p.w,p.h);
+      ctx.restore();
+    });
+    if(alive&&f<mx) requestAnimationFrame(anim);
+    else ctx.clearRect(0,0,c.width,c.height);
+  }
+  requestAnimationFrame(anim);
+}
+
+/* ═══════════════════════════════════════════════════════════
+   EVENT LISTENERS
+   ═══════════════════════════════════════════════════════════ */
+btnSnap.addEventListener("click",takeSnapshot);
+btnRetake.addEventListener("click",retakePhoto);
+btnUse.addEventListener("click",usePhoto);
+btnNewPhotoDiff.addEventListener("click",goNewPhoto);
+btnNewPhotoGame.addEventListener("click",goNewPhoto);
+btnNewPhotoWin.addEventListener("click",goNewPhoto);
+btnPlayAgainWin.addEventListener("click",function(){
+  winOverlay.classList.remove("active");
+  showScreen(diffScreen);
+});
+btnPlayAgainGame.addEventListener("click",function(){
+  winOverlay.classList.remove("active");
+  startGame(gridSize);
+});
+
+document.querySelectorAll(".diff-card").forEach(function(card){
+  card.addEventListener("click",function(){
+    startGame(parseInt(card.dataset.size));
+  });
+});
+
+/* ═══════════════════════════════════════════════════════════
+   INIT
+   ═══════════════════════════════════════════════════════════ */
+initCamera();
+
+})();
+</script>
+</body>
+</html>
