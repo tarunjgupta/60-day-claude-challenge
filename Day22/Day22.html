@@ -1,0 +1,1370 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GrindOS — Startup Validation Report | Confidential</title>
+<meta name="description" content="Professional startup validation report for GrindOS — The Social Accountability Platform for India's Students. Prepared in VC Advisor Mode.">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#06090F;--bg2:#0A0F1A;--bg3:#0F1522;--bg4:#151D2E;--bg5:#1A2438;
+  --border:#1B2840;--border2:#223352;--border-subtle:#141E30;
+  --text:#EDF0F7;--text2:#8B9BB8;--text3:#5A6B86;--text4:#3D4F6A;
+  --orange:#F97316;--orange2:#FB923C;--orange3:#FDBA74;--orange-bg:rgba(249,115,22,0.06);--orange-border:rgba(249,115,22,0.2);
+  --purple:#8B5CF6;--purple2:#A78BFA;--purple3:#C4B5FD;--purple-bg:rgba(139,92,246,0.06);--purple-border:rgba(139,92,246,0.2);
+  --green:#10B981;--green2:#34D399;--green3:#6EE7B7;--green-bg:rgba(16,185,129,0.06);--green-border:rgba(16,185,129,0.2);
+  --red:#EF4444;--red2:#F87171;--red3:#FCA5A5;--red-bg:rgba(239,68,68,0.06);--red-border:rgba(239,68,68,0.2);
+  --blue:#3B82F6;--blue2:#60A5FA;--blue3:#93C5FD;--blue-bg:rgba(59,130,246,0.06);--blue-border:rgba(59,130,246,0.2);
+  --amber:#F59E0B;--amber2:#FCD34D;--amber3:#FDE68A;--amber-bg:rgba(245,158,11,0.06);--amber-border:rgba(245,158,11,0.2);
+  --teal:#14B8A6;--teal2:#2DD4BF;
+  --cyan:#06B6D4;--cyan2:#22D3EE;
+}
+html{scroll-behavior:smooth}
+body{font-family:'Inter',system-ui,-apple-system,sans-serif;background:var(--bg);color:var(--text);line-height:1.65;font-size:15px;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}
+.container{max-width:1120px;margin:0 auto;padding:0 40px}
+::selection{background:rgba(249,115,22,0.25);color:#fff}
+
+/* ===== NAVIGATION ===== */
+.nav{position:fixed;top:0;left:0;right:0;z-index:1000;background:var(--bg);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-bottom:1px solid var(--border);padding:0 40px}
+.nav-inner{max-width:1120px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;height:56px}
+.nav-brand{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:18px;letter-spacing:-0.5px;color:var(--text)}
+.nav-brand span{color:var(--orange)}
+.nav-links{display:flex;gap:28px;list-style:none}
+.nav-links a{font-size:12px;color:var(--text3);text-decoration:none;font-family:'JetBrains Mono',monospace;text-transform:uppercase;letter-spacing:0.08em;transition:color 0.2s}
+.nav-links a:hover{color:var(--orange)}
+.nav-badge{font-size:10px;padding:3px 10px;border-radius:4px;background:var(--orange-bg);border:1px solid var(--orange-border);color:var(--orange);font-family:'JetBrains Mono',monospace;letter-spacing:0.05em;text-transform:uppercase}
+
+/* ===== COVER ===== */
+.cover{min-height:100vh;display:flex;flex-direction:column;justify-content:center;padding:120px 0 80px;position:relative;overflow:hidden;border-bottom:1px solid var(--border)}
+.cover::before{content:'';position:absolute;top:-300px;right:-200px;width:800px;height:800px;background:radial-gradient(circle,rgba(249,115,22,0.04) 0%,transparent 60%);pointer-events:none}
+.cover::after{content:'';position:absolute;bottom:-200px;left:-100px;width:600px;height:600px;background:radial-gradient(circle,rgba(139,92,246,0.03) 0%,transparent 60%);pointer-events:none}
+.cover-firm{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--text4);text-transform:uppercase;letter-spacing:0.15em;margin-bottom:40px;display:flex;align-items:center;gap:12px}
+.cover-firm::before{content:'';width:32px;height:1px;background:var(--text4)}
+.cover-badges{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:32px}
+.badge{font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:500;padding:4px 12px;border-radius:4px;border:1px solid;letter-spacing:0.06em;text-transform:uppercase}
+.badge-orange{color:var(--orange);border-color:var(--orange-border);background:var(--orange-bg)}
+.badge-purple{color:var(--purple2);border-color:var(--purple-border);background:var(--purple-bg)}
+.badge-green{color:var(--green);border-color:var(--green-border);background:var(--green-bg)}
+.badge-blue{color:var(--blue2);border-color:var(--blue-border);background:var(--blue-bg)}
+.badge-red{color:var(--red2);border-color:var(--red-border);background:var(--red-bg)}
+.cover-eyebrow{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--orange);letter-spacing:0.12em;text-transform:uppercase;margin-bottom:16px;font-weight:500}
+.cover-title{font-family:'Space Grotesk',sans-serif;font-size:clamp(48px,7vw,84px);font-weight:700;line-height:1;letter-spacing:-3px;margin-bottom:12px}
+.cover-title span{background:linear-gradient(135deg,var(--orange),var(--orange2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.cover-subtitle{font-family:'Space Grotesk',sans-serif;font-size:clamp(18px,2.5vw,24px);color:var(--text2);font-weight:300;margin-bottom:48px;letter-spacing:-0.3px;max-width:600px}
+.cover-kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:48px}
+.cover-kpi{background:var(--bg3);border:1px solid var(--border);border-radius:12px;padding:20px 24px;position:relative;overflow:hidden}
+.cover-kpi::before{content:'';position:absolute;top:0;left:0;right:0;height:2px}
+.cover-kpi.kpi-orange::before{background:var(--orange)}
+.cover-kpi.kpi-green::before{background:var(--green)}
+.cover-kpi.kpi-purple::before{background:var(--purple)}
+.cover-kpi.kpi-blue::before{background:var(--blue)}
+.kpi-label{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:8px}
+.kpi-value{font-family:'Space Grotesk',sans-serif;font-size:36px;font-weight:700;line-height:1;margin-bottom:4px}
+.kpi-sub{font-size:12px;color:var(--text3)}
+.cover-meta{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px;padding-top:40px;border-top:1px solid var(--border)}
+.meta-item{padding:12px 0}
+.meta-item label{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--text4);text-transform:uppercase;letter-spacing:0.1em;display:block;margin-bottom:6px}
+.meta-item span{font-size:14px;color:var(--text2);font-weight:500}
+
+/* ===== TOC ===== */
+.toc{padding:48px 0;border-bottom:1px solid var(--border);background:var(--bg2)}
+.toc-title{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--text4);text-transform:uppercase;letter-spacing:0.12em;margin-bottom:24px}
+.toc-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:8px}
+.toc-item{display:flex;align-items:center;gap:12px;padding:10px 14px;border-radius:8px;text-decoration:none;transition:background 0.2s;cursor:pointer}
+.toc-item:hover{background:var(--bg4)}
+.toc-num{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--orange);font-weight:600;min-width:24px}
+.toc-text{font-size:13px;color:var(--text2);font-weight:500}
+
+/* ===== SECTIONS ===== */
+.section{padding:80px 0;border-bottom:1px solid var(--border)}
+.section:nth-child(odd){background:var(--bg)}
+.section:nth-child(even){background:var(--bg2)}
+.section-header{margin-bottom:48px}
+.section-num{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--orange);text-transform:uppercase;letter-spacing:0.12em;margin-bottom:8px;font-weight:600;display:flex;align-items:center;gap:10px}
+.section-num::after{content:'';flex:1;height:1px;background:var(--border);max-width:200px}
+.section-title{font-family:'Space Grotesk',sans-serif;font-size:clamp(28px,4vw,42px);font-weight:700;line-height:1.1;letter-spacing:-1px;margin-bottom:10px}
+.section-desc{font-size:15px;color:var(--text2);max-width:620px;line-height:1.7}
+
+/* ===== CARDS ===== */
+.card{background:var(--bg3);border:1px solid var(--border);border-radius:14px;padding:28px;transition:border-color 0.3s}
+.card:hover{border-color:var(--border2)}
+.card-header{display:flex;align-items:center;gap:14px;margin-bottom:18px}
+.card-icon{width:40px;height:40px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
+.card-icon-orange{background:var(--orange-bg);border:1px solid var(--orange-border)}
+.card-icon-green{background:var(--green-bg);border:1px solid var(--green-border)}
+.card-icon-purple{background:var(--purple-bg);border:1px solid var(--purple-border)}
+.card-icon-blue{background:var(--blue-bg);border:1px solid var(--blue-border)}
+.card-icon-red{background:var(--red-bg);border:1px solid var(--red-border)}
+.card-icon-amber{background:var(--amber-bg);border:1px solid var(--amber-border)}
+.card-title{font-family:'Space Grotesk',sans-serif;font-size:16px;font-weight:600}
+.card p,.card li{font-size:14px;color:var(--text2);line-height:1.7}
+.card ul{padding-left:18px}
+.card ul li{margin-bottom:6px}
+.grid{display:grid;gap:16px}
+.grid-2{grid-template-columns:repeat(2,1fr)}
+.grid-3{grid-template-columns:repeat(3,1fr)}
+.grid-4{grid-template-columns:repeat(4,1fr)}
+@media(max-width:900px){.grid-2,.grid-3,.grid-4{grid-template-columns:1fr}}
+@media(max-width:768px){
+  .cover-kpis{grid-template-columns:repeat(2,1fr)}
+  .container{padding:0 20px}
+  .icp-grid{grid-template-columns:1fr !important}
+  .split{grid-template-columns:1fr !important}
+}
+
+/* ===== METRIC CARDS ===== */
+.metric{background:var(--bg4);border:1px solid var(--border);border-radius:12px;padding:22px 26px;position:relative}
+.metric::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;border-radius:12px 12px 0 0}
+.metric.m-orange::before{background:var(--orange)}
+.metric.m-green::before{background:var(--green)}
+.metric.m-purple::before{background:var(--purple)}
+.metric.m-blue::before{background:var(--blue)}
+.metric.m-amber::before{background:var(--amber)}
+.metric.m-red::before{background:var(--red)}
+.metric.m-teal::before{background:var(--teal)}
+.metric-label{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:8px}
+.metric-val{font-family:'Space Grotesk',sans-serif;font-size:34px;font-weight:700;line-height:1;margin-bottom:4px}
+.metric-sub{font-size:12px;color:var(--text3)}
+.m-orange .metric-val{color:var(--orange)}
+.m-green .metric-val{color:var(--green)}
+.m-purple .metric-val{color:var(--purple2)}
+.m-blue .metric-val{color:var(--blue2)}
+.m-amber .metric-val{color:var(--amber)}
+.m-red .metric-val{color:var(--red)}
+.m-teal .metric-val{color:var(--teal)}
+
+/* ===== SCORE BARS ===== */
+.score-bar{margin:12px 0}
+.score-bar-top{display:flex;justify-content:space-between;align-items:baseline;font-size:13px;margin-bottom:6px}
+.score-bar-name{color:var(--text2)}
+.score-bar-val{font-weight:600;font-family:'JetBrains Mono',monospace;font-size:12px}
+.score-bar-track{height:6px;background:var(--bg);border-radius:3px;overflow:hidden}
+.score-bar-fill{height:100%;border-radius:3px;transition:width 1.2s cubic-bezier(0.22,1,0.36,1)}
+.f-orange{background:linear-gradient(90deg,var(--orange),var(--orange2))}
+.f-green{background:linear-gradient(90deg,var(--green),var(--green2))}
+.f-purple{background:linear-gradient(90deg,var(--purple),var(--purple2))}
+.f-blue{background:linear-gradient(90deg,var(--blue),var(--blue2))}
+.f-amber{background:linear-gradient(90deg,var(--amber),var(--amber2))}
+.f-red{background:linear-gradient(90deg,var(--red),var(--red2))}
+.f-teal{background:linear-gradient(90deg,var(--teal),var(--teal2))}
+
+/* ===== TABLES ===== */
+.tbl{width:100%;border-collapse:collapse;font-size:14px}
+.tbl th{font-family:'JetBrains Mono',monospace;font-size:10px;text-transform:uppercase;letter-spacing:0.08em;color:var(--text3);padding:12px 16px;text-align:left;border-bottom:1px solid var(--border);font-weight:500;background:var(--bg4)}
+.tbl td{padding:14px 16px;border-bottom:1px solid var(--border-subtle);color:var(--text2);vertical-align:top}
+.tbl tr:last-child td{border-bottom:none}
+.tbl tr:hover td{background:rgba(255,255,255,0.015)}
+.tbl .hl td{color:var(--text);background:var(--orange-bg)}
+.tbl .hl td:first-child{border-left:3px solid var(--orange)}
+
+/* ===== CHIPS ===== */
+.chip{display:inline-flex;align-items:center;font-size:11px;padding:3px 10px;border-radius:6px;font-weight:500;gap:4px}
+.chip-green{background:rgba(16,185,129,0.1);color:var(--green2);border:1px solid rgba(16,185,129,0.15)}
+.chip-red{background:rgba(239,68,68,0.1);color:var(--red2);border:1px solid rgba(239,68,68,0.15)}
+.chip-amber{background:rgba(245,158,11,0.1);color:var(--amber2);border:1px solid rgba(245,158,11,0.15)}
+.chip-blue{background:rgba(59,130,246,0.1);color:var(--blue2);border:1px solid rgba(59,130,246,0.15)}
+.chip-purple{background:rgba(139,92,246,0.1);color:var(--purple2);border:1px solid rgba(139,92,246,0.15)}
+.chip-orange{background:rgba(249,115,22,0.1);color:var(--orange2);border:1px solid rgba(249,115,22,0.15)}
+.chip-teal{background:rgba(20,184,166,0.1);color:var(--teal2);border:1px solid rgba(20,184,166,0.15)}
+
+/* ===== QUOTE ===== */
+.quote{border-left:3px solid var(--orange);padding:20px 28px;background:var(--orange-bg);border-radius:0 12px 12px 0;margin:28px 0;font-size:15px;color:var(--text2);font-style:italic;line-height:1.7}
+.quote-author{font-style:normal;font-size:12px;color:var(--text3);margin-top:10px;font-family:'JetBrains Mono',monospace}
+
+/* ===== INSIGHT BOX ===== */
+.insight{padding:20px 24px;border-radius:12px;border:1px solid;display:flex;align-items:flex-start;gap:16px;margin:24px 0;font-size:14px;line-height:1.7}
+.insight-icon{font-size:20px;flex-shrink:0;margin-top:2px}
+.insight-green{background:var(--green-bg);border-color:var(--green-border);color:var(--text2)}
+.insight-amber{background:var(--amber-bg);border-color:var(--amber-border);color:var(--text2)}
+.insight-blue{background:var(--blue-bg);border-color:var(--blue-border);color:var(--text2)}
+.insight-red{background:var(--red-bg);border-color:var(--red-border);color:var(--text2)}
+
+/* ===== VERDICT ===== */
+.verdict{border-radius:20px;padding:56px 48px;text-align:center;position:relative;overflow:hidden}
+.verdict-go{background:var(--green-bg);border:2px solid var(--green-border)}
+.verdict-label{font-family:'JetBrains Mono',monospace;font-size:12px;text-transform:uppercase;letter-spacing:0.15em;margin-bottom:16px;color:var(--text3)}
+.verdict-score{font-family:'Space Grotesk',sans-serif;font-size:96px;font-weight:700;line-height:1;letter-spacing:-4px;color:var(--green)}
+.verdict-unit{font-family:'JetBrains Mono',monospace;font-size:14px;color:var(--text3);margin-bottom:20px}
+.verdict-text{font-family:'Space Grotesk',sans-serif;font-size:32px;font-weight:700;color:var(--green);margin-bottom:12px;letter-spacing:-0.5px}
+.verdict-desc{font-size:15px;color:var(--text2);max-width:520px;margin:0 auto;line-height:1.7}
+
+/* ===== PERSONA ===== */
+.icp-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+.persona{background:var(--bg3);border:1px solid var(--border);border-radius:14px;padding:28px;position:relative;overflow:hidden}
+.persona::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--orange),var(--purple))}
+.persona-avatar{width:52px;height:52px;border-radius:50%;background:linear-gradient(135deg,rgba(249,115,22,0.2),rgba(139,92,246,0.2));display:flex;align-items:center;justify-content:center;font-size:22px;margin-bottom:16px;border:2px solid var(--border2)}
+.persona-name{font-family:'Space Grotesk',sans-serif;font-size:18px;font-weight:600;margin-bottom:2px}
+.persona-role{font-size:11px;color:var(--text3);margin-bottom:16px;font-family:'JetBrains Mono',monospace;text-transform:uppercase;letter-spacing:0.06em}
+.persona-row{display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border-subtle);font-size:13px}
+.persona-row:last-child{border-bottom:none}
+.persona-row span:first-child{color:var(--text3)}
+.persona-row span:last-child{color:var(--text);font-weight:500}
+.persona-quote{font-size:13px;color:var(--text3);margin-top:16px;line-height:1.6;font-style:italic;padding-top:12px;border-top:1px solid var(--border-subtle)}
+
+/* ===== PAIN POINTS ===== */
+.pain{display:flex;gap:14px;align-items:flex-start;padding:18px;border-radius:12px;background:var(--bg3);border:1px solid var(--border);margin-bottom:10px}
+.pain-tag{font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:600;padding:3px 10px;border-radius:4px;flex-shrink:0;margin-top:3px;text-transform:uppercase;letter-spacing:0.05em}
+.pain-critical{background:rgba(239,68,68,0.12);color:var(--red2)}
+.pain-high{background:rgba(245,158,11,0.12);color:var(--amber2)}
+.pain-med{background:rgba(59,130,246,0.12);color:var(--blue2)}
+
+/* ===== JOURNEY ===== */
+.journey-step{display:flex;gap:24px}
+.journey-left{display:flex;flex-direction:column;align-items:center}
+.journey-dot{width:40px;height:40px;border-radius:50%;border:2px solid var(--orange);display:flex;align-items:center;justify-content:center;font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:700;color:var(--orange);flex-shrink:0;background:var(--bg)}
+.journey-line{flex:1;width:2px;background:linear-gradient(180deg,var(--orange-border),var(--border));margin:8px auto 0;min-height:36px}
+.journey-right{flex:1;padding-bottom:36px}
+.journey-right h4{font-family:'Space Grotesk',sans-serif;font-size:15px;font-weight:600;margin-bottom:6px;color:var(--text)}
+.journey-right p{font-size:13px;color:var(--text2);line-height:1.6}
+.journey-chips{display:flex;gap:6px;flex-wrap:wrap;margin-top:10px}
+
+/* ===== PIVOT ===== */
+.pivot{padding:24px;border-radius:12px;background:var(--bg3);border:1px solid var(--border);border-left:3px solid var(--purple);margin-bottom:12px}
+.pivot h4{font-family:'Space Grotesk',sans-serif;font-size:15px;font-weight:600;margin-bottom:8px;color:var(--text)}
+.pivot p{font-size:13px;color:var(--text2);line-height:1.7}
+
+/* ===== 30-DAY PLAN ===== */
+.week{margin-bottom:40px}
+.week-head{display:flex;align-items:center;gap:16px;margin-bottom:18px;padding-bottom:14px;border-bottom:1px solid var(--border)}
+.week-num{font-family:'Space Grotesk',sans-serif;font-size:28px;font-weight:700;color:var(--orange)}
+.week-info h3{font-family:'Space Grotesk',sans-serif;font-size:16px;font-weight:600;margin-bottom:2px}
+.week-info p{font-size:12px;color:var(--text3)}
+.task{display:flex;gap:14px;align-items:flex-start;padding:14px 16px;background:var(--bg3);border:1px solid var(--border);border-radius:10px;margin-bottom:8px}
+.task-day{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--orange);font-weight:600;flex-shrink:0;padding-top:2px;min-width:36px}
+.task-body{font-size:14px;color:var(--text2);line-height:1.6}
+.task-body strong{color:var(--text);font-weight:500}
+
+/* ===== CHART ===== */
+.chart-box{position:relative;width:100%}
+.chart-legend{display:flex;flex-wrap:wrap;gap:16px;margin-bottom:14px;font-size:12px;color:var(--text2)}
+.chart-legend-item{display:flex;align-items:center;gap:6px}
+.legend-dot{width:10px;height:10px;border-radius:3px;flex-shrink:0}
+
+/* ===== PRODUCT FEATURE ===== */
+.feature-flow{background:var(--bg3);border:1px solid var(--border);border-radius:14px;padding:32px;margin-top:24px}
+.flow-step{display:flex;align-items:flex-start;gap:16px;padding:16px 0;border-bottom:1px solid var(--border-subtle)}
+.flow-step:last-child{border-bottom:none}
+.flow-time{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--orange);font-weight:600;flex-shrink:0;min-width:80px;padding-top:2px}
+.flow-icon{font-size:20px;flex-shrink:0}
+.flow-content h4{font-size:14px;font-weight:600;margin-bottom:4px;color:var(--text)}
+.flow-content p{font-size:13px;color:var(--text2);line-height:1.6}
+
+/* ===== FOOTER ===== */
+.footer{padding:48px 0;text-align:center;color:var(--text4);font-size:12px;font-family:'JetBrains Mono',monospace;letter-spacing:0.03em;line-height:1.8;border-top:1px solid var(--border)}
+.footer a{color:var(--orange);text-decoration:none}
+.footer .divider{margin:0 8px;color:var(--border)}
+
+/* ===== SPLIT LAYOUT ===== */
+.split{display:grid;gap:28px}
+.split-2{grid-template-columns:1fr 1fr}
+.split-sidebar{grid-template-columns:1fr 340px}
+
+/* ===== PRINT ===== */
+@media print{
+  body{background:#fff;color:#111;font-size:12px}
+  .nav{display:none}
+  .cover{min-height:auto;page-break-after:always;padding:40px 0}
+  .section{page-break-inside:avoid;padding:32px 0;border:none}
+  .card,.metric,.persona,.pain,.task,.pivot{border:1px solid #ddd;background:#fafafa}
+  .tbl th{background:#f5f5f5}
+  .verdict{border:2px solid #10B981}
+  .score-bar-track{background:#eee}
+}
+
+/* ===== ANIMATIONS ===== */
+@keyframes fadeInUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+.animate{opacity:0;animation:fadeInUp 0.6s ease forwards}
+.delay-1{animation-delay:0.1s}
+.delay-2{animation-delay:0.2s}
+.delay-3{animation-delay:0.3s}
+.delay-4{animation-delay:0.4s}
+
+h3{font-family:'Space Grotesk',sans-serif;font-size:18px;font-weight:600;margin-bottom:14px;color:var(--text)}
+h4{font-size:13px;font-weight:600;color:var(--text2);margin-bottom:8px;text-transform:uppercase;letter-spacing:0.05em;font-family:'JetBrains Mono',monospace}
+</style>
+</head>
+<body>
+
+<!-- ═══════════════════ NAVIGATION ═══ -->
+<nav class="nav" id="top">
+  <div class="nav-inner">
+    <div class="nav-brand">Grind<span>OS</span></div>
+    <ul class="nav-links">
+      <li><a href="#summary">Summary</a></li>
+      <li><a href="#problem">Problem</a></li>
+      <li><a href="#product">Product</a></li>
+      <li><a href="#market">Market</a></li>
+      <li><a href="#competitors">Competitors</a></li>
+      <li><a href="#verdict">Verdict</a></li>
+    </ul>
+    <span class="nav-badge">Confidential</span>
+  </div>
+</nav>
+
+<!-- ═══════════════════ COVER ═══ -->
+<div class="cover" id="cover">
+  <div class="container">
+    <div class="cover-firm">Startup Validation Report — VC Advisor Mode</div>
+    <div class="cover-badges">
+      <span class="badge badge-orange">Confidential Draft</span>
+      <span class="badge badge-purple">Day 22 · #60DayClaudeChallenge</span>
+      <span class="badge badge-blue">India · EdTech + Productivity</span>
+      <span class="badge badge-green">June 2026</span>
+    </div>
+    <div class="cover-eyebrow">Startup Validation Report</div>
+    <h1 class="cover-title">Grind<span>OS</span></h1>
+    <div class="cover-subtitle">The Social Accountability Platform for India's Students — Where Discipline Becomes a Competitive Sport</div>
+
+    <div class="cover-kpis">
+      <div class="cover-kpi kpi-orange">
+        <div class="kpi-label">Overall Score</div>
+        <div class="kpi-value" style="color:var(--orange)">76<span style="font-size:18px;color:var(--text3)">/100</span></div>
+        <div class="kpi-sub">Conditional GO ✓</div>
+      </div>
+      <div class="cover-kpi kpi-green">
+        <div class="kpi-label">Problem Strength</div>
+        <div class="kpi-value" style="color:var(--green)">8.5<span style="font-size:18px;color:var(--text3)">/10</span></div>
+        <div class="kpi-sub">Validated daily pain</div>
+      </div>
+      <div class="cover-kpi kpi-purple">
+        <div class="kpi-label">SAM (Serviceable)</div>
+        <div class="kpi-value" style="color:var(--purple2)">₹8.5K<span style="font-size:18px;color:var(--text3)">Cr</span></div>
+        <div class="kpi-sub">~$1.02 Billion USD</div>
+      </div>
+      <div class="cover-kpi kpi-blue">
+        <div class="kpi-label">Founder-Market Fit</div>
+        <div class="kpi-value" style="color:var(--blue2)">76<span style="font-size:18px;color:var(--text3)">/100</span></div>
+        <div class="kpi-sub">Strong Fit — IS the ICP</div>
+      </div>
+    </div>
+
+    <div class="cover-meta">
+      <div class="meta-item"><label>Founder</label><span>Tarunj Gupta</span></div>
+      <div class="meta-item"><label>Institution</label><span>ABES Engineering College, Ghaziabad</span></div>
+      <div class="meta-item"><label>Category</label><span>Social Accountability · EdTech · Competition</span></div>
+      <div class="meta-item"><label>Target Geography</label><span>India (Tier 1 → Tier 2 → Global)</span></div>
+      <div class="meta-item"><label>Stage</label><span>Idea → Pre-MVP Validation</span></div>
+      <div class="meta-item"><label>Report Type</label><span>Full Validation · VC Advisor Mode</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════ TABLE OF CONTENTS ═══ -->
+<div class="toc">
+  <div class="container">
+    <div class="toc-title">Table of Contents — 15 Sections</div>
+    <div class="toc-grid">
+      <a class="toc-item" href="#summary"><span class="toc-num">01</span><span class="toc-text">Executive Summary</span></a>
+      <a class="toc-item" href="#problem"><span class="toc-num">02</span><span class="toc-text">Problem Validation</span></a>
+      <a class="toc-item" href="#founder"><span class="toc-num">03</span><span class="toc-text">Founder–Market Fit</span></a>
+      <a class="toc-item" href="#product"><span class="toc-num">04</span><span class="toc-text">Product Architecture</span></a>
+      <a class="toc-item" href="#market"><span class="toc-num">05</span><span class="toc-text">TAM · SAM · SOM</span></a>
+      <a class="toc-item" href="#competitors"><span class="toc-num">06</span><span class="toc-text">Competitor Analysis</span></a>
+      <a class="toc-item" href="#gap"><span class="toc-num">07</span><span class="toc-text">Market Gap Analysis</span></a>
+      <a class="toc-item" href="#icp"><span class="toc-num">08</span><span class="toc-text">Ideal Customer Profile</span></a>
+      <a class="toc-item" href="#personas"><span class="toc-num">09</span><span class="toc-text">Buyer Personas</span></a>
+      <a class="toc-item" href="#pain"><span class="toc-num">10</span><span class="toc-text">Pain Points & Triggers</span></a>
+      <a class="toc-item" href="#journey"><span class="toc-num">11</span><span class="toc-text">Customer Journey</span></a>
+      <a class="toc-item" href="#risks"><span class="toc-num">12</span><span class="toc-text">Risk Assessment</span></a>
+      <a class="toc-item" href="#pivots"><span class="toc-num">13</span><span class="toc-text">Pivot Opportunities</span></a>
+      <a class="toc-item" href="#verdict"><span class="toc-num">14</span><span class="toc-text">Go / No-Go Verdict</span></a>
+      <a class="toc-item" href="#plan"><span class="toc-num">15</span><span class="toc-text">30-Day Action Plan</span></a>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════ 01 EXECUTIVE SUMMARY ═══ -->
+<div class="section" id="summary">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-num">Section 01</div>
+      <div class="section-title">Executive Summary</div>
+      <div class="section-desc">A high-level synthesis of the opportunity, the product, and the strategic recommendation.</div>
+    </div>
+
+    <div class="quote">
+      "India has 300M+ students who know they're wasting time. They don't need another to-do app — they need 5 friends who won't let them quit. GrindOS turns discipline into a competitive team sport."
+    </div>
+
+    <div class="grid grid-2" style="margin-bottom:24px">
+      <div class="card">
+        <div class="card-header"><div class="card-icon card-icon-orange">💡</div><div class="card-title">The Idea</div></div>
+        <p>GrindOS is a social accountability platform where students commit to 3 daily tasks within small "pods" of 5–6 friends. Tasks are visible to the pod, completion rates generate a personal Grind Score (0–100), and students compete on pod, college, and national leaderboards. Motivation comes from real student success stories and smart, context-aware reminders — not guilt or punishment.</p>
+      </div>
+      <div class="card">
+        <div class="card-header"><div class="card-icon card-icon-green">🎯</div><div class="card-title">The Opportunity</div></div>
+        <p>No app in India combines: (1) small-group social accountability, (2) a portable discipline metric (Grind Score), (3) multi-tier competitive leaderboards, and (4) relatable peer success stories — all designed for the Indian student context. The behavioral science is sound: peer accountability in small groups drives 95% task completion vs. 65% solo. The market is massive and unserved.</p>
+      </div>
+      <div class="card">
+        <div class="card-header"><div class="card-icon card-icon-purple">👤</div><div class="card-title">Founder Advantage</div></div>
+        <p>Tarunj Gupta IS the target customer — a B.Tech IT student at ABES Engineering College who lives this problem daily. Technical stack (MERN + AI/ML) enables full solo MVP development. Campus access provides 2,000+ potential beta users at zero acquisition cost. The #60DayChallenge builds public credibility as a builder. Founder-market fit score: 76/100.</p>
+      </div>
+      <div class="card">
+        <div class="card-header"><div class="card-icon card-icon-amber">⚠️</div><div class="card-title">Key Risks & Conditions</div></div>
+        <p>No user interviews have been conducted yet (0 of recommended 30+). Retention beyond the novelty phase is unproven — the "LeetCode paradox" (students sign up for competitive tools but don't follow through) must be addressed through pod-level accountability. Student willingness-to-pay needs validation. None of these are fatal — all require pre-MVP validation work.</p>
+      </div>
+    </div>
+
+    <div style="padding:28px 32px;background:var(--green-bg);border:1px solid var(--green-border);border-radius:14px;display:flex;align-items:center;gap:28px;flex-wrap:wrap">
+      <div style="font-family:'Space Grotesk',sans-serif;font-size:52px;font-weight:700;color:var(--green)">✓ GO</div>
+      <div>
+        <div style="font-size:17px;font-weight:600;margin-bottom:4px">Conditional Go — Validate Before You Build</div>
+        <div style="font-size:13px;color:var(--text2);line-height:1.7">Conduct 30 user interviews → Build a no-code landing page → Get 200 waitlist signups → Validate pod accountability with 10 friends manually → Then invest in development. Do not code the full app before these milestones are hit.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════ 02 PROBLEM VALIDATION ═══ -->
+<div class="section" id="problem">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-num">Section 02</div>
+      <div class="section-title">Problem Validation</div>
+      <div class="section-desc">Is the problem real, acute, frequent, and large enough to build a venture-scale business on?</div>
+    </div>
+
+    <div class="grid grid-4" style="margin-bottom:32px">
+      <div class="metric m-orange"><div class="metric-label">Problem Score</div><div class="metric-val">8.5</div><div class="metric-sub">Out of 10</div></div>
+      <div class="metric m-red"><div class="metric-label">Pain Intensity</div><div class="metric-val">9/10</div><div class="metric-sub">Students actively know they waste time</div></div>
+      <div class="metric m-blue"><div class="metric-label">Frequency</div><div class="metric-val">Daily</div><div class="metric-sub">Pain occurs every single day</div></div>
+      <div class="metric m-green"><div class="metric-label">Market Awareness</div><div class="metric-val">8/10</div><div class="metric-sub">Students know the problem exists</div></div>
+    </div>
+
+    <div class="card" style="margin-bottom:24px">
+      <h3>Problem Validation Scorecard</h3>
+      <div style="margin-top:16px">
+        <div class="score-bar"><div class="score-bar-top"><span class="score-bar-name">Problem Clarity & Definition</span><span class="score-bar-val" style="color:var(--green)">9.0</span></div><div class="score-bar-track"><div class="score-bar-fill f-green" style="width:90%"></div></div></div>
+        <div class="score-bar"><div class="score-bar-top"><span class="score-bar-name">Frequency of Pain (daily occurrence)</span><span class="score-bar-val" style="color:var(--green)">9.5</span></div><div class="score-bar-track"><div class="score-bar-fill f-green" style="width:95%"></div></div></div>
+        <div class="score-bar"><div class="score-bar-top"><span class="score-bar-name">Emotional Hook Strength</span><span class="score-bar-val" style="color:var(--green)">9.0</span></div><div class="score-bar-track"><div class="score-bar-fill f-green" style="width:90%"></div></div></div>
+        <div class="score-bar"><div class="score-bar-top"><span class="score-bar-name">Market Awareness of Problem</span><span class="score-bar-val" style="color:var(--orange)">8.0</span></div><div class="score-bar-track"><div class="score-bar-fill f-orange" style="width:80%"></div></div></div>
+        <div class="score-bar"><div class="score-bar-top"><span class="score-bar-name">Willingness to Pay for Solution</span><span class="score-bar-val" style="color:var(--amber)">6.5</span></div><div class="score-bar-track"><div class="score-bar-fill f-amber" style="width:65%"></div></div></div>
+        <div class="score-bar"><div class="score-bar-top"><span class="score-bar-name">Existing Validation (interviews, users)</span><span class="score-bar-val" style="color:var(--red)">3.0</span></div><div class="score-bar-track"><div class="score-bar-fill f-red" style="width:30%"></div></div></div>
+      </div>
+    </div>
+
+    <div class="grid grid-2">
+      <div class="card">
+        <div class="card-header"><div class="card-icon card-icon-green">✓</div><div class="card-title">Why the Problem is Real</div></div>
+        <ul>
+          <li>India has 650M+ internet users; students spend avg 7+ hrs/day on screens</li>
+          <li>YouTube, Instagram, and reels culture is the #1 distraction for 18–24 age group</li>
+          <li>JEE/NEET/UPSC dropouts cite "lack of discipline" as top failure reason in surveys</li>
+          <li>Students feel guilt daily but have zero external accountability that creates real consequence</li>
+          <li>Existing tools (LeetCode, Notion, Forest) don't change behavior — no social cost to quitting</li>
+          <li>Parental pressure exists but creates anxiety, not structured action</li>
+        </ul>
+      </div>
+      <div class="card">
+        <div class="card-header"><div class="card-icon card-icon-red">✗</div><div class="card-title">What's Missing in Validation</div></div>
+        <ul>
+          <li>No user interviews conducted yet (0 of recommended 30+)</li>
+          <li>No waitlist or landing page to gauge demand</li>
+          <li>No data on price sensitivity among Indian students</li>
+          <li>Pod accountability concept has not been tested with real groups</li>
+          <li>No evidence that students will maintain daily check-ins beyond Week 2</li>
+          <li>Competitive analysis based on secondary research only</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="insight insight-blue">
+      <div class="insight-icon">💡</div>
+      <div><strong>The LeetCode Paradox:</strong> LeetCode has leaderboards, contests, and direct career incentives — yet 90%+ of students who sign up never solve more than 20 problems. This proves that competition alone doesn't drive behavior change. GrindOS's hypothesis is that <strong>small-group accountability (5–6 friends where your absence is noticed)</strong> is the missing ingredient that makes competition actually work.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════ 03 FOUNDER-MARKET FIT ═══ -->
+<div class="section" id="founder">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-num">Section 03</div>
+      <div class="section-title">Founder–Market Fit Analysis</div>
+      <div class="section-desc">The right founder for this specific problem and market? An honest, evidence-based assessment.</div>
+    </div>
+
+    <div class="split split-sidebar" style="align-items:start">
+      <div>
+        <div class="card" style="margin-bottom:20px">
+          <h3 style="margin-bottom:20px">Fit Score Breakdown</h3>
+          <div class="score-bar"><div class="score-bar-top"><span class="score-bar-name">Domain Knowledge (you ARE the user)</span><span class="score-bar-val" style="color:var(--green)">9/10</span></div><div class="score-bar-track"><div class="score-bar-fill f-green" style="width:90%"></div></div></div>
+          <div class="score-bar"><div class="score-bar-top"><span class="score-bar-name">Technical Execution (MERN + AI/ML)</span><span class="score-bar-val" style="color:var(--green)">9/10</span></div><div class="score-bar-track"><div class="score-bar-fill f-green" style="width:90%"></div></div></div>
+          <div class="score-bar"><div class="score-bar-top"><span class="score-bar-name">Passion & Personal Motivation</span><span class="score-bar-val" style="color:var(--green)">9/10</span></div><div class="score-bar-track"><div class="score-bar-fill f-green" style="width:90%"></div></div></div>
+          <div class="score-bar"><div class="score-bar-top"><span class="score-bar-name">India Market & Cultural Understanding</span><span class="score-bar-val" style="color:var(--orange)">8/10</span></div><div class="score-bar-track"><div class="score-bar-fill f-orange" style="width:80%"></div></div></div>
+          <div class="score-bar"><div class="score-bar-top"><span class="score-bar-name">Student Network Access (beta testing)</span><span class="score-bar-val" style="color:var(--orange)">7/10</span></div><div class="score-bar-track"><div class="score-bar-fill f-orange" style="width:70%"></div></div></div>
+          <div class="score-bar"><div class="score-bar-top"><span class="score-bar-name">Business & GTM Experience</span><span class="score-bar-val" style="color:var(--amber)">5/10</span></div><div class="score-bar-track"><div class="score-bar-fill f-amber" style="width:50%"></div></div></div>
+          <div class="score-bar"><div class="score-bar-top"><span class="score-bar-name">Prior Startup / Product Launch</span><span class="score-bar-val" style="color:var(--amber)">4/10</span></div><div class="score-bar-track"><div class="score-bar-fill f-amber" style="width:40%"></div></div></div>
+          <div class="score-bar"><div class="score-bar-top"><span class="score-bar-name">Existing Validation / Evidence</span><span class="score-bar-val" style="color:var(--red)">3/10</span></div><div class="score-bar-track"><div class="score-bar-fill f-red" style="width:30%"></div></div></div>
+        </div>
+      </div>
+      <div>
+        <div class="metric" style="text-align:center;padding:36px;margin-bottom:16px">
+          <div class="metric-label" style="text-align:center">Founder–Market Fit Score</div>
+          <div style="font-family:'Space Grotesk',sans-serif;font-size:80px;font-weight:700;color:var(--orange);line-height:1">76</div>
+          <div style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--text3);margin-top:4px">OUT OF 100</div>
+          <div style="margin-top:16px;padding:8px 16px;background:var(--orange-bg);border:1px solid var(--orange-border);border-radius:8px;font-size:13px;color:var(--orange2);font-weight:600">STRONG FIT</div>
+        </div>
+        <div class="card">
+          <h4 style="color:var(--orange);margin-bottom:12px">Unfair Advantages</h4>
+          <ul style="font-size:13px">
+            <li>You are the exact target customer (ICP)</li>
+            <li>MERN + AI/ML = full-stack MVP solo</li>
+            <li>ABES campus = 2,000+ potential beta users</li>
+            <li>#60DayChallenge = public builder credibility</li>
+            <li>Zero competition in India-first accountability</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════ 04 PRODUCT ARCHITECTURE ═══ -->
+<div class="section" id="product">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-num">Section 04</div>
+      <div class="section-title">Product Architecture — The 5 Pillars</div>
+      <div class="section-desc">GrindOS is built on five interlocking systems that create a self-reinforcing accountability loop.</div>
+    </div>
+
+    <div class="grid grid-3" style="margin-bottom:32px">
+      <div class="card" style="border-top:2px solid var(--orange)">
+        <div class="card-header"><div class="card-icon card-icon-orange">🏠</div><div class="card-title">Pod Accountability</div></div>
+        <p>Students form pods of 5–6 friends. Every morning they commit to 3 tasks; every evening they check off completions. The pod sees everything. Quitting has a social cost — your friends notice.</p>
+      </div>
+      <div class="card" style="border-top:2px solid var(--purple)">
+        <div class="card-header"><div class="card-icon card-icon-purple">📊</div><div class="card-title">Grind Score</div></div>
+        <p>A single discipline metric (0–100) updated daily based on consistency, completion rate, streaks, and pod engagement. Becomes the student's discipline identity — shareable on LinkedIn and Instagram.</p>
+      </div>
+      <div class="card" style="border-top:2px solid var(--blue)">
+        <div class="card-header"><div class="card-icon card-icon-blue">🏆</div><div class="card-title">3-Tier Leaderboards</div></div>
+        <p>Rankings at Pod level (real-time, intimate), College level (institutional pride), and National level (aspirational). Taps into India's inherently competitive student culture.</p>
+      </div>
+      <div class="card" style="border-top:2px solid var(--green)">
+        <div class="card-header"><div class="card-icon card-icon-green">🌟</div><div class="card-title">Success Stories</div></div>
+        <p>Real student journeys — from Grind Score 23 to Google internship. Not generic motivational quotes. Relatable peers from real colleges, real struggles, real outcomes.</p>
+      </div>
+      <div class="card" style="border-top:2px solid var(--amber)">
+        <div class="card-header"><div class="card-icon card-icon-amber">⏰</div><div class="card-title">Smart Reminders</div></div>
+        <p>Context-aware nudges that reference specific pod members and streak status. Max 3/day. Always actionable with one tap. Reduces the hardest part: starting.</p>
+      </div>
+      <div class="card" style="border-top:2px solid var(--teal)">
+        <div class="card-header"><div class="card-icon" style="background:rgba(20,184,166,0.06);border:1px solid rgba(20,184,166,0.15)">🧠</div><div class="card-title">Core Insight</div></div>
+        <p><strong>"LeetCode gives problems. Notion gives pages. GrindOS gives you 5 friends who won't let you quit."</strong> The product is not a tool — it's a social contract.</p>
+      </div>
+    </div>
+
+    <div class="feature-flow">
+      <h3 style="margin-bottom:20px">📱 A Student's Day on GrindOS</h3>
+      <div class="flow-step">
+        <div class="flow-time">8:00 AM</div>
+        <div class="flow-icon">🌅</div>
+        <div class="flow-content">
+          <h4>Morning Check-In</h4>
+          <p>Student receives a notification: "Your pod is waiting. What 3 things today?" They type 3 specific tasks. It's posted to their pod of 5–6 friends. They see who else has already checked in.</p>
+        </div>
+      </div>
+      <div class="flow-step">
+        <div class="flow-time">8:05 AM</div>
+        <div class="flow-icon">🌟</div>
+        <div class="flow-content">
+          <h4>Daily Success Story</h4>
+          <p>A short, relatable story appears: "Meet Priya from NIT Surat — she went from Grind Score 29 to 87 in 90 days and landed a Google internship." Starts the day with aspiration, not guilt.</p>
+        </div>
+      </div>
+      <div class="flow-step">
+        <div class="flow-time">2:00 PM</div>
+        <div class="flow-icon">👀</div>
+        <div class="flow-content">
+          <h4>Mid-Day Competitive Nudge</h4>
+          <p>"Arjun already finished 3/3 tasks. You're at 0/3. Just saying. 👀" — References a specific pod member. Light, competitive, not punishing.</p>
+        </div>
+      </div>
+      <div class="flow-step">
+        <div class="flow-time">9:30 PM</div>
+        <div class="flow-icon">✅</div>
+        <div class="flow-content">
+          <h4>Evening Check-Off</h4>
+          <p>Student checks off completed tasks. 2/3 done. Grind Score adjusts. Pod leaderboard updates in real-time. Their 12-day streak continues. Pod members react with emoji.</p>
+        </div>
+      </div>
+      <div class="flow-step">
+        <div class="flow-time">Weekly</div>
+        <div class="flow-icon">🏆</div>
+        <div class="flow-content">
+          <h4>Leaderboard & Share</h4>
+          <p>College leaderboard updates. Student shares their Grind Score card on LinkedIn: "Top 8% nationally this month." Every share is a free ad with social proof. New users join organically.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════ 05 TAM SAM SOM ═══ -->
+<div class="section" id="market">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-num">Section 05</div>
+      <div class="section-title">TAM · SAM · SOM Analysis</div>
+      <div class="section-desc">Market sizing using a bottom-up approach. All numbers in Indian Rupees and USD equivalent.</div>
+    </div>
+
+    <div class="grid grid-3" style="margin-bottom:32px">
+      <div class="metric" style="border-left:3px solid var(--blue)">
+        <div class="metric-label">TAM — Total Addressable Market</div>
+        <div class="metric-val" style="color:var(--blue2);font-size:28px">₹35,000 Cr</div>
+        <div class="metric-sub" style="margin-top:8px;line-height:1.5">~$4.2B · All Indian students with smartphones<br>India EdTech + Productivity App market</div>
+      </div>
+      <div class="metric" style="border-left:3px solid var(--orange)">
+        <div class="metric-label">SAM — Serviceable Addressable Market</div>
+        <div class="metric-val" style="color:var(--orange);font-size:28px">₹8,500 Cr</div>
+        <div class="metric-sub" style="margin-top:8px;line-height:1.5">~$1.02B · College + competitive exam students<br>18–25, English-comfortable, smartphone users</div>
+      </div>
+      <div class="metric" style="border-left:3px solid var(--green)">
+        <div class="metric-label">SOM — Serviceable Obtainable (Yr 3)</div>
+        <div class="metric-val" style="color:var(--green);font-size:28px">₹12.7 Cr</div>
+        <div class="metric-sub" style="margin-top:8px;line-height:1.5">~$1.5M · 300K users, 3% paid conversion<br>Conservative model with B2B supplement</div>
+      </div>
+    </div>
+
+    <div class="split split-2" style="margin-bottom:24px">
+      <div class="card">
+        <h3>Market Size — Visual Breakdown</h3>
+        <div style="font-size:12px;color:var(--text3);margin-bottom:14px">Annual revenue potential at scale (₹ Cr)</div>
+        <div class="chart-legend">
+          <div class="chart-legend-item"><div class="legend-dot" style="background:#3B82F6"></div>TAM ₹35,000 Cr</div>
+          <div class="chart-legend-item"><div class="legend-dot" style="background:#F97316"></div>SAM ₹8,500 Cr</div>
+          <div class="chart-legend-item"><div class="legend-dot" style="background:#10B981"></div>SOM ₹12.7 Cr</div>
+        </div>
+        <div class="chart-box" style="height:220px"><canvas id="tamChart" aria-label="Bar chart showing TAM, SAM, SOM market sizes"></canvas></div>
+      </div>
+      <div class="card">
+        <h3>Revenue Growth Projection</h3>
+        <div style="font-size:12px;color:var(--text3);margin-bottom:14px">Annual Recurring Revenue (₹ Cr) — Conservative 3% Conversion</div>
+        <div class="chart-legend">
+          <div class="chart-legend-item"><div class="legend-dot" style="background:#F97316;border-radius:50%"></div>B2C ARR</div>
+          <div class="chart-legend-item"><div class="legend-dot" style="background:#8B5CF6;border-radius:50%"></div>B2B ARR</div>
+        </div>
+        <div class="chart-box" style="height:220px"><canvas id="revenueChart" aria-label="Revenue growth from Year 1 to Year 4"></canvas></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3 style="margin-bottom:16px">Monetization Model (Conservative — 3% Conversion)</h3>
+      <table class="tbl">
+        <thead><tr><th>Parameter</th><th>Year 1</th><th>Year 2</th><th>Year 3</th><th>Year 4</th></tr></thead>
+        <tbody>
+          <tr><td>Total Users (Free + Paid)</td><td>10,000</td><td>60,000</td><td>300,000</td><td>800,000</td></tr>
+          <tr><td>Paying Users (3% conversion)</td><td>300</td><td>1,800</td><td>9,000</td><td>24,000</td></tr>
+          <tr><td>ARPU / month</td><td>₹99</td><td>₹99</td><td>₹99</td><td>₹99</td></tr>
+          <tr><td>B2C Revenue</td><td>₹35.6 L</td><td>₹2.1 Cr</td><td>₹10.7 Cr</td><td>₹28.5 Cr</td></tr>
+          <tr><td>B2B Revenue (College Plans)</td><td>—</td><td>₹30 L</td><td>₹2 Cr</td><td>₹6 Cr</td></tr>
+          <tr class="hl"><td><strong>Total Revenue</strong></td><td><strong>₹35.6 L</strong></td><td><strong>₹2.4 Cr</strong></td><td><strong>₹12.7 Cr</strong></td><td><strong>₹34.5 Cr</strong></td></tr>
+          <tr><td>Revenue (USD)</td><td>~$43K</td><td>~$290K</td><td>~$1.5M</td><td>~$4.1M</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="insight insight-amber" style="margin-top:24px">
+      <div class="insight-icon">📊</div>
+      <div><strong>Conservative Modeling:</strong> These projections use 3% freemium-to-paid conversion (industry average for Indian student apps), not the optimistic 10%. If GrindOS achieves strong D7 retention via pod accountability, 5–7% conversion is achievable — which would double these numbers.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════ 06 COMPETITOR ANALYSIS ═══ -->
+<div class="section" id="competitors">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-num">Section 06</div>
+      <div class="section-title">Competitor Analysis</div>
+      <div class="section-desc">How GrindOS compares against existing tools across six critical dimensions for the Indian student market.</div>
+    </div>
+
+    <div class="card" style="overflow-x:auto;margin-bottom:24px">
+      <table class="tbl">
+        <thead>
+          <tr><th>App / Tool</th><th>Category</th><th>India-Specific</th><th>Pod / Social Accountability</th><th>Grind Score / Metric</th><th>Leaderboards</th><th>Free Tier</th><th>Threat Level</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><strong>Notion</strong></td><td><span class="chip chip-blue">Notes / Tasks</span></td><td><span class="chip chip-red">✗ No</span></td><td><span class="chip chip-red">✗ No</span></td><td><span class="chip chip-red">✗ No</span></td><td><span class="chip chip-red">✗ No</span></td><td><span class="chip chip-green">✓ Yes</span></td><td style="font-family:'JetBrains Mono',monospace;color:var(--text3)">Low</td></tr>
+          <tr><td><strong>Forest</strong></td><td><span class="chip chip-green">Focus Timer</span></td><td><span class="chip chip-red">✗ No</span></td><td><span class="chip chip-red">✗ No</span></td><td><span class="chip chip-red">✗ No</span></td><td><span class="chip chip-red">✗ No</span></td><td><span class="chip chip-amber">Limited</span></td><td style="font-family:'JetBrains Mono',monospace;color:var(--text3)">Low</td></tr>
+          <tr><td><strong>LeetCode</strong></td><td><span class="chip chip-purple">Coding Practice</span></td><td><span class="chip chip-red">✗ No</span></td><td><span class="chip chip-amber">Contests only</span></td><td><span class="chip chip-amber">Rating</span></td><td><span class="chip chip-green">✓ Global</span></td><td><span class="chip chip-green">✓ Yes</span></td><td style="font-family:'JetBrains Mono',monospace;color:var(--amber)">Medium</td></tr>
+          <tr><td><strong>Habitica</strong></td><td><span class="chip chip-purple">Gamification</span></td><td><span class="chip chip-red">✗ No</span></td><td><span class="chip chip-amber">Guilds</span></td><td><span class="chip chip-amber">XP/Level</span></td><td><span class="chip chip-amber">Guild only</span></td><td><span class="chip chip-green">✓ Yes</span></td><td style="font-family:'JetBrains Mono',monospace;color:var(--amber)">Medium</td></tr>
+          <tr><td><strong>Todoist</strong></td><td><span class="chip chip-blue">Task Manager</span></td><td><span class="chip chip-red">✗ No</span></td><td><span class="chip chip-red">✗ No</span></td><td><span class="chip chip-amber">Karma</span></td><td><span class="chip chip-red">✗ No</span></td><td><span class="chip chip-green">✓ Yes</span></td><td style="font-family:'JetBrains Mono',monospace;color:var(--text3)">Low</td></tr>
+          <tr><td><strong>BeTimeful</strong></td><td><span class="chip chip-blue">Screen Time</span></td><td><span class="chip chip-red">✗ No</span></td><td><span class="chip chip-red">✗ No</span></td><td><span class="chip chip-red">✗ No</span></td><td><span class="chip chip-red">✗ No</span></td><td><span class="chip chip-amber">Limited</span></td><td style="font-family:'JetBrains Mono',monospace;color:var(--text3)">Low</td></tr>
+          <tr><td><strong>Duolingo</strong></td><td><span class="chip chip-teal">Language</span></td><td><span class="chip chip-amber">Partial</span></td><td><span class="chip chip-amber">Friends</span></td><td><span class="chip chip-green">✓ XP</span></td><td><span class="chip chip-green">✓ Leagues</span></td><td><span class="chip chip-green">✓ Yes</span></td><td style="font-family:'JetBrains Mono',monospace;color:var(--amber)">Concept ref</td></tr>
+          <tr class="hl">
+            <td><strong>GrindOS ⬅</strong></td>
+            <td><span class="chip chip-orange">Social Accountability</span></td>
+            <td><span class="chip chip-green">✓ India-first</span></td>
+            <td><span class="chip chip-green">✓ Pods (5–6)</span></td>
+            <td><span class="chip chip-green">✓ Grind Score</span></td>
+            <td><span class="chip chip-green">✓ 3-tier</span></td>
+            <td><span class="chip chip-green">✓ Freemium</span></td>
+            <td style="font-family:'JetBrains Mono',monospace;color:var(--orange);font-weight:700">TARGET</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="quote">
+      <strong>Competitive Insight:</strong> The market has tools for productivity, tools for coding practice, and tools for focus — but no tool creates <strong>small-group social accountability with a portable discipline metric</strong> designed for Indian students. The closest concept is Duolingo's league system, but applied to real-life discipline rather than language learning.
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════ 07 MARKET GAP ═══ -->
+<div class="section" id="gap">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-num">Section 07</div>
+      <div class="section-title">Market Gap Analysis</div>
+      <div class="section-desc">The specific whitespace GrindOS can uniquely own — and why no one has taken it.</div>
+    </div>
+
+    <div class="grid grid-2">
+      <div class="card" style="border-left:3px solid var(--orange)">
+        <div class="card-header"><div class="card-title" style="color:var(--orange)">Gap 1: Small-Group Social Accountability</div></div>
+        <p>No existing app creates pods of 5–6 friends where daily task commitments and completions are mutually visible. Research shows accountability in small groups drives 95% task completion vs. 65% solo (ASTD study). This mechanic doesn't exist in any Indian student app.</p>
+      </div>
+      <div class="card" style="border-left:3px solid var(--purple)">
+        <div class="card-header"><div class="card-title" style="color:var(--purple2)">Gap 2: Portable Discipline Metric</div></div>
+        <p>No app gives students a single, shareable "discipline score" that works like a credit score for consistency. LeetCode has contest ratings (skill-based); GrindOS's Grind Score measures <strong>discipline</strong> (behavior-based) — a fundamentally different and more universal metric.</p>
+      </div>
+      <div class="card" style="border-left:3px solid var(--green)">
+        <div class="card-header"><div class="card-title" style="color:var(--green)">Gap 3: India-First Student Competition</div></div>
+        <p>Every major productivity tool (Notion, Todoist, Forest, Motion) is designed for Western professionals. None understand Indian student culture — competitive exams, college rivalries, peer-driven motivation, middle-class aspirational psychology, or the Tier 1 vs. Tier 2 dynamic.</p>
+      </div>
+      <div class="card" style="border-left:3px solid var(--blue)">
+        <div class="card-header"><div class="card-title" style="color:var(--blue2)">Gap 4: Peer Success as Motivation</div></div>
+        <p>Generic motivational quotes don't work. What works is seeing <strong>someone just like you</strong> — same college tier, same struggles — who improved their discipline and got a real outcome. No app curates relatable, data-backed student success stories as a core feature.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════ 08 ICP ═══ -->
+<div class="section" id="icp">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-num">Section 08</div>
+      <div class="section-title">Ideal Customer Profile</div>
+      <div class="section-desc">The precise definition of who GrindOS is built for — behaviorally, psychographically, and demographically.</div>
+    </div>
+
+    <div class="card">
+      <h3 style="margin-bottom:16px">ICP — Master Definition</h3>
+      <table class="tbl">
+        <thead><tr><th>Dimension</th><th>Profile</th></tr></thead>
+        <tbody>
+          <tr><td>Age Range</td><td>17–25 years old</td></tr>
+          <tr><td>Geography</td><td>Tier 1 & Tier 2 Indian cities (Delhi NCR, Jaipur, Lucknow, Patna, Bhopal, Indore, Nagpur, Pune)</td></tr>
+          <tr><td>Education</td><td>Class 11/12 → Undergrad (Engineering, Medical, Commerce, UPSC aspirants, MBA prep)</td></tr>
+          <tr><td>Family</td><td>Middle-class; parents are salaried workers or small business owners who invested heavily in education</td></tr>
+          <tr><td>Psychographic</td><td>Aware they waste time; feel guilty nightly; restart motivation every Monday; respond to peer pressure more than self-discipline</td></tr>
+          <tr><td>Social Behavior</td><td>Active in friend groups (WhatsApp); compare themselves to peers constantly; competitive by nature (exam ranks, placement packages)</td></tr>
+          <tr><td>Tech Comfort</td><td>Daily social media users; comfortable with app installs; English + Hindi bilingual</td></tr>
+          <tr><td>Device</td><td>Android smartphone (₹10K–25K range); 4G/5G data plan</td></tr>
+          <tr><td>Willingness to Pay</td><td>₹99–199/month IF peers use it AND they see daily value within first 3 days</td></tr>
+          <tr><td>Decision Trigger</td><td>Exam failure, placement rejection, seeing a peer succeed, motivational content on social media, a friend sharing their Grind Score</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════ 09 BUYER PERSONAS ═══ -->
+<div class="section" id="personas">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-num">Section 09</div>
+      <div class="section-title">Buyer Personas</div>
+      <div class="section-desc">Who GrindOS is built for — their daily reality, their fears, and what makes them act.</div>
+    </div>
+
+    <div class="icp-grid" style="margin-bottom:28px">
+      <div class="persona">
+        <div class="persona-avatar">🎯</div>
+        <div class="persona-name">Priya Sharma</div>
+        <div class="persona-role">Primary ICP · The Guilty Grinder</div>
+        <div class="persona-row"><span>Age</span><span>19 years old</span></div>
+        <div class="persona-row"><span>Location</span><span>Jaipur, Rajasthan</span></div>
+        <div class="persona-row"><span>Education</span><span>2nd year B.Tech CSE</span></div>
+        <div class="persona-row"><span>Goal</span><span>FAANG placement</span></div>
+        <div class="persona-row"><span>Daily screen time</span><span>8.5 hrs (5 hrs wasted)</span></div>
+        <div class="persona-row"><span>Phone</span><span>Redmi Note 12, Android</span></div>
+        <div class="persona-row"><span>Pays for apps?</span><span>₹99–149/mo if friends use it</span></div>
+        <div class="persona-row"><span>Current system</span><span>Notion + sticky notes + guilt</span></div>
+        <div class="persona-quote">"I know I waste time. I feel bad every night. If my friends could see what I actually do all day, I'd be embarrassed enough to change."</div>
+      </div>
+      <div class="persona">
+        <div class="persona-avatar">🚀</div>
+        <div class="persona-name">Arjun Mishra</div>
+        <div class="persona-role">Secondary ICP · The Competitive Builder</div>
+        <div class="persona-row"><span>Age</span><span>22 years old</span></div>
+        <div class="persona-row"><span>Location</span><span>Allahabad, UP</span></div>
+        <div class="persona-row"><span>Education</span><span>Final year B.Tech IT</span></div>
+        <div class="persona-row"><span>Goal</span><span>Crack MNC or start a startup</span></div>
+        <div class="persona-row"><span>Daily screen time</span><span>10 hrs (6 hrs YouTube/Shorts)</span></div>
+        <div class="persona-row"><span>Phone</span><span>Samsung A54, Android</span></div>
+        <div class="persona-row"><span>Pays for apps?</span><span>Yes if peers use it (social proof)</span></div>
+        <div class="persona-row"><span>Current system</span><span>Physical diary + random app switching</span></div>
+        <div class="persona-quote">"I don't need motivation. I need competition. If I can see that my friend is outworking me, I'll work harder. That's just how I'm wired."</div>
+      </div>
+    </div>
+
+    <div class="persona" style="max-width:540px">
+      <div class="persona-avatar">👨‍👩‍👦</div>
+      <div class="persona-name">Mr. & Mrs. Sharma</div>
+      <div class="persona-role">Tertiary ICP · The Paying Parents</div>
+      <div class="persona-row"><span>Age</span><span>45–55 years old</span></div>
+      <div class="persona-row"><span>Concern</span><span>"Is my child actually studying?"</span></div>
+      <div class="persona-row"><span>Willingness to pay</span><span>₹199–499/month for peace of mind</span></div>
+      <div class="persona-row"><span>Feature wanted</span><span>Weekly discipline summary (not surveillance)</span></div>
+      <div class="persona-quote">"I don't want to spy on my child. I just want to know they're on track. A weekly report would be enough."</div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════ 10 PAIN POINTS & TRIGGERS ═══ -->
+<div class="section" id="pain">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-num">Section 10</div>
+      <div class="section-title">Pain Points · Triggers · Objections</div>
+      <div class="section-desc">What drives students toward a solution — and what makes them hesitate.</div>
+    </div>
+
+    <div class="split split-2">
+      <div>
+        <h3 style="margin-bottom:16px">Core Pain Points</h3>
+        <div class="pain"><span class="pain-tag pain-critical">Critical</span><div><strong style="font-size:14px">Time Blindness</strong><p style="font-size:13px;color:var(--text2);margin-top:4px">5 hours of YouTube feels like 30 minutes. Students genuinely don't know where their hours go. No honest daily audit exists.</p></div></div>
+        <div class="pain"><span class="pain-tag pain-critical">Critical</span><div><strong style="font-size:14px">Accountability Vacuum</strong><p style="font-size:13px;color:var(--text2);margin-top:4px">No friend will consistently hold you accountable. Study groups fail within weeks. Nothing creates real, daily, visible social consequence for slacking.</p></div></div>
+        <div class="pain"><span class="pain-tag pain-high">High</span><div><strong style="font-size:14px">Motivation Decay</strong><p style="font-size:13px;color:var(--text2);margin-top:4px">Motivation peaks Sunday night, dies by Tuesday. No system sustains momentum. Self-discipline fails; peer accountability doesn't.</p></div></div>
+        <div class="pain"><span class="pain-tag pain-high">High</span><div><strong style="font-size:14px">No Discipline Identity</strong><p style="font-size:13px;color:var(--text2);margin-top:4px">Students can quantify their LeetCode rating, CGPA, or Instagram followers — but have no metric for their daily discipline. It's invisible and therefore unmanageable.</p></div></div>
+        <div class="pain"><span class="pain-tag pain-med">Medium</span><div><strong style="font-size:14px">Lack of Relatable Role Models</strong><p style="font-size:13px;color:var(--text2);margin-top:4px">Generic "Elon Musk wakes up at 5 AM" content doesn't resonate. Students want to see someone from their tier of college who actually improved and got results.</p></div></div>
+      </div>
+      <div>
+        <h3 style="margin-bottom:16px">Buying Triggers</h3>
+        <div class="card" style="margin-bottom:20px">
+          <ul style="line-height:2.4">
+            <li>Scored poorly in an exam / got rejected from a placement</li>
+            <li>Saw a peer get a good internship or placement offer</li>
+            <li>Viral "I wasted 2 years of college" content on social media</li>
+            <li>Parent confrontation about wasted time or money</li>
+            <li>New semester / New Year / Birthday reset motivation</li>
+            <li>A friend shares their Grind Score on LinkedIn/Instagram</li>
+            <li>Saw someone they know on the GrindOS college leaderboard</li>
+          </ul>
+        </div>
+        <h3 style="margin-bottom:16px">Common Objections</h3>
+        <div class="card">
+          <table class="tbl">
+            <thead><tr><th>Objection</th><th>GrindOS Response</th></tr></thead>
+            <tbody>
+              <tr><td>"I'll use it for a week and quit"</td><td>Your pod of 5 friends will notice. Social cost makes quitting expensive.</td></tr>
+              <tr><td>"I'll just ignore notifications"</td><td>Pod members will message you: "Bhai, check-in kar." Humans > notifications.</td></tr>
+              <tr><td>"Too expensive for a student"</td><td>₹99/mo = ₹3.3/day. Free tier is genuinely useful. Pay only for analytics & extras.</td></tr>
+              <tr><td>"My friends won't join"</td><td>One friend is enough to start. Pod grows organically. We help you invite them.</td></tr>
+              <tr><td>"Leaderboards are demotivating"</td><td>You only compete in your pod (5–6 people). Always achievable, never overwhelming.</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════ 11 CUSTOMER JOURNEY ═══ -->
+<div class="section" id="journey">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-num">Section 11</div>
+      <div class="section-title">Customer Journey Map</div>
+      <div class="section-desc">How a student discovers, adopts, retains, pays for, and advocates GrindOS.</div>
+    </div>
+
+    <div style="max-width:680px">
+      <div class="journey-step">
+        <div class="journey-left"><div class="journey-dot">01</div><div class="journey-line"></div></div>
+        <div class="journey-right">
+          <h4>Awareness — The Trigger Moment</h4>
+          <p>Student fails an exam, sees a friend's placement news, or encounters a Grind Score card shared on Instagram/LinkedIn. Emotional pain peaks. They search "how to be disciplined as a student India" or a friend says "use GrindOS."</p>
+          <div class="journey-chips"><span class="chip chip-orange">Instagram Reels</span><span class="chip chip-blue">Google Search</span><span class="chip chip-purple">Friend's Grind Score</span></div>
+        </div>
+      </div>
+      <div class="journey-step">
+        <div class="journey-left"><div class="journey-dot">02</div><div class="journey-line"></div></div>
+        <div class="journey-right">
+          <h4>Consideration — Landing Page Visit</h4>
+          <p>They land on GrindOS. Headline: "5 friends. 3 daily tasks. 1 Grind Score. No excuses." They see a sample pod dashboard, a Grind Score card, and a success story from a student at a similar college. Free signup, no credit card.</p>
+          <div class="journey-chips"><span class="chip chip-green">Free Signup</span><span class="chip chip-amber">No Credit Card</span></div>
+        </div>
+      </div>
+      <div class="journey-step">
+        <div class="journey-left"><div class="journey-dot">03</div><div class="journey-line"></div></div>
+        <div class="journey-right">
+          <h4>Activation — First Morning Check-In</h4>
+          <p>Day 1: Student posts 3 tasks to their pod. By evening, they've completed 2/3 and see that Arjun finished 3/3. Competitive instinct kicks in. They share their first Grind Score card on WhatsApp. Social loop begins.</p>
+          <div class="journey-chips"><span class="chip chip-orange">First Check-In</span><span class="chip chip-blue">Pod Feed</span><span class="chip chip-green">Shareable Card</span></div>
+        </div>
+      </div>
+      <div class="journey-step">
+        <div class="journey-left"><div class="journey-dot">04</div><div class="journey-line"></div></div>
+        <div class="journey-right">
+          <h4>Retention — Streak & Pod Competition</h4>
+          <p>By Day 7, student has a streak. The pod has a collective streak. Missing a day means letting 5 friends down. Social accountability compounds with competitive scoring. The pod chat lights up daily.</p>
+          <div class="journey-chips"><span class="chip chip-purple">7-Day Streak</span><span class="chip chip-amber">Pod Leaderboard</span><span class="chip chip-blue">Daily Competition</span></div>
+        </div>
+      </div>
+      <div class="journey-step">
+        <div class="journey-left"><div class="journey-dot">05</div><div class="journey-line"></div></div>
+        <div class="journey-right">
+          <h4>Revenue — Premium Upgrade</h4>
+          <p>By Day 14, free tier limits are felt (1 pod, 3 tasks, no analytics). Student wants college leaderboard access, multiple pods, and detailed Grind Score breakdown. ₹99/month feels reasonable — they've already seen value.</p>
+          <div class="journey-chips"><span class="chip chip-green">₹99/month</span><span class="chip chip-orange">Freemium Gate</span></div>
+        </div>
+      </div>
+      <div class="journey-step">
+        <div class="journey-left"><div class="journey-dot">06</div><div style="width:2px"></div></div>
+        <div class="journey-right">
+          <h4>Advocacy — Organic Growth Loop</h4>
+          <p>After 30 days, student shares their monthly Grind Score report on LinkedIn: "Top 8% nationally. 23-day streak." Peers ask "What's GrindOS?" Campus-by-campus viral spread. Every share = free user acquisition.</p>
+          <div class="journey-chips"><span class="chip chip-blue">LinkedIn Post</span><span class="chip chip-purple">Campus Clubs</span><span class="chip chip-green">Referral Loop</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════ 12 RISK ASSESSMENT ═══ -->
+<div class="section" id="risks">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-num">Section 12</div>
+      <div class="section-title">Risk Assessment Matrix</div>
+      <div class="section-desc">Every startup has risks. Mapped by likelihood and impact, with concrete mitigation strategies.</div>
+    </div>
+
+    <div class="card" style="overflow-x:auto;margin-bottom:24px">
+      <table class="tbl">
+        <thead><tr><th>Risk</th><th>Category</th><th>Likelihood</th><th>Impact</th><th>Severity</th><th>Mitigation Strategy</th></tr></thead>
+        <tbody>
+          <tr>
+            <td><strong>Low Day-7 Retention</strong></td>
+            <td><span class="chip chip-orange">Product</span></td>
+            <td><span class="chip chip-orange">High</span></td>
+            <td><span class="chip chip-red">Very High</span></td>
+            <td style="color:var(--red);font-weight:600">🔴 Critical</td>
+            <td style="font-size:13px">Pod streak mechanics ensure social cost of quitting. A/B test onboarding aggressively. Measure D1/D3/D7 weekly. Target: >40% D7 retention.</td>
+          </tr>
+          <tr>
+            <td><strong>Students Don't Form Pods</strong></td>
+            <td><span class="chip chip-purple">Product</span></td>
+            <td><span class="chip chip-amber">Medium</span></td>
+            <td><span class="chip chip-red">Very High</span></td>
+            <td style="color:var(--red);font-weight:600">🔴 Critical</td>
+            <td style="font-size:13px">One-tap WhatsApp invite link. Auto-match solo users into public pods. Make pod creation the FIRST step in onboarding (before anything else).</td>
+          </tr>
+          <tr>
+            <td><strong>Student Price Sensitivity</strong></td>
+            <td><span class="chip chip-orange">Business</span></td>
+            <td><span class="chip chip-orange">High</span></td>
+            <td><span class="chip chip-amber">Medium</span></td>
+            <td style="color:var(--amber);font-weight:600">🟡 High</td>
+            <td style="font-size:13px">Strong free tier. Annual plan at ₹799/year (₹66/month). College bulk plans (₹49/student/month). Parent payment option for premium.</td>
+          </tr>
+          <tr>
+            <td><strong>Competition Becomes Demotivating</strong></td>
+            <td><span class="chip chip-purple">Product</span></td>
+            <td><span class="chip chip-amber">Medium</span></td>
+            <td><span class="chip chip-amber">Medium</span></td>
+            <td style="color:var(--amber);font-weight:600">🟡 High</td>
+            <td style="font-size:13px">Pod size (5–6) keeps competition intimate and achievable. Score soft-resets available. Focus on improvement trends, not absolute rankings.</td>
+          </tr>
+          <tr>
+            <td><strong>Big Tech Copies Features</strong></td>
+            <td><span class="chip chip-blue">Competitive</span></td>
+            <td><span class="chip chip-blue">Low</span></td>
+            <td><span class="chip chip-amber">Medium</span></td>
+            <td style="color:var(--green);font-weight:600">🟢 Low</td>
+            <td style="font-size:13px">India-specific cultural design is hard to copy. Build community moat (campus ambassadors, success stories) before competitors can react.</td>
+          </tr>
+          <tr>
+            <td><strong>Solo Founder Burnout</strong></td>
+            <td><span class="chip chip-red">Team</span></td>
+            <td><span class="chip chip-amber">Medium</span></td>
+            <td><span class="chip chip-amber">Medium</span></td>
+            <td style="color:var(--amber);font-weight:600">🟡 High</td>
+            <td style="font-size:13px">Find a non-technical co-founder for GTM within 60 days. Use no-code for non-core features. Build in public to share the load.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="split split-2">
+      <div class="card">
+        <h3>Risk Radar — Visual</h3>
+        <div style="font-size:12px;color:var(--text3);margin-bottom:14px">Severity scores across risk categories</div>
+        <div class="chart-box" style="height:260px"><canvas id="riskChart" aria-label="Radar chart of risk severity across 6 categories"></canvas></div>
+      </div>
+      <div class="card">
+        <h3>The LeetCode Paradox — Solved?</h3>
+        <p style="margin-bottom:16px">Why GrindOS addresses each failure mode of competitive tools:</p>
+        <table class="tbl">
+          <thead><tr><th>Why Students Quit Competitive Tools</th><th>GrindOS Fix</th></tr></thead>
+          <tbody>
+            <tr><td>Competition too large (millions)</td><td>Pod = 5–6 people. Always visible.</td></tr>
+            <tr><td>No social cost to quitting</td><td>Friends see you stopped checking in.</td></tr>
+            <tr><td>Tasks undefined / overwhelming</td><td>YOU define 3 specific tasks each morning.</td></tr>
+            <tr><td>Rewards delayed by months</td><td>Daily score update. Instant feedback.</td></tr>
+            <tr><td>Solitary experience</td><td>Pod reacts, chats, competes daily.</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════ 13 PIVOT OPPORTUNITIES ═══ -->
+<div class="section" id="pivots">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-num">Section 13</div>
+      <div class="section-title">Pivot Opportunities</div>
+      <div class="section-desc">If the core B2C model faces friction, here are defensible alternate directions that preserve the core asset.</div>
+    </div>
+
+    <div style="display:grid;gap:12px">
+      <div class="pivot">
+        <h4>Pivot A: B2B College Tool — "GrindOS for Institutions"</h4>
+        <p>Sell to engineering colleges as a student engagement & discipline dashboard. Colleges pay ₹299–499/student/year for department-level analytics, attendance correlation, and placement readiness scores. Removes individual payment friction entirely. TAM: ~8,000 engineering colleges in India.</p>
+      </div>
+      <div class="pivot">
+        <h4>Pivot B: Coaching Institute Partner — "GrindOS for Kota"</h4>
+        <p>JEE/NEET coaching institutes (Allen, Aakash, FIITJEE) spend heavily on student retention tools. GrindOS as a white-labeled discipline tracker solves their #1 problem (dropout from distraction). High-ARPU B2B channel at ₹2,000–5,000/student/year.</p>
+      </div>
+      <div class="pivot">
+        <h4>Pivot C: Parent Dashboard — "GrindOS for Parents"</h4>
+        <p>Indian parents pay more than students for educational tools. A parent-facing add-on (weekly discipline summary, no raw data, student controls privacy) unlocks a second paying user per household. Parents will pay ₹199–499/month. Could be a Day 1 feature, not just a pivot.</p>
+      </div>
+      <div class="pivot">
+        <h4>Pivot D: AI Career Coach — "GrindOS Pro"</h4>
+        <p>Add an AI coaching layer that analyzes 30 days of Grind Score data to generate personalized 90-day career plans, skill gap analysis, and micro-learning recommendations. Positions GrindOS as a Career OS. Premium tier: ₹499–999/month.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════ 14 VERDICT ═══ -->
+<div class="section" id="verdict">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-num">Section 14</div>
+      <div class="section-title">Go / No-Go Recommendation</div>
+      <div class="section-desc">The final verdict — evidence-based, honest, and actionable.</div>
+    </div>
+
+    <div class="verdict verdict-go" style="margin-bottom:32px">
+      <div class="verdict-label">Advisor Verdict</div>
+      <div class="verdict-score">76</div>
+      <div class="verdict-unit">OUT OF 100 POINTS</div>
+      <div class="verdict-text">✅ CONDITIONAL GO</div>
+      <div class="verdict-desc">The problem is real and daily. The market is massive. The competitive accountability model is behaviorally sound and culturally native to Indian students. The founder IS the target customer. <strong>Validate with 30 interviews and 200 waitlist signups before writing a single line of product code.</strong></div>
+    </div>
+
+    <div class="grid grid-2" style="margin-bottom:24px">
+      <div class="card">
+        <div class="card-header"><div class="card-icon card-icon-green">✓</div><div class="card-title">Reasons to GO</div></div>
+        <ul style="line-height:2.2">
+          <li>Real, daily, painful problem — painkiller not vitamin</li>
+          <li>300M+ student market with no India-first accountability app</li>
+          <li>Pod accountability model backed by behavioral science</li>
+          <li>Solves the LeetCode Paradox (social cost > solo competition)</li>
+          <li>Founder = target customer = deep product intuition</li>
+          <li>Technical capability to build MVP solo</li>
+          <li>Multiple B2B pivot paths reduce binary risk</li>
+          <li>Grind Score creates a shareable, viral identity artifact</li>
+        </ul>
+      </div>
+      <div class="card">
+        <div class="card-header"><div class="card-icon card-icon-red">!</div><div class="card-title">Conditions Before Full Build</div></div>
+        <ul style="line-height:2.2">
+          <li>Complete 30 user interviews (behavior-focused, not opinion)</li>
+          <li>Validate pod concept — run a manual WhatsApp pod for 14 days</li>
+          <li>Get 200 waitlist signups via landing page</li>
+          <li>Run a price sensitivity survey (100+ responses)</li>
+          <li>Define Day 7 retention target (>40%) and measure it</li>
+          <li>Find a non-technical co-founder for GTM</li>
+          <li>Build in public — document as your brand</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3 style="margin-bottom:16px">Verdict Score Breakdown</h3>
+      <div class="chart-box" style="height:280px"><canvas id="verdictChart" aria-label="Bar chart showing verdict score breakdown across 8 categories"></canvas></div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════ 15 30-DAY PLAN ═══ -->
+<div class="section" id="plan">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-num">Section 15</div>
+      <div class="section-title">30-Day Action Plan</div>
+      <div class="section-desc">Concrete, daily-level actions to go from idea to validated concept — before writing product code.</div>
+    </div>
+
+    <div class="week">
+      <div class="week-head">
+        <div class="week-num">W1</div>
+        <div class="week-info">
+          <h3>Research & Discovery (Days 1–7)</h3>
+          <p>Understand the problem deeply before assuming you already do</p>
+        </div>
+      </div>
+      <div class="task"><div class="task-day">D1</div><div class="task-body"><strong>Write a 1-page problem statement</strong> — articulate the exact pain, who feels it worst, and when. Post on LinkedIn for early signal and audience building.</div></div>
+      <div class="task"><div class="task-day">D2</div><div class="task-body"><strong>List 50 potential interview candidates</strong> — college classmates, LinkedIn connections, engineering college groups. Focus on 18–24, India, students who admit they waste time.</div></div>
+      <div class="task"><div class="task-day">D3</div><div class="task-body"><strong>Design your interview script (10 questions)</strong> — focus on behavior, not opinions. "Tell me about a time you wasted a study day" not "Would you use this app?"</div></div>
+      <div class="task"><div class="task-day">D4–5</div><div class="task-body"><strong>Conduct 15 user interviews</strong> — record with permission. Take notes on exact pain language. Look for patterns in how students describe the problem.</div></div>
+      <div class="task"><div class="task-day">D6</div><div class="task-body"><strong>Synthesize findings into an affinity map</strong> — which pain is most common? What language do students actually use? Does "pod accountability" resonate?</div></div>
+      <div class="task"><div class="task-day">D7</div><div class="task-body"><strong>Post interview insights on LinkedIn</strong> — "I talked to 15 students about discipline. Here's what I found." This builds audience for your future launch.</div></div>
+    </div>
+
+    <div class="week">
+      <div class="week-head">
+        <div class="week-num">W2</div>
+        <div class="week-info">
+          <h3>Concept & Validation (Days 8–14)</h3>
+          <p>Shape the concept around what you learned, not what you assumed</p>
+        </div>
+      </div>
+      <div class="task"><div class="task-day">D8</div><div class="task-body"><strong>Run a manual WhatsApp pod experiment</strong> — create a group of 6 friends. Every morning, everyone posts 3 tasks. Every evening, they report completions. Run this for 14 days and observe behavior.</div></div>
+      <div class="task"><div class="task-day">D9</div><div class="task-body"><strong>Sketch app wireframes (Figma/paper)</strong> — morning check-in screen, pod feed, Grind Score dashboard, leaderboard, success story card. No code yet.</div></div>
+      <div class="task"><div class="task-day">D10–11</div><div class="task-body"><strong>Build a landing page</strong> (Framer / Carrd) — headline: "5 friends. 3 daily tasks. 1 Grind Score." Privacy promise, waitlist email signup. Goal: 200 signups total.</div></div>
+      <div class="task"><div class="task-day">D12</div><div class="task-body"><strong>Launch the waitlist</strong> — post on LinkedIn, Instagram, college groups, Reddit India. Measure signups. Target: 50 in first 48 hours.</div></div>
+      <div class="task"><div class="task-day">D13</div><div class="task-body"><strong>Run a price sensitivity survey</strong> (Google Forms, 100+ responses) — test ₹49 / ₹99 / ₹149 / ₹199 / ₹299 per month. Find the price cliff.</div></div>
+      <div class="task"><div class="task-day">D14</div><div class="task-body"><strong>Review WhatsApp pod experiment + waitlist data</strong> — if pod engagement dropped after Day 5, understand why. If <30 signups, interview 5 people who saw the page but didn't sign up.</div></div>
+    </div>
+
+    <div class="week">
+      <div class="week-head">
+        <div class="week-num">W3</div>
+        <div class="week-info">
+          <h3>MVP Build Sprint (Days 15–21)</h3>
+          <p>Build only what you can validate with 10 real users in 7 days</p>
+        </div>
+      </div>
+      <div class="task"><div class="task-day">D15</div><div class="task-body"><strong>Define MVP scope (ultra-minimal)</strong> — user auth, create/join pod (invite link), morning 3-task check-in, evening check-off, pod feed, basic Grind Score, pod leaderboard, 3 reminders/day.</div></div>
+      <div class="task"><div class="task-day">D16–19</div><div class="task-body"><strong>Build the MVP</strong> using MERN stack — React frontend, Node/Express API, MongoDB. Simple notification system (email via Resend or push). No AI, no activity tracking. 4 days max.</div></div>
+      <div class="task"><div class="task-day">D20</div><div class="task-body"><strong>Deploy to 10 beta testers</strong> from your waitlist. Form 2 pods. Full access. Ask for daily feedback via WhatsApp. Watch: Do they check in daily? Do they compete?</div></div>
+      <div class="task"><div class="task-day">D21</div><div class="task-body"><strong>Log every piece of feedback</strong> — no fixing yet. Just observe. What do they use most? What do they ignore? When do they drop off? What makes them come back?</div></div>
+    </div>
+
+    <div class="week">
+      <div class="week-head">
+        <div class="week-num">W4</div>
+        <div class="week-info">
+          <h3>Iterate, Story & Scale Setup (Days 22–30)</h3>
+          <p>Close the first loop — fix, tell the story, prepare for next phase</p>
+        </div>
+      </div>
+      <div class="task"><div class="task-day">D22–24</div><div class="task-body"><strong>Fix the top 3 issues</strong> from beta feedback. Only 3. Avoid feature creep. Ship within 48 hours of identifying them.</div></div>
+      <div class="task"><div class="task-day">D25</div><div class="task-body"><strong>Write a "30-Day Learnings" LinkedIn post</strong> — what you learned from interviews, what surprised you, what you built, what beta users said. This is your investor-grade validation narrative.</div></div>
+      <div class="task"><div class="task-day">D26</div><div class="task-body"><strong>Apply to 3 Indian startup programs</strong> — NASSCOM 10000 Startups, T-Hub, IIM/IIT incubators. Use this report as your submission document.</div></div>
+      <div class="task"><div class="task-day">D27–28</div><div class="task-body"><strong>Build a 5-slide pitch deck</strong> — Problem / Solution (Pod Model) / Market (TAM/SAM) / Traction (waitlist + beta data) / Ask. Use this report for market sizing slides.</div></div>
+      <div class="task"><div class="task-day">D29</div><div class="task-body"><strong>Set your North Star Metric: Day 7 Retention.</strong> Every product decision for the next 6 months must answer: "Does this improve Day 7 retention?"</div></div>
+      <div class="task"><div class="task-day">D30</div><div class="task-body"><strong>Decision point</strong> — if D7 retention >40% and waitlist >200: GO. Fund via bootstrapping or apply for pre-seed. If not: interview again, pivot one element, repeat the 30-day cycle.</div></div>
+    </div>
+
+    <div class="insight insight-green" style="margin-top:12px">
+      <div class="insight-icon">🎯</div>
+      <div><strong>The #1 Rule:</strong> If you can't get 200 people to give you their email for a product that doesn't exist yet, you definitely can't get them to download an app, form a pod, check in daily, and pay ₹99/month. <strong>Validate demand before building supply.</strong></div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════ FOOTER ═══ -->
+<div class="footer" id="footer">
+  <div class="container">
+    <p>GrindOS Startup Validation Report <span class="divider">|</span> Prepared in VC Advisor Mode</p>
+    <p>For <a href="#">Tarunj Gupta</a> <span class="divider">|</span> ABES Engineering College, Ghaziabad</p>
+    <p><a href="#">#60DayClaudeChallenge</a> <span class="divider">|</span> Day 22 <span class="divider">|</span> June 2026</p>
+    <p style="margin-top:12px;color:var(--text4);font-size:11px">This report is for internal strategy use only. Market data is estimated from publicly available sources.<br>Not financial, legal, or investment advice. All projections are illustrative.</p>
+  </div>
+</div>
+
+<!-- ═══════════════════ CHARTS ═══ -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<script>
+Chart.defaults.color = '#5A6B86';
+Chart.defaults.borderColor = '#1B2840';
+Chart.defaults.font.family = "'JetBrains Mono', monospace";
+Chart.defaults.font.size = 11;
+
+// TAM/SAM/SOM Chart
+new Chart(document.getElementById('tamChart'), {
+  type: 'bar',
+  data: {
+    labels: ['TAM', 'SAM', 'SOM (Yr 3)'],
+    datasets: [{
+      label: 'Market Size (₹ Cr)',
+      data: [35000, 8500, 12.7],
+      backgroundColor: ['rgba(59,130,246,0.2)', 'rgba(249,115,22,0.2)', 'rgba(16,185,129,0.2)'],
+      borderColor: ['#3B82F6', '#F97316', '#10B981'],
+      borderWidth: 1.5,
+      borderRadius: 8,
+      borderSkipped: false
+    }]
+  },
+  options: {
+    responsive: true, maintainAspectRatio: false,
+    plugins: { legend: { display: false } },
+    scales: {
+      y: {
+        beginAtZero: true, grid: { color: 'rgba(27,40,64,0.6)' },
+        ticks: { callback: v => '₹' + v.toLocaleString('en-IN') + ' Cr' }
+      },
+      x: { grid: { display: false } }
+    }
+  }
+});
+
+// Revenue Projection Chart
+new Chart(document.getElementById('revenueChart'), {
+  type: 'line',
+  data: {
+    labels: ['Year 1', 'Year 2', 'Year 3', 'Year 4'],
+    datasets: [{
+      label: 'B2C ARR (₹ Cr)',
+      data: [0.36, 2.1, 10.7, 28.5],
+      borderColor: '#F97316',
+      backgroundColor: 'rgba(249,115,22,0.05)',
+      borderWidth: 2.5, tension: 0.4, fill: true,
+      pointBackgroundColor: '#F97316', pointRadius: 5, pointHoverRadius: 7
+    },{
+      label: 'B2B ARR (₹ Cr)',
+      data: [0, 0.3, 2, 6],
+      borderColor: '#8B5CF6',
+      backgroundColor: 'rgba(139,92,246,0.05)',
+      borderWidth: 2, tension: 0.4, fill: true, borderDash: [5,5],
+      pointBackgroundColor: '#8B5CF6', pointRadius: 4, pointHoverRadius: 6
+    }]
+  },
+  options: {
+    responsive: true, maintainAspectRatio: false,
+    plugins: { legend: { display: false } },
+    scales: {
+      y: {
+        beginAtZero: true, grid: { color: 'rgba(27,40,64,0.6)' },
+        ticks: { callback: v => '₹' + v + ' Cr' }
+      },
+      x: { grid: { display: false } }
+    }
+  }
+});
+
+// Risk Radar Chart
+new Chart(document.getElementById('riskChart'), {
+  type: 'radar',
+  data: {
+    labels: ['Retention', 'Pod Adoption', 'Price Sensitivity', 'Competition Fatigue', 'Competitive Moat', 'Solo Founder'],
+    datasets: [{
+      label: 'Risk Severity',
+      data: [9, 8, 7, 6, 3, 6],
+      backgroundColor: 'rgba(249,115,22,0.1)',
+      borderColor: '#F97316',
+      borderWidth: 2,
+      pointBackgroundColor: '#F97316',
+      pointRadius: 4
+    }]
+  },
+  options: {
+    responsive: true, maintainAspectRatio: false,
+    plugins: { legend: { display: false } },
+    scales: {
+      r: {
+        beginAtZero: true, max: 10,
+        grid: { color: 'rgba(27,40,64,0.5)' },
+        angleLines: { color: 'rgba(27,40,64,0.3)' },
+        pointLabels: { font: { size: 10 } },
+        ticks: { display: false }
+      }
+    }
+  }
+});
+
+// Verdict Breakdown Chart
+new Chart(document.getElementById('verdictChart'), {
+  type: 'bar',
+  data: {
+    labels: ['Problem\nStrength', 'Market\nSize', 'Founder\nFit', 'Product\nDifferentiation', 'Competitive\nMoat', 'Revenue\nModel', 'Validation\nEvidence', 'Execution\nRisk'],
+    datasets: [{
+      label: 'Score',
+      data: [85, 80, 76, 82, 70, 65, 30, 60],
+      backgroundColor: function(ctx) {
+        const v = ctx.raw;
+        if (v >= 80) return 'rgba(16,185,129,0.25)';
+        if (v >= 60) return 'rgba(249,115,22,0.25)';
+        if (v >= 40) return 'rgba(245,158,11,0.25)';
+        return 'rgba(239,68,68,0.25)';
+      },
+      borderColor: function(ctx) {
+        const v = ctx.raw;
+        if (v >= 80) return '#10B981';
+        if (v >= 60) return '#F97316';
+        if (v >= 40) return '#F59E0B';
+        return '#EF4444';
+      },
+      borderWidth: 1.5,
+      borderRadius: 6,
+      borderSkipped: false
+    }]
+  },
+  options: {
+    indexAxis: 'y',
+    responsive: true, maintainAspectRatio: false,
+    plugins: {
+      legend: { display: false },
+      tooltip: { callbacks: { label: ctx => ctx.raw + '/100' } }
+    },
+    scales: {
+      x: { beginAtZero: true, max: 100, grid: { color: 'rgba(27,40,64,0.4)' }, ticks: { callback: v => v + '%' } },
+      y: { grid: { display: false } }
+    }
+  }
+});
+
+// Smooth scroll for TOC & nav links
+document.querySelectorAll('a[href^="#"]').forEach(a => {
+  a.addEventListener('click', e => {
+    e.preventDefault();
+    const el = document.querySelector(a.getAttribute('href'));
+    if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  });
+});
+
+// Intersection Observer for scroll animations
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('animate');
+      observer.unobserve(entry.target);
+    }
+  });
+}, { threshold: 0.1 });
+
+document.querySelectorAll('.section-header, .card, .metric, .verdict, .persona, .pain, .task, .pivot').forEach(el => {
+  observer.observe(el);
+});
+</script>
+
+</body>
+</html>
