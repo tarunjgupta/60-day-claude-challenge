@@ -1,0 +1,843 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GrindOS — Customer & MVP Blueprint | Day 23 · #60DayClaudeChallenge</title>
+<meta name="description" content="Customer research and MVP blueprint for GrindOS — The Social Accountability Platform for India's Students.">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#06090F;--bg2:#0A0F1A;--bg3:#0F1522;--bg4:#151D2E;
+  --border:#1B2840;--border2:#223352;--border-s:#141E30;
+  --text:#EDF0F7;--text2:#8B9BB8;--text3:#5A6B86;--text4:#3D4F6A;
+  --orange:#F97316;--orange2:#FB923C;--ob:rgba(249,115,22,0.06);--obb:rgba(249,115,22,0.2);
+  --purple:#8B5CF6;--purple2:#A78BFA;--pb:rgba(139,92,246,0.06);--pbb:rgba(139,92,246,0.2);
+  --green:#10B981;--green2:#34D399;--gb:rgba(16,185,129,0.06);--gbb:rgba(16,185,129,0.2);
+  --red:#EF4444;--red2:#F87171;--rb:rgba(239,68,68,0.06);--rbb:rgba(239,68,68,0.2);
+  --blue:#3B82F6;--blue2:#60A5FA;--bb:rgba(59,130,246,0.06);--bbb:rgba(59,130,246,0.2);
+  --amber:#F59E0B;--amber2:#FCD34D;--ab:rgba(245,158,11,0.06);--abb:rgba(245,158,11,0.2);
+  --teal:#14B8A6;--teal2:#2DD4BF;
+}
+html{scroll-behavior:smooth}
+body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--text);line-height:1.65;font-size:15px;-webkit-font-smoothing:antialiased}
+.c{max-width:1120px;margin:0 auto;padding:0 40px}
+::selection{background:rgba(249,115,22,0.25);color:#fff}
+
+/* NAV */
+.nav{position:fixed;top:0;left:0;right:0;z-index:1000;background:var(--bg);border-bottom:1px solid var(--border);padding:0 40px;backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px)}
+.nav-in{max-width:1120px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;height:54px}
+.nav-b{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:18px;letter-spacing:-0.5px}.nav-b span{color:var(--orange)}
+.nav-l{display:flex;gap:24px;list-style:none}
+.nav-l a{font-size:11px;color:var(--text3);text-decoration:none;font-family:'JetBrains Mono',monospace;text-transform:uppercase;letter-spacing:0.08em;transition:color 0.2s}
+.nav-l a:hover{color:var(--orange)}
+.nav-tag{font-size:10px;padding:3px 10px;border-radius:4px;background:var(--ob);border:1px solid var(--obb);color:var(--orange);font-family:'JetBrains Mono',monospace;letter-spacing:0.05em;text-transform:uppercase}
+
+/* COVER */
+.cover{min-height:100vh;display:flex;flex-direction:column;justify-content:center;padding:110px 0 70px;position:relative;overflow:hidden;border-bottom:1px solid var(--border)}
+.cover::before{content:'';position:absolute;top:-300px;right:-200px;width:800px;height:800px;background:radial-gradient(circle,rgba(139,92,246,0.04) 0%,transparent 60%);pointer-events:none}
+.cover::after{content:'';position:absolute;bottom:-200px;left:-100px;width:600px;height:600px;background:radial-gradient(circle,rgba(249,115,22,0.03) 0%,transparent 60%);pointer-events:none}
+.cv-firm{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--text4);text-transform:uppercase;letter-spacing:0.15em;margin-bottom:36px;display:flex;align-items:center;gap:12px}
+.cv-firm::before{content:'';width:32px;height:1px;background:var(--text4)}
+.cv-badges{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:28px}
+.badge{font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:500;padding:4px 12px;border-radius:4px;border:1px solid;letter-spacing:0.06em;text-transform:uppercase}
+.b-o{color:var(--orange);border-color:var(--obb);background:var(--ob)}
+.b-p{color:var(--purple2);border-color:var(--pbb);background:var(--pb)}
+.b-g{color:var(--green);border-color:var(--gbb);background:var(--gb)}
+.b-b{color:var(--blue2);border-color:var(--bbb);background:var(--bb)}
+.cv-ey{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--purple);letter-spacing:0.12em;text-transform:uppercase;margin-bottom:14px;font-weight:500}
+.cv-t{font-family:'Space Grotesk',sans-serif;font-size:clamp(40px,6vw,72px);font-weight:700;line-height:1;letter-spacing:-2.5px;margin-bottom:10px}
+.cv-t span{background:linear-gradient(135deg,var(--purple),var(--orange));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.cv-sub{font-family:'Space Grotesk',sans-serif;font-size:clamp(16px,2vw,22px);color:var(--text2);font-weight:300;margin-bottom:44px;letter-spacing:-0.3px;max-width:620px}
+.cv-kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:44px}
+.kpi{background:var(--bg3);border:1px solid var(--border);border-radius:12px;padding:20px;position:relative;overflow:hidden}
+.kpi::before{content:'';position:absolute;top:0;left:0;right:0;height:2px}
+.kpi.k-o::before{background:var(--orange)}.kpi.k-g::before{background:var(--green)}.kpi.k-p::before{background:var(--purple)}.kpi.k-b::before{background:var(--blue)}
+.kpi-l{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:6px}
+.kpi-v{font-family:'Space Grotesk',sans-serif;font-size:32px;font-weight:700;line-height:1;margin-bottom:3px}
+.kpi-s{font-size:11px;color:var(--text3)}
+.cv-meta{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:14px;padding-top:36px;border-top:1px solid var(--border)}
+.mi label{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--text4);text-transform:uppercase;letter-spacing:0.1em;display:block;margin-bottom:4px}
+.mi span{font-size:13px;color:var(--text2);font-weight:500}
+
+/* SECTIONS */
+.s{padding:72px 0;border-bottom:1px solid var(--border)}
+.s:nth-child(odd){background:var(--bg)}.s:nth-child(even){background:var(--bg2)}
+.sh{margin-bottom:40px}
+.sn{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--purple);text-transform:uppercase;letter-spacing:0.12em;margin-bottom:6px;font-weight:600;display:flex;align-items:center;gap:10px}
+.sn::after{content:'';flex:1;height:1px;background:var(--border);max-width:200px}
+.st{font-family:'Space Grotesk',sans-serif;font-size:clamp(26px,3.5vw,38px);font-weight:700;line-height:1.1;letter-spacing:-0.8px;margin-bottom:8px}
+.sd{font-size:14px;color:var(--text2);max-width:600px;line-height:1.7}
+
+/* CARDS */
+.card{background:var(--bg3);border:1px solid var(--border);border-radius:14px;padding:26px;transition:border-color 0.3s}
+.card:hover{border-color:var(--border2)}
+.ch{display:flex;align-items:center;gap:12px;margin-bottom:16px}
+.ci{width:38px;height:38px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0}
+.ci-o{background:var(--ob);border:1px solid var(--obb)}.ci-g{background:var(--gb);border:1px solid var(--gbb)}
+.ci-p{background:var(--pb);border:1px solid var(--pbb)}.ci-b{background:var(--bb);border:1px solid var(--bbb)}
+.ci-r{background:var(--rb);border:1px solid var(--rbb)}.ci-a{background:var(--ab);border:1px solid var(--abb)}
+.ct{font-family:'Space Grotesk',sans-serif;font-size:15px;font-weight:600}
+.card p,.card li{font-size:13px;color:var(--text2);line-height:1.7}
+.card ul{padding-left:16px}.card li{margin-bottom:5px}
+.g{display:grid;gap:14px}
+.g2{grid-template-columns:repeat(2,1fr)}.g3{grid-template-columns:repeat(3,1fr)}.g4{grid-template-columns:repeat(4,1fr)}
+@media(max-width:900px){.g2,.g3,.g4,.cv-kpis{grid-template-columns:1fr}.c{padding:0 20px}.ig{grid-template-columns:1fr !important}}
+
+/* METRICS */
+.m{background:var(--bg4);border:1px solid var(--border);border-radius:12px;padding:20px 22px;position:relative}
+.m::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;border-radius:12px 12px 0 0}
+.m.mo::before{background:var(--orange)}.m.mg::before{background:var(--green)}.m.mp::before{background:var(--purple)}.m.mb::before{background:var(--blue)}.m.ma::before{background:var(--amber)}.m.mr::before{background:var(--red)}.m.mt::before{background:var(--teal)}
+.ml{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:6px}
+.mv{font-family:'Space Grotesk',sans-serif;font-size:32px;font-weight:700;line-height:1;margin-bottom:3px}
+.ms{font-size:11px;color:var(--text3)}
+.mo .mv{color:var(--orange)}.mg .mv{color:var(--green)}.mp .mv{color:var(--purple2)}.mb .mv{color:var(--blue2)}.ma .mv{color:var(--amber)}.mr .mv{color:var(--red)}.mt .mv{color:var(--teal)}
+
+/* SCORE BARS */
+.sb{margin:10px 0}
+.sb-t{display:flex;justify-content:space-between;align-items:baseline;font-size:13px;margin-bottom:5px}
+.sb-n{color:var(--text2)}.sb-v{font-weight:600;font-family:'JetBrains Mono',monospace;font-size:12px}
+.sb-tr{height:6px;background:var(--bg);border-radius:3px;overflow:hidden}
+.sb-f{height:100%;border-radius:3px;transition:width 1.2s cubic-bezier(0.22,1,0.36,1)}
+.fo{background:linear-gradient(90deg,var(--orange),var(--orange2))}.fg{background:linear-gradient(90deg,var(--green),var(--green2))}
+.fp{background:linear-gradient(90deg,var(--purple),var(--purple2))}.fb{background:linear-gradient(90deg,var(--blue),var(--blue2))}
+.fa{background:linear-gradient(90deg,var(--amber),var(--amber2))}.fr{background:linear-gradient(90deg,var(--red),var(--red2))}
+.ft{background:linear-gradient(90deg,var(--teal),var(--teal2))}
+
+/* TABLES */
+.tbl{width:100%;border-collapse:collapse;font-size:13px}
+.tbl th{font-family:'JetBrains Mono',monospace;font-size:10px;text-transform:uppercase;letter-spacing:0.08em;color:var(--text3);padding:11px 14px;text-align:left;border-bottom:1px solid var(--border);font-weight:500;background:var(--bg4)}
+.tbl td{padding:12px 14px;border-bottom:1px solid var(--border-s);color:var(--text2);vertical-align:top}
+.tbl tr:last-child td{border-bottom:none}
+.tbl tr:hover td{background:rgba(255,255,255,0.01)}
+.tbl .hl td{color:var(--text);background:var(--ob)}
+.tbl .hl td:first-child{border-left:3px solid var(--orange)}
+
+/* CHIPS */
+.chip{display:inline-flex;align-items:center;font-size:10px;padding:3px 9px;border-radius:6px;font-weight:500;gap:3px}
+.c-g{background:rgba(16,185,129,0.1);color:var(--green2);border:1px solid rgba(16,185,129,0.15)}
+.c-r{background:rgba(239,68,68,0.1);color:var(--red2);border:1px solid rgba(239,68,68,0.15)}
+.c-a{background:rgba(245,158,11,0.1);color:var(--amber2);border:1px solid rgba(245,158,11,0.15)}
+.c-b{background:rgba(59,130,246,0.1);color:var(--blue2);border:1px solid rgba(59,130,246,0.15)}
+.c-p{background:rgba(139,92,246,0.1);color:var(--purple2);border:1px solid rgba(139,92,246,0.15)}
+.c-o{background:rgba(249,115,22,0.1);color:var(--orange2);border:1px solid rgba(249,115,22,0.15)}
+
+/* QUOTE */
+.qt{border-left:3px solid var(--purple);padding:18px 24px;background:var(--pb);border-radius:0 12px 12px 0;margin:24px 0;font-size:14px;color:var(--text2);font-style:italic;line-height:1.7}
+
+/* INSIGHT */
+.ins{padding:18px 22px;border-radius:12px;border:1px solid;display:flex;align-items:flex-start;gap:14px;margin:20px 0;font-size:13px;line-height:1.7}
+.ins-i{font-size:18px;flex-shrink:0;margin-top:1px}
+.ins-g{background:var(--gb);border-color:var(--gbb);color:var(--text2)}
+.ins-a{background:var(--ab);border-color:var(--abb);color:var(--text2)}
+.ins-b{background:var(--bb);border-color:var(--bbb);color:var(--text2)}
+.ins-r{background:var(--rb);border-color:var(--rbb);color:var(--text2)}
+.ins-p{background:var(--pb);border-color:var(--pbb);color:var(--text2)}
+
+/* VERDICT */
+.vrd{border-radius:20px;padding:48px;text-align:center;position:relative;overflow:hidden}
+.vrd-go{background:var(--gb);border:2px solid var(--gbb)}
+.vrd-l{font-family:'JetBrains Mono',monospace;font-size:12px;text-transform:uppercase;letter-spacing:0.15em;margin-bottom:14px;color:var(--text3)}
+.vrd-s{font-family:'Space Grotesk',sans-serif;font-size:80px;font-weight:700;line-height:1;letter-spacing:-3px}
+.vrd-u{font-family:'JetBrains Mono',monospace;font-size:13px;color:var(--text3);margin-bottom:18px}
+.vrd-t{font-family:'Space Grotesk',sans-serif;font-size:28px;font-weight:700;margin-bottom:10px;letter-spacing:-0.5px}
+.vrd-d{font-size:14px;color:var(--text2);max-width:500px;margin:0 auto;line-height:1.7}
+
+/* PERSONA */
+.ig{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.per{background:var(--bg3);border:1px solid var(--border);border-radius:14px;padding:26px;position:relative;overflow:hidden}
+.per::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--orange),var(--purple))}
+.pa{width:48px;height:48px;border-radius:50%;background:linear-gradient(135deg,rgba(249,115,22,0.2),rgba(139,92,246,0.2));display:flex;align-items:center;justify-content:center;font-size:20px;margin-bottom:14px;border:2px solid var(--border2)}
+.pn{font-family:'Space Grotesk',sans-serif;font-size:17px;font-weight:600;margin-bottom:2px}
+.pr{font-size:11px;color:var(--text3);margin-bottom:14px;font-family:'JetBrains Mono',monospace;text-transform:uppercase;letter-spacing:0.06em}
+.ps{display:flex;justify-content:space-between;padding:7px 0;border-bottom:1px solid var(--border-s);font-size:12px}
+.ps:last-of-type{border-bottom:none}
+.ps span:first-child{color:var(--text3)}.ps span:last-child{color:var(--text);font-weight:500}
+.pq{font-size:12px;color:var(--text3);margin-top:14px;line-height:1.6;font-style:italic;padding-top:10px;border-top:1px solid var(--border-s)}
+
+/* JOURNEY */
+.js{display:flex;gap:22px}
+.jl{display:flex;flex-direction:column;align-items:center}
+.jd{width:38px;height:38px;border-radius:50%;border:2px solid var(--purple);display:flex;align-items:center;justify-content:center;font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:700;color:var(--purple);flex-shrink:0;background:var(--bg)}
+.jln{flex:1;width:2px;background:linear-gradient(180deg,var(--pbb),var(--border));margin:6px auto 0;min-height:30px}
+.jr{flex:1;padding-bottom:30px}
+.jr h4{font-family:'Space Grotesk',sans-serif;font-size:14px;font-weight:600;margin-bottom:4px;color:var(--text);text-transform:none;letter-spacing:0}
+.jr p{font-size:12px;color:var(--text2);line-height:1.6}
+.jc{display:flex;gap:5px;flex-wrap:wrap;margin-top:8px}
+
+/* MOSCOW */
+.mos{padding:22px;border-radius:12px;border:1px solid;margin-bottom:12px}
+.mos-must{background:var(--gb);border-color:var(--gbb)}
+.mos-should{background:var(--bb);border-color:var(--bbb)}
+.mos-could{background:var(--ab);border-color:var(--abb)}
+.mos-wont{background:var(--rb);border-color:var(--rbb)}
+.mos h4{font-family:'Space Grotesk',sans-serif;font-size:15px;font-weight:600;margin-bottom:10px}
+.mos ul{padding-left:16px;font-size:13px;color:var(--text2);line-height:2}
+
+/* TASK */
+.tk{display:flex;gap:12px;align-items:flex-start;padding:13px 15px;background:var(--bg3);border:1px solid var(--border);border-radius:10px;margin-bottom:7px}
+.tk-n{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--purple);font-weight:600;flex-shrink:0;padding-top:2px;min-width:28px}
+.tk-b{font-size:13px;color:var(--text2);line-height:1.6}
+.tk-b strong{color:var(--text);font-weight:500}
+
+/* PAIN */
+.pain{display:flex;gap:12px;align-items:flex-start;padding:16px;border-radius:12px;background:var(--bg3);border:1px solid var(--border);margin-bottom:8px}
+.ptag{font-family:'JetBrains Mono',monospace;font-size:9px;font-weight:600;padding:3px 8px;border-radius:4px;flex-shrink:0;margin-top:2px;text-transform:uppercase;letter-spacing:0.05em}
+.p-c{background:rgba(239,68,68,0.12);color:var(--red2)}
+.p-h{background:rgba(245,158,11,0.12);color:var(--amber2)}
+.p-m{background:rgba(59,130,246,0.12);color:var(--blue2)}
+
+/* CHART */
+.chrt{position:relative;width:100%}
+
+/* FOOTER */
+.foot{padding:44px 0;text-align:center;color:var(--text4);font-size:11px;font-family:'JetBrains Mono',monospace;letter-spacing:0.03em;line-height:1.8;border-top:1px solid var(--border)}
+.foot a{color:var(--purple);text-decoration:none}
+.foot .dv{margin:0 8px;color:var(--border)}
+
+h3{font-family:'Space Grotesk',sans-serif;font-size:17px;font-weight:600;margin-bottom:12px;color:var(--text)}
+h4.sub{font-size:12px;font-weight:600;color:var(--text3);margin-bottom:6px;text-transform:uppercase;letter-spacing:0.05em;font-family:'JetBrains Mono',monospace}
+
+/* PRINT */
+@media print{body{background:#fff;color:#111;font-size:11px}.nav{display:none}.cover{min-height:auto;page-break-after:always;padding:30px 0}.s{page-break-inside:avoid;padding:24px 0;border:none}.card,.m,.per,.pain,.tk,.mos{border:1px solid #ddd;background:#fafafa}.tbl th{background:#f5f5f5}.vrd{border:2px solid #10B981}.sb-tr{background:#eee}}
+
+/* ANIMATION */
+@keyframes fadeUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+.anim{opacity:0;animation:fadeUp 0.5s ease forwards}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="nav">
+  <div class="nav-in">
+    <div class="nav-b">Grind<span>OS</span></div>
+    <ul class="nav-l">
+      <li><a href="#icp">ICP</a></li>
+      <li><a href="#pain">Pain Points</a></li>
+      <li><a href="#journey">Journey</a></li>
+      <li><a href="#mvp">MVP</a></li>
+      <li><a href="#moscow">MoSCoW</a></li>
+      <li><a href="#verdict">Verdict</a></li>
+    </ul>
+    <span class="nav-tag">Blueprint v1.0</span>
+  </div>
+</nav>
+
+<!-- COVER -->
+<div class="cover">
+  <div class="c">
+    <div class="cv-firm">Customer & MVP Blueprint — Product Manager Mode</div>
+    <div class="cv-badges">
+      <span class="badge b-p">Day 23 · #60DayClaudeChallenge</span>
+      <span class="badge b-o">Continuation of Day 22</span>
+      <span class="badge b-b">India · Social Accountability</span>
+      <span class="badge b-g">June 2026</span>
+    </div>
+    <div class="cv-ey">Customer & MVP Blueprint</div>
+    <h1 class="cv-t">Grind<span>OS</span></h1>
+    <div class="cv-sub">From Validation Report to Customer Clarity — Who to Build For, What to Build First, and How to Know It's Working</div>
+
+    <div class="cv-kpis">
+      <div class="kpi k-p"><div class="kpi-l">Customer Clarity</div><div class="kpi-v" style="color:var(--purple2)">82<span style="font-size:16px;color:var(--text3)">/100</span></div><div class="kpi-s">ICP well-defined</div></div>
+      <div class="kpi k-o"><div class="kpi-l">Problem Severity</div><div class="kpi-v" style="color:var(--orange)">85<span style="font-size:16px;color:var(--text3)">/100</span></div><div class="kpi-s">Daily, painful, unresolved</div></div>
+      <div class="kpi k-g"><div class="kpi-l">PMF Potential</div><div class="kpi-v" style="color:var(--green)">72<span style="font-size:16px;color:var(--text3)">/100</span></div><div class="kpi-s">Strong signal, needs validation</div></div>
+      <div class="kpi k-b"><div class="kpi-l">MVP Readiness</div><div class="kpi-v" style="color:var(--blue2)">78<span style="font-size:16px;color:var(--text3)">/100</span></div><div class="kpi-s">Scope is clear & buildable</div></div>
+    </div>
+
+    <div class="cv-meta">
+      <div class="mi"><label>Founder</label><span>Tarunj Gupta</span></div>
+      <div class="mi"><label>Institution</label><span>ABES Engineering College</span></div>
+      <div class="mi"><label>Source Report</label><span>Day 22 Startup Validation (76/100)</span></div>
+      <div class="mi"><label>Category</label><span>Social Accountability · EdTech</span></div>
+      <div class="mi"><label>Stage</label><span>Pre-MVP → MVP Definition</span></div>
+      <div class="mi"><label>Report Date</label><span>June 24, 2026</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- 01 EXECUTIVE SUMMARY -->
+<div class="s" id="exec">
+  <div class="c">
+    <div class="sh"><div class="sn">Section 01</div><div class="st">Executive Summary</div><div class="sd">From yesterday's validation to today's customer blueprint — what we know, what we need to build, and what to ignore.</div></div>
+
+    <div class="qt">"GrindOS exists in a unique whitespace: no product in India combines small-group social accountability, a portable discipline metric, competitive leaderboards, and relatable peer stories — all for students. The customer is clear. The pain is validated. The question isn't 'should we build?' — it's 'what do we build first, and for exactly whom?'"</div>
+
+    <div class="g g2">
+      <div class="card">
+        <div class="ch"><div class="ci ci-p">📋</div><div class="ct">Day 22 Validation Summary</div></div>
+        <ul>
+          <li><strong>Overall Score:</strong> 76/100 — Conditional GO</li>
+          <li><strong>Problem Score:</strong> 8.5/10 — Real, daily, painful</li>
+          <li><strong>Founder-Market Fit:</strong> 76/100 — Strong (IS the ICP)</li>
+          <li><strong>Market (SAM):</strong> ₹8,500 Cr (~$1.02B)</li>
+          <li><strong>Key Insight:</strong> Tools don't change behavior. Small groups where quitting is visible do.</li>
+        </ul>
+      </div>
+      <div class="card">
+        <div class="ch"><div class="ci ci-o">🎯</div><div class="ct">What This Blueprint Adds</div></div>
+        <ul>
+          <li><strong>Sharper ICP:</strong> Exactly who to target in Week 1 vs. Month 6</li>
+          <li><strong>10 Ranked Pain Points:</strong> Which hurts most → build for that first</li>
+          <li><strong>MVP Scope:</strong> What to build, what NOT to build</li>
+          <li><strong>MoSCoW Prioritization:</strong> Must / Should / Could / Won't</li>
+          <li><strong>30-Day MVP Plan:</strong> Day-by-day execution roadmap</li>
+          <li><strong>Pricing Hypothesis:</strong> What to charge and how</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 02 IDEAL CUSTOMER PROFILE -->
+<div class="s" id="icp">
+  <div class="c">
+    <div class="sh"><div class="sn">Section 02</div><div class="st">Ideal Customer Profile (ICP)</div><div class="sd">Not all students are equal. This is the exact student who will adopt first, retain longest, and pay soonest.</div></div>
+
+    <div class="card" style="margin-bottom:24px">
+      <h3>Primary ICP — The Guilt-Aware Competitive Student</h3>
+      <table class="tbl">
+        <thead><tr><th>Dimension</th><th>Profile</th><th>Why This Matters</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Age</strong></td><td>18–23 years old</td><td>Peak guilt + peak social media usage overlap</td></tr>
+          <tr><td><strong>Education</strong></td><td>2nd–4th year B.Tech (CSE/IT preferred)</td><td>Placement pressure creates urgency to act NOW</td></tr>
+          <tr><td><strong>Geography</strong></td><td>Tier 1 & 2 India (Delhi NCR, Jaipur, Lucknow, Pune, Indore)</td><td>Smartphone penetration + English comfort + peer competition</td></tr>
+          <tr><td><strong>Family</strong></td><td>Middle-class; parents are salaried / small business</td><td>Education is the family's primary investment & hope</td></tr>
+          <tr><td><strong>Screen Time</strong></td><td>7–10 hrs/day (4–6 hrs wasted on social media)</td><td>Problem is severe & daily — not occasional</td></tr>
+          <tr><td><strong>Psychographic</strong></td><td>Aware of time waste; feels guilty nightly; competitive with peers</td><td>Self-awareness = ready for a solution; competitive = responds to leaderboards</td></tr>
+          <tr><td><strong>Social Behavior</strong></td><td>Active in 5+ WhatsApp groups; follows peers on LinkedIn</td><td>Already in group contexts; pod model feels natural</td></tr>
+          <tr><td><strong>Device</strong></td><td>Android (₹10K–25K range); 4G/5G data</td><td>Build Android-first; don't over-optimize for iOS</td></tr>
+          <tr><td><strong>Price Tolerance</strong></td><td>₹99–149/month IF friends use it AND daily value is clear in 3 days</td><td>Social proof > feature list for conversion</td></tr>
+          <tr><td><strong>Current Solution</strong></td><td>Nothing / Notion + sticky notes + guilt</td><td>No entrenched competitor to displace — greenfield</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="g g3">
+      <div class="m mo"><div class="ml">Primary Segment Size</div><div class="mv">~18M</div><div class="ms">Engineering students in India</div></div>
+      <div class="m mp"><div class="ml">Addressable (aware + smartphone)</div><div class="mv">~8M</div><div class="ms">English-comfortable, Tier 1-2</div></div>
+      <div class="m mg"><div class="ml">Early Adopters (Year 1)</div><div class="mv">~50K</div><div class="ms">Reachable via campus + social</div></div>
+    </div>
+
+    <div class="ins ins-p" style="margin-top:20px">
+      <div class="ins-i">💡</div>
+      <div><strong>Who NOT to target initially:</strong> High school students (too young for self-directed app usage), UPSC aspirants (different discipline culture — solitary, not social), MBA students (already have peer accountability via cohort), working professionals (different problem space). Expand to these segments only AFTER proving retention with B.Tech students.</div>
+    </div>
+  </div>
+</div>
+
+<!-- 03 BUYER PERSONA -->
+<div class="s" id="persona">
+  <div class="c">
+    <div class="sh"><div class="sn">Section 03</div><div class="st">Buyer Personas</div><div class="sd">Three distinct users — each with different motivations, willingness to pay, and engagement patterns.</div></div>
+
+    <div class="ig" style="margin-bottom:18px">
+      <div class="per">
+        <div class="pa">🎯</div>
+        <div class="pn">Priya Sharma</div>
+        <div class="pr">Primary · The Guilty Grinder</div>
+        <div class="ps"><span>Age / Location</span><span>19 · Jaipur, Rajasthan</span></div>
+        <div class="ps"><span>Education</span><span>2nd year B.Tech CSE</span></div>
+        <div class="ps"><span>Goal</span><span>FAANG placement in 2 years</span></div>
+        <div class="ps"><span>Daily screen waste</span><span>5 hrs (Instagram + YouTube)</span></div>
+        <div class="ps"><span>Current tool</span><span>Notion + guilt</span></div>
+        <div class="ps"><span>Pays for apps?</span><span>₹99/mo if friends use it</span></div>
+        <div class="ps"><span>Activation trigger</span><span>Friend shares Grind Score</span></div>
+        <div class="ps"><span>Retention hook</span><span>Pod streak — can't let friends down</span></div>
+        <div class="pq">"I know I waste time. I feel bad every night. If 5 friends could see my daily tasks, I'd actually do them. I'm too embarrassed not to."</div>
+      </div>
+      <div class="per">
+        <div class="pa">🚀</div>
+        <div class="pn">Arjun Mishra</div>
+        <div class="pr">Secondary · The Competitive Builder</div>
+        <div class="ps"><span>Age / Location</span><span>22 · Allahabad, UP</span></div>
+        <div class="ps"><span>Education</span><span>Final year B.Tech IT</span></div>
+        <div class="ps"><span>Goal</span><span>Crack MNC or launch startup</span></div>
+        <div class="ps"><span>Daily screen waste</span><span>6 hrs (YouTube Shorts)</span></div>
+        <div class="ps"><span>Current tool</span><span>Physical diary + random apps</span></div>
+        <div class="ps"><span>Pays for apps?</span><span>Yes if social proof (peers use it)</span></div>
+        <div class="ps"><span>Activation trigger</span><span>Sees college leaderboard</span></div>
+        <div class="ps"><span>Retention hook</span><span>Rank competition — must stay in top 5</span></div>
+        <div class="pq">"I don't need motivation. I need competition. Show me my friend outworked me, and I'll work twice as hard tomorrow."</div>
+      </div>
+    </div>
+
+    <div class="per" style="max-width:520px">
+      <div class="pa">👨‍👩‍👦</div>
+      <div class="pn">Mr. & Mrs. Sharma</div>
+      <div class="pr">Tertiary · The Paying Parent</div>
+      <div class="ps"><span>Age</span><span>45–55 years old</span></div>
+      <div class="ps"><span>Concern</span><span>"Is my child actually studying?"</span></div>
+      <div class="ps"><span>Pays for apps?</span><span>₹199–499/month for peace of mind</span></div>
+      <div class="ps"><span>Feature wanted</span><span>Weekly Grind Score digest email</span></div>
+      <div class="pq">"I don't want to spy. I just want to know they're on track. A weekly report is enough."</div>
+    </div>
+  </div>
+</div>
+
+<!-- 04 TOP 10 PAIN POINTS -->
+<div class="s" id="pain">
+  <div class="c">
+    <div class="sh"><div class="sn">Section 04</div><div class="st">Top 10 Customer Pain Points</div><div class="sd">Ranked by severity × frequency. Build for #1–3 first. Address #4–7 in V1.1. Defer #8–10.</div></div>
+
+    <div class="card" style="overflow-x:auto;margin-bottom:24px">
+      <table class="tbl">
+        <thead><tr><th>#</th><th>Pain Point</th><th>Severity</th><th>Frequency</th><th>Score</th><th>GrindOS Solution</th></tr></thead>
+        <tbody>
+          <tr class="hl"><td><strong>1</strong></td><td><strong>Time Blindness</strong> — Students don't know where hours go. 5 hrs of YouTube feels like 30 min.</td><td><span class="chip c-r">Critical</span></td><td>Daily</td><td style="font-family:'JetBrains Mono',monospace;color:var(--orange);font-weight:700">9.5</td><td>Daily 3-task check-in forces conscious time allocation every morning</td></tr>
+          <tr class="hl"><td><strong>2</strong></td><td><strong>Accountability Vacuum</strong> — No friend consistently holds them accountable. Study groups die in days.</td><td><span class="chip c-r">Critical</span></td><td>Daily</td><td style="font-family:'JetBrains Mono',monospace;color:var(--orange);font-weight:700">9.3</td><td>Pod of 5–6 friends sees your tasks. Social cost of skipping is visible & daily.</td></tr>
+          <tr class="hl"><td><strong>3</strong></td><td><strong>Motivation Decay</strong> — Peaks Sunday night, dies by Tuesday. No system sustains momentum.</td><td><span class="chip c-r">Critical</span></td><td>Weekly</td><td style="font-family:'JetBrains Mono',monospace;color:var(--orange);font-weight:700">9.0</td><td>Streaks + pod pressure + daily success stories create sustained momentum</td></tr>
+          <tr><td><strong>4</strong></td><td><strong>No Discipline Identity</strong> — Can quantify CGPA, LeetCode rating — but not daily discipline. It's invisible.</td><td><span class="chip c-a">High</span></td><td>Always</td><td style="font-family:'JetBrains Mono',monospace;color:var(--amber)">8.5</td><td>Grind Score (0–100) makes discipline a visible, shareable number</td></tr>
+          <tr><td><strong>5</strong></td><td><strong>Competition Without Consequence</strong> — LeetCode has leaderboards but no social cost to quitting.</td><td><span class="chip c-a">High</span></td><td>Daily</td><td style="font-family:'JetBrains Mono',monospace;color:var(--amber)">8.2</td><td>3-tier leaderboards (Pod → College → National) with intimate group visibility</td></tr>
+          <tr><td><strong>6</strong></td><td><strong>Lack of Relatable Role Models</strong> — "Elon wakes at 5 AM" doesn't resonate. They want peers from similar colleges.</td><td><span class="chip c-a">High</span></td><td>Weekly</td><td style="font-family:'JetBrains Mono',monospace;color:var(--amber)">7.8</td><td>Real student success stories from similar colleges with Grind Score trajectories</td></tr>
+          <tr><td><strong>7</strong></td><td><strong>Starting Friction</strong> — The hardest part is opening the textbook, not studying. Every day requires a fresh decision.</td><td><span class="chip c-b">Medium</span></td><td>Daily</td><td style="font-family:'JetBrains Mono',monospace;color:var(--blue2)">7.5</td><td>Morning check-in prompt makes "starting" a 30-second action, not a decision</td></tr>
+          <tr><td><strong>8</strong></td><td><strong>Distraction Guilt Loop</strong> — Waste time → feel guilty → seek dopamine to escape guilt → waste more time.</td><td><span class="chip c-b">Medium</span></td><td>Daily</td><td style="font-family:'JetBrains Mono',monospace;color:var(--blue2)">7.0</td><td>Evening check-off closes the loop. Even 1/3 tasks = progress acknowledged.</td></tr>
+          <tr><td><strong>9</strong></td><td><strong>Tool Fragmentation</strong> — Students use Notion + Google Calendar + sticky notes + 3 habit apps. Nothing is integrated.</td><td><span class="chip c-b">Medium</span></td><td>Weekly</td><td style="font-family:'JetBrains Mono',monospace;color:var(--blue2)">6.5</td><td>One app, one loop: commit → do → check-off → score → repeat</td></tr>
+          <tr><td><strong>10</strong></td><td><strong>Career Direction Confusion</strong> — Don't know which skills to prioritize or which tech to learn.</td><td><span class="chip c-b">Medium</span></td><td>Monthly</td><td style="font-family:'JetBrains Mono',monospace;color:var(--blue2)">5.5</td><td>V2 feature: AI career coaching based on 30 days of Grind Score data</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="ins ins-g">
+      <div class="ins-i">✅</div>
+      <div><strong>Build Rule:</strong> The MVP must nail Pain Points #1–3 perfectly. Everything else is a bonus. If the morning check-in + pod visibility + evening check-off don't solve Time Blindness, Accountability Vacuum, and Motivation Decay — no amount of extra features will save the product.</div>
+    </div>
+  </div>
+</div>
+
+<!-- 05 CUSTOMER JOURNEY -->
+<div class="s" id="journey">
+  <div class="c">
+    <div class="sh"><div class="sn">Section 05</div><div class="st">Customer Journey</div><div class="sd">Awareness → Consideration → Activation → Retention → Revenue → Advocacy — with conversion targets at each stage.</div></div>
+
+    <div style="max-width:660px">
+      <div class="js"><div class="jl"><div class="jd">01</div><div class="jln"></div></div><div class="jr"><h4>Awareness — Trigger Moment</h4><p>Student encounters GrindOS via a friend's Grind Score card on Instagram/LinkedIn, a viral "I wasted college" post, or after an exam failure. Emotional pain is at peak.</p><div class="jc"><span class="chip c-o">Instagram</span><span class="chip c-b">LinkedIn</span><span class="chip c-p">Friend referral</span></div><p style="margin-top:6px;font-size:11px;color:var(--text3)"><strong>Target:</strong> 10,000 impressions/month by Month 3</p></div></div>
+      <div class="js"><div class="jl"><div class="jd">02</div><div class="jln"></div></div><div class="jr"><h4>Consideration — Landing Page / App Store</h4><p>"5 friends. 3 daily tasks. 1 Grind Score." Student sees sample pod dashboard, a success story, and the privacy-first promise. Free signup, no credit card.</p><div class="jc"><span class="chip c-g">Free signup</span><span class="chip c-a">No credit card</span></div><p style="margin-top:6px;font-size:11px;color:var(--text3)"><strong>Target:</strong> 30% visitor → signup conversion</p></div></div>
+      <div class="js"><div class="jl"><div class="jd">03</div><div class="jln"></div></div><div class="jr"><h4>Activation — First Pod Check-In (Day 1)</h4><p>Student creates or joins a pod. Posts 3 tasks. Sees friends' tasks. By evening, checks off 2/3. Sees Arjun did 3/3. Competitive instinct fires. Shares Grind Score card.</p><div class="jc"><span class="chip c-o">Morning check-in</span><span class="chip c-b">Pod feed</span><span class="chip c-g">First share</span></div><p style="margin-top:6px;font-size:11px;color:var(--text3)"><strong>Target:</strong> 60% of signups complete first check-in within 24 hrs</p></div></div>
+      <div class="js"><div class="jl"><div class="jd">04</div><div class="jln"></div></div><div class="jr"><h4>Retention — Streak & Pod Pressure (Day 3–14)</h4><p>Pod streak builds. Missing a day = breaking the group streak. Social pressure is specific: "Vikram hasn't checked in — bhai kya hua?" This is the magic moment.</p><div class="jc"><span class="chip c-p">Streak</span><span class="chip c-a">Pod chat</span><span class="chip c-b">Leaderboard</span></div><p style="margin-top:6px;font-size:11px;color:var(--text3)"><strong>Target:</strong> >40% Day 7 retention (North Star Metric)</p></div></div>
+      <div class="js"><div class="jl"><div class="jd">05</div><div class="jln"></div></div><div class="jr"><h4>Revenue — Premium Gate (Day 14+)</h4><p>Free tier limits felt: 1 pod, 3 tasks, basic score. Premium unlocks: multiple pods, detailed analytics, college leaderboard, custom reminders, no watermark on share cards.</p><div class="jc"><span class="chip c-g">₹99/month</span><span class="chip c-o">₹799/year</span></div><p style="margin-top:6px;font-size:11px;color:var(--text3)"><strong>Target:</strong> 3–5% free → paid conversion by Month 6</p></div></div>
+      <div class="js"><div class="jl"><div class="jd">06</div><div style="width:2px"></div></div><div class="jr"><h4>Advocacy — Organic Growth Loop (Day 30+)</h4><p>Student shares monthly report on LinkedIn: "Top 8% nationally. 23-day streak." Peers ask "What's GrindOS?" Campus-level viral spread. Every share = free acquisition.</p><div class="jc"><span class="chip c-b">LinkedIn post</span><span class="chip c-p">Campus clubs</span><span class="chip c-g">Referral</span></div><p style="margin-top:6px;font-size:11px;color:var(--text3)"><strong>Target:</strong> >0.5 invites per active user per month</p></div></div>
+    </div>
+  </div>
+</div>
+
+<!-- 06 BUYING TRIGGERS & OBJECTIONS -->
+<div class="s" id="triggers">
+  <div class="c">
+    <div class="sh"><div class="sn">Section 06</div><div class="st">Buying Triggers & Customer Objections</div><div class="sd">What pushes students toward GrindOS — and what makes them hesitate. Build for triggers, neutralize objections.</div></div>
+
+    <div class="g g2">
+      <div class="card">
+        <div class="ch"><div class="ci ci-g">⚡</div><div class="ct">Key Buying Triggers</div></div>
+        <table class="tbl">
+          <thead><tr><th>#</th><th>Trigger</th><th>Strength</th></tr></thead>
+          <tbody>
+            <tr><td>1</td><td>Friend shares Grind Score card on Instagram/LinkedIn</td><td><span class="chip c-g">Very High</span></td></tr>
+            <tr><td>2</td><td>Failed an exam or got rejected from a placement</td><td><span class="chip c-g">Very High</span></td></tr>
+            <tr><td>3</td><td>Saw a peer get a good internship/placement</td><td><span class="chip c-o">High</span></td></tr>
+            <tr><td>4</td><td>Viral "I wasted college" content on social media</td><td><span class="chip c-o">High</span></td></tr>
+            <tr><td>5</td><td>Parent confrontation about wasted time/money</td><td><span class="chip c-a">Medium</span></td></tr>
+            <tr><td>6</td><td>New semester / New Year / Birthday reset motivation</td><td><span class="chip c-a">Medium</span></td></tr>
+            <tr><td>7</td><td>Sees college on GrindOS national leaderboard</td><td><span class="chip c-a">Medium</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="card">
+        <div class="ch"><div class="ci ci-r">🛡️</div><div class="ct">Key Customer Objections</div></div>
+        <table class="tbl">
+          <thead><tr><th>Objection</th><th>Counter</th></tr></thead>
+          <tbody>
+            <tr><td>"I'll use it for a week and quit"</td><td>Your pod of 5 friends will notice. Social cost makes quitting expensive.</td></tr>
+            <tr><td>"My friends won't join"</td><td>One friend is enough. WhatsApp invite link. We can auto-match solo users into public pods.</td></tr>
+            <tr><td>"I'll ignore notifications"</td><td>Max 3/day. Your friends message you directly: "Bhai, check-in kar."</td></tr>
+            <tr><td>"Too expensive"</td><td>₹99/mo = ₹3.3/day. Free tier is genuinely useful. Pay only for extras.</td></tr>
+            <tr><td>"Leaderboards are demotivating"</td><td>Pod = 5 people. Always achievable. Never global overwhelming rankings.</td></tr>
+            <tr><td>"Another productivity app?"</td><td>We're not a to-do list. We're 5 friends holding each other accountable.</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 07 MVP RECOMMENDATION -->
+<div class="s" id="mvp">
+  <div class="c">
+    <div class="sh"><div class="sn">Section 07</div><div class="st">MVP Recommendation</div><div class="sd">What to build first, what NOT to build, and how to know if it's working.</div></div>
+
+    <div class="g g2" style="margin-bottom:24px">
+      <div class="card" style="border-top:3px solid var(--green)">
+        <div class="ch"><div class="ci ci-g">✅</div><div class="ct">What to Build (MVP Scope)</div></div>
+        <ul>
+          <li><strong>User auth</strong> — Email/Google signup</li>
+          <li><strong>Create/join pod</strong> — WhatsApp-style invite link</li>
+          <li><strong>Morning 3-task check-in</strong> — Simple text input</li>
+          <li><strong>Evening check-off</strong> — Checkbox UI</li>
+          <li><strong>Pod feed</strong> — See everyone's tasks & completions</li>
+          <li><strong>Basic Grind Score</strong> — Simple calculation (consistency + completion)</li>
+          <li><strong>Pod leaderboard</strong> — Real-time ranking within pod</li>
+          <li><strong>3 daily notifications</strong> — Morning reminder, mid-day nudge, evening close-out</li>
+          <li><strong>1 hardcoded success story/day</strong> — Curate 20 stories manually</li>
+          <li><strong>Shareable Grind Score card</strong> — Image export for Instagram/LinkedIn</li>
+        </ul>
+      </div>
+      <div class="card" style="border-top:3px solid var(--red)">
+        <div class="ch"><div class="ci ci-r">✗</div><div class="ct">What NOT to Build</div></div>
+        <ul>
+          <li><strong>Activity tracking / screen monitoring</strong> — Privacy landmine. Not needed.</li>
+          <li><strong>AI-generated roasts</strong> — Removed from concept. Risk > reward.</li>
+          <li><strong>College leaderboard</strong> — Needs scale. Add at 500+ users.</li>
+          <li><strong>National leaderboard</strong> — Needs scale. Add at 5,000+ users.</li>
+          <li><strong>Payment / premium tier</strong> — Validate retention FIRST.</li>
+          <li><strong>AI coaching / career advice</strong> — V2 feature. Over-engineering for MVP.</li>
+          <li><strong>Focus timer</strong> — Nice-to-have, not core loop.</li>
+          <li><strong>Parent dashboard</strong> — After proving B2C first.</li>
+          <li><strong>Hindi/regional language support</strong> — English MVP, localize later.</li>
+          <li><strong>iOS app</strong> — Android-first. 90%+ of ICP is Android.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>Success Metrics — How to Know It's Working</h3>
+      <table class="tbl">
+        <thead><tr><th>Metric</th><th>Target</th><th>Kill Threshold</th><th>Measurement</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Day 1 Activation</strong></td><td>60% of signups do first check-in</td><td>&lt;35% → onboarding is broken</td><td>Analytics event: first_checkin</td></tr>
+          <tr><td><strong>Pod Creation Rate</strong></td><td>70% of signups join a pod within 48 hrs</td><td>&lt;40% → pod UX is broken</td><td>Analytics: pod_joined</td></tr>
+          <tr class="hl"><td><strong>Day 7 Retention ⭐</strong></td><td>&gt;40% (North Star)</td><td>&lt;25% → core loop isn't working</td><td>Retained users / D0 cohort</td></tr>
+          <tr><td><strong>Daily Check-in Rate</strong></td><td>&gt;60% of active users check in daily</td><td>&lt;40% → habit isn't forming</td><td>Daily active check-ins / DAU</td></tr>
+          <tr><td><strong>Organic Invites</strong></td><td>&gt;0.5 invites/user in first week</td><td>&lt;0.2 → not shareable enough</td><td>Invite links clicked / users</td></tr>
+          <tr><td><strong>Day 14 Retention</strong></td><td>&gt;25%</td><td>&lt;15% → retention cliff hit</td><td>Retained users / D0 cohort</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- 08 MOSCOW PRIORITIZATION -->
+<div class="s" id="moscow">
+  <div class="c">
+    <div class="sh"><div class="sn">Section 08</div><div class="st">MoSCoW Prioritization</div><div class="sd">Ruthless prioritization. If it's not a "Must Have," it doesn't go in the MVP.</div></div>
+
+    <div class="mos mos-must">
+      <h4 style="color:var(--green)">🟢 Must Have — Ship Breaks Without These</h4>
+      <ul>
+        <li>User signup (email/Google OAuth)</li>
+        <li>Create pod + invite link (WhatsApp shareable)</li>
+        <li>Morning 3-task commitment input</li>
+        <li>Evening task check-off</li>
+        <li>Pod feed (see everyone's tasks + completion status)</li>
+        <li>Basic Grind Score calculation</li>
+        <li>Pod leaderboard (rank within pod)</li>
+        <li>Morning check-in notification</li>
+        <li>Streak counter (individual + pod)</li>
+      </ul>
+    </div>
+    <div class="mos mos-should">
+      <h4 style="color:var(--blue2)">🔵 Should Have — Strong Value-Add, Week 2 of Build</h4>
+      <ul>
+        <li>Shareable Grind Score image card</li>
+        <li>Mid-day competitive nudge notification</li>
+        <li>Evening close-out reminder</li>
+        <li>1 daily success story (hardcoded)</li>
+        <li>Pod chat (simple messaging)</li>
+        <li>Streak-at-risk alert notification</li>
+        <li>Basic user profile page</li>
+      </ul>
+    </div>
+    <div class="mos mos-could">
+      <h4 style="color:var(--amber)">🟡 Could Have — Nice Extras, V1.1</h4>
+      <ul>
+        <li>College leaderboard</li>
+        <li>Detailed Grind Score analytics (weekly breakdown)</li>
+        <li>Multiple pods per user</li>
+        <li>Custom notification schedules</li>
+        <li>Comeback nudge after missed days</li>
+        <li>Auto-match for solo users (public pods)</li>
+      </ul>
+    </div>
+    <div class="mos mos-wont">
+      <h4 style="color:var(--red2)">🔴 Won't Have — Explicitly Out of Scope</h4>
+      <ul>
+        <li>Activity tracking / screen monitoring</li>
+        <li>AI-generated roast notifications</li>
+        <li>AI career coaching</li>
+        <li>Payment processing / premium tier</li>
+        <li>National leaderboard</li>
+        <li>Parent dashboard</li>
+        <li>iOS app</li>
+        <li>Hindi / regional language support</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- 09 PRICING HYPOTHESIS -->
+<div class="s" id="pricing">
+  <div class="c">
+    <div class="sh"><div class="sn">Section 09</div><div class="st">Pricing Hypothesis</div><div class="sd">Don't charge until D7 retention exceeds 40%. Then test these tiers.</div></div>
+
+    <div class="g g3" style="margin-bottom:24px">
+      <div class="card" style="border-top:2px solid var(--text3)">
+        <h3 style="text-align:center">Free</h3>
+        <div style="text-align:center;font-family:'Space Grotesk',sans-serif;font-size:36px;font-weight:700;color:var(--text3);margin:12px 0">₹0</div>
+        <div style="text-align:center;font-size:12px;color:var(--text3);margin-bottom:16px">Forever free</div>
+        <ul>
+          <li>1 pod (max 6 members)</li>
+          <li>3 tasks/day</li>
+          <li>Basic Grind Score</li>
+          <li>Pod leaderboard</li>
+          <li>3 notifications/day</li>
+          <li>1 success story/day</li>
+          <li>Shareable card (with watermark)</li>
+        </ul>
+      </div>
+      <div class="card" style="border-top:2px solid var(--orange)">
+        <h3 style="text-align:center;color:var(--orange)">Pro</h3>
+        <div style="text-align:center;font-family:'Space Grotesk',sans-serif;font-size:36px;font-weight:700;color:var(--orange);margin:12px 0">₹99<span style="font-size:14px;color:var(--text3)">/mo</span></div>
+        <div style="text-align:center;font-size:12px;color:var(--text3);margin-bottom:16px">or ₹799/year (save 33%)</div>
+        <ul>
+          <li>Unlimited pods</li>
+          <li>Unlimited tasks</li>
+          <li>Detailed Grind Score analytics</li>
+          <li>College + National leaderboards</li>
+          <li>Custom notification schedules</li>
+          <li>All success stories</li>
+          <li>Shareable card (no watermark)</li>
+          <li>Weekly progress email report</li>
+        </ul>
+      </div>
+      <div class="card" style="border-top:2px solid var(--purple)">
+        <h3 style="text-align:center;color:var(--purple2)">College Plan</h3>
+        <div style="text-align:center;font-family:'Space Grotesk',sans-serif;font-size:36px;font-weight:700;color:var(--purple2);margin:12px 0">₹299<span style="font-size:14px;color:var(--text3)">/student/yr</span></div>
+        <div style="text-align:center;font-size:12px;color:var(--text3);margin-bottom:16px">B2B · 100+ student minimum</div>
+        <ul>
+          <li>All Pro features</li>
+          <li>Admin dashboard for HODs</li>
+          <li>Department-level analytics</li>
+          <li>Bulk student onboarding</li>
+          <li>College branding on leaderboard</li>
+          <li>Placement readiness scores</li>
+          <li>Custom success stories</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="ins ins-a">
+      <div class="ins-i">⚠️</div>
+      <div><strong>Pricing Rule:</strong> Do NOT implement payment in the MVP. First prove D7 retention >40%. Then run a price sensitivity survey (test ₹49 / ₹99 / ₹149 / ₹199). Only AFTER 200+ active users should you add a payment wall. Premature monetization kills retention.</div>
+    </div>
+  </div>
+</div>
+
+<!-- 10 TOP 5 RISKS -->
+<div class="s" id="risks">
+  <div class="c">
+    <div class="sh"><div class="sn">Section 10</div><div class="st">Top 5 Risks</div><div class="sd">The highest-probability, highest-impact risks — with specific mitigation actions.</div></div>
+
+    <div class="card" style="overflow-x:auto;margin-bottom:20px">
+      <table class="tbl">
+        <thead><tr><th>#</th><th>Risk</th><th>Probability</th><th>Impact</th><th>Severity</th><th>Mitigation</th></tr></thead>
+        <tbody>
+          <tr><td>1</td><td><strong>Students don't form pods</strong> — Without pods, the entire product collapses.</td><td><span class="chip c-a">Medium</span></td><td><span class="chip c-r">Critical</span></td><td style="color:var(--red);font-weight:700">🔴 9/10</td><td>One-tap WhatsApp invite. Pod creation = step 1 of onboarding. Auto-match for solo users.</td></tr>
+          <tr><td>2</td><td><strong>D7 retention below 25%</strong> — The core loop isn't sticky enough.</td><td><span class="chip c-o">High</span></td><td><span class="chip c-r">Critical</span></td><td style="color:var(--red);font-weight:700">🔴 9/10</td><td>Pod streak mechanic creates daily social cost. A/B test onboarding. Measure D1/D3/D7 weekly.</td></tr>
+          <tr><td>3</td><td><strong>Student won't pay ₹99/month</strong> — Willingness-to-pay is unvalidated.</td><td><span class="chip c-o">High</span></td><td><span class="chip c-a">Medium</span></td><td style="color:var(--amber);font-weight:700">🟡 7/10</td><td>Strong free tier. Annual plan ₹799/year. Target parents as co-payers. College B2B as backup revenue.</td></tr>
+          <tr><td>4</td><td><strong>Solo founder burnout</strong> — Building, marketing, and iterating alone is exhausting.</td><td><span class="chip c-a">Medium</span></td><td><span class="chip c-a">Medium</span></td><td style="color:var(--amber);font-weight:700">🟡 6/10</td><td>Find a non-tech co-founder for GTM within 60 days. Use no-code for non-core. Build in public.</td></tr>
+          <tr><td>5</td><td><strong>Competition fatigue</strong> — Leaderboards become demotivating for low-ranked students.</td><td><span class="chip c-b">Medium</span></td><td><span class="chip c-b">Medium</span></td><td style="color:var(--blue2);font-weight:700">🔵 5/10</td><td>Pod size (5–6) keeps it intimate. Score soft-resets available. Celebrate improvement, not just rank.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="g g2">
+      <div class="card">
+        <h3>Risk Severity Radar</h3>
+        <div class="chrt" style="height:260px"><canvas id="riskChart"></canvas></div>
+      </div>
+      <div class="card">
+        <h3>Risk Mitigation Priority</h3>
+        <div class="chrt" style="height:260px"><canvas id="mitigationChart"></canvas></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 11 30-DAY MVP PLAN -->
+<div class="s" id="plan">
+  <div class="c">
+    <div class="sh"><div class="sn">Section 11</div><div class="st">30-Day MVP Plan</div><div class="sd">From today to a working MVP with 10 beta users — day by day.</div></div>
+
+    <div style="margin-bottom:32px">
+      <div style="display:flex;align-items:center;gap:14px;margin-bottom:16px;padding-bottom:12px;border-bottom:1px solid var(--border)">
+        <div style="font-family:'Space Grotesk',sans-serif;font-size:26px;font-weight:700;color:var(--purple)">W1</div>
+        <div><h3 style="margin-bottom:1px">Customer Validation (Days 1–7)</h3><div style="font-size:11px;color:var(--text3)">Talk to humans before writing code</div></div>
+      </div>
+      <div class="tk"><div class="tk-n">D1</div><div class="tk-b"><strong>Run a manual WhatsApp pod for 14 days</strong> — 6 friends, morning tasks, evening check-offs. YOU are the product. Observe what works.</div></div>
+      <div class="tk"><div class="tk-n">D2–3</div><div class="tk-b"><strong>Conduct 15 user interviews</strong> — "Tell me about a day you wasted." "What would make you actually follow through?" Record patterns.</div></div>
+      <div class="tk"><div class="tk-n">D4</div><div class="tk-b"><strong>Synthesize interview findings</strong> — affinity map. Which pain hurts most? Do students actually want pod accountability?</div></div>
+      <div class="tk"><div class="tk-n">D5–6</div><div class="tk-b"><strong>Build landing page</strong> (Framer/Carrd) — "5 friends. 3 tasks. 1 Grind Score." Waitlist email signup. Launch on LinkedIn + campus groups.</div></div>
+      <div class="tk"><div class="tk-n">D7</div><div class="tk-b"><strong>Post interview insights on LinkedIn</strong> — build audience. Share learnings. Target: 50 waitlist signups by Day 7.</div></div>
+    </div>
+
+    <div style="margin-bottom:32px">
+      <div style="display:flex;align-items:center;gap:14px;margin-bottom:16px;padding-bottom:12px;border-bottom:1px solid var(--border)">
+        <div style="font-family:'Space Grotesk',sans-serif;font-size:26px;font-weight:700;color:var(--purple)">W2</div>
+        <div><h3 style="margin-bottom:1px">MVP Build Sprint (Days 8–14)</h3><div style="font-size:11px;color:var(--text3)">Build only Must-Haves from MoSCoW</div></div>
+      </div>
+      <div class="tk"><div class="tk-n">D8</div><div class="tk-b"><strong>Setup project</strong> — React + Node/Express + MongoDB. Auth (Google OAuth). Basic CI/CD.</div></div>
+      <div class="tk"><div class="tk-n">D9–10</div><div class="tk-b"><strong>Build core loop</strong> — Pod creation, invite link, morning task input, evening check-off, pod feed showing all members' tasks.</div></div>
+      <div class="tk"><div class="tk-n">D11–12</div><div class="tk-b"><strong>Build Grind Score + pod leaderboard</strong> — Simple calculation. Real-time ranking. Streak counter for individual + pod.</div></div>
+      <div class="tk"><div class="tk-n">D13</div><div class="tk-b"><strong>Add notifications</strong> — Morning check-in reminder, evening close-out. Use email (Resend) or push (OneSignal free tier).</div></div>
+      <div class="tk"><div class="tk-n">D14</div><div class="tk-b"><strong>Deploy MVP</strong> — Vercel (frontend) + Railway/Render (backend). Test end-to-end. Invite 2 friends to verify pod flow works.</div></div>
+    </div>
+
+    <div style="margin-bottom:32px">
+      <div style="display:flex;align-items:center;gap:14px;margin-bottom:16px;padding-bottom:12px;border-bottom:1px solid var(--border)">
+        <div style="font-family:'Space Grotesk',sans-serif;font-size:26px;font-weight:700;color:var(--purple)">W3</div>
+        <div><h3 style="margin-bottom:1px">Beta Launch (Days 15–21)</h3><div style="font-size:11px;color:var(--text3)">10 real users, 2 pods, daily observation</div></div>
+      </div>
+      <div class="tk"><div class="tk-n">D15</div><div class="tk-b"><strong>Onboard 10 beta users</strong> from waitlist. Form 2 pods. Full access. Daily feedback channel (WhatsApp group).</div></div>
+      <div class="tk"><div class="tk-n">D16–19</div><div class="tk-b"><strong>Observe daily</strong> — Who checks in? Who skips? What do they say in pod chat? Where do they get stuck? Log everything.</div></div>
+      <div class="tk"><div class="tk-n">D20</div><div class="tk-b"><strong>Add Should-Haves</strong> — Shareable Grind Score card, mid-day nudge, 1 daily success story (hardcoded).</div></div>
+      <div class="tk"><div class="tk-n">D21</div><div class="tk-b"><strong>Measure D7 retention</strong> — of 10 beta users, how many are still checking in daily? Target: 4+ users = >40%.</div></div>
+    </div>
+
+    <div>
+      <div style="display:flex;align-items:center;gap:14px;margin-bottom:16px;padding-bottom:12px;border-bottom:1px solid var(--border)">
+        <div style="font-family:'Space Grotesk',sans-serif;font-size:26px;font-weight:700;color:var(--purple)">W4</div>
+        <div><h3 style="margin-bottom:1px">Iterate & Scale Prep (Days 22–30)</h3><div style="font-size:11px;color:var(--text3)">Fix, learn, decide</div></div>
+      </div>
+      <div class="tk"><div class="tk-n">D22–24</div><div class="tk-b"><strong>Fix top 3 issues</strong> from beta feedback. Only 3. No feature creep. Ship within 48 hours.</div></div>
+      <div class="tk"><div class="tk-n">D25</div><div class="tk-b"><strong>Run price sensitivity survey</strong> — 100+ responses. Test ₹49 / ₹99 / ₹149 / ₹199. Find the cliff.</div></div>
+      <div class="tk"><div class="tk-n">D26–28</div><div class="tk-b"><strong>Expand to 50 users</strong> — from waitlist + campus outreach. Form 8–10 pods. Measure D7 retention at scale.</div></div>
+      <div class="tk"><div class="tk-n">D29</div><div class="tk-b"><strong>Write "30-Day Learnings" LinkedIn post</strong> — interview insights, beta data, what worked, what didn't.</div></div>
+      <div class="tk"><div class="tk-n">D30</div><div class="tk-b"><strong>GO / NO-GO decision</strong> — D7 retention >40% AND waitlist >200? → GO. If not → pivot one element, run another 30-day cycle.</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- 12 FOUNDER ACTION SHEET -->
+<div class="s" id="actions">
+  <div class="c">
+    <div class="sh"><div class="sn">Section 12</div><div class="st">Founder Action Sheet</div><div class="sd">Top 10 next actions — in priority order. Do #1 before #2. No skipping.</div></div>
+
+    <div class="card" style="overflow-x:auto">
+      <table class="tbl">
+        <thead><tr><th>#</th><th>Action</th><th>Deadline</th><th>Success Criteria</th><th>Priority</th></tr></thead>
+        <tbody>
+          <tr><td style="font-family:'JetBrains Mono',monospace;font-weight:700;color:var(--purple)">1</td><td><strong>Start a manual WhatsApp pod with 6 friends TODAY</strong></td><td>Today</td><td>Pod active for 14 consecutive days</td><td><span class="chip c-r">P0</span></td></tr>
+          <tr><td style="font-family:'JetBrains Mono',monospace;font-weight:700;color:var(--purple)">2</td><td><strong>Conduct 15 user interviews</strong> — behavior-focused, not opinion</td><td>Day 3</td><td>Patterns identified; affinity map created</td><td><span class="chip c-r">P0</span></td></tr>
+          <tr><td style="font-family:'JetBrains Mono',monospace;font-weight:700;color:var(--purple)">3</td><td><strong>Build and launch a waitlist landing page</strong></td><td>Day 6</td><td>200 email signups within 14 days</td><td><span class="chip c-r">P0</span></td></tr>
+          <tr><td style="font-family:'JetBrains Mono',monospace;font-weight:700;color:var(--purple)">4</td><td><strong>Build MVP (Must-Haves only)</strong> — MERN stack, 7 days max</td><td>Day 14</td><td>Working pod + check-in + score + leaderboard</td><td><span class="chip c-o">P1</span></td></tr>
+          <tr><td style="font-family:'JetBrains Mono',monospace;font-weight:700;color:var(--purple)">5</td><td><strong>Deploy to 10 beta users in 2 pods</strong></td><td>Day 15</td><td>All 10 complete first check-in within 24 hrs</td><td><span class="chip c-o">P1</span></td></tr>
+          <tr><td style="font-family:'JetBrains Mono',monospace;font-weight:700;color:var(--purple)">6</td><td><strong>Measure D7 retention of beta cohort</strong></td><td>Day 22</td><td>Target: >40% (4+ of 10 users still active)</td><td><span class="chip c-o">P1</span></td></tr>
+          <tr><td style="font-family:'JetBrains Mono',monospace;font-weight:700;color:var(--purple)">7</td><td><strong>Run price sensitivity survey</strong> — 100+ responses</td><td>Day 25</td><td>Find optimal price point and conversion cliff</td><td><span class="chip c-a">P2</span></td></tr>
+          <tr><td style="font-family:'JetBrains Mono',monospace;font-weight:700;color:var(--purple)">8</td><td><strong>Find a non-technical co-founder</strong> for campus outreach + GTM</td><td>Day 30</td><td>Someone committed to 10 hrs/week minimum</td><td><span class="chip c-a">P2</span></td></tr>
+          <tr><td style="font-family:'JetBrains Mono',monospace;font-weight:700;color:var(--purple)">9</td><td><strong>Post "30-Day Learnings" on LinkedIn</strong></td><td>Day 30</td><td>100+ reactions, 5+ inbound queries</td><td><span class="chip c-a">P2</span></td></tr>
+          <tr><td style="font-family:'JetBrains Mono',monospace;font-weight:700;color:var(--purple)">10</td><td><strong>Apply to 2 Indian incubator programs</strong></td><td>Day 35</td><td>Submissions sent to NASSCOM / T-Hub / IIT incubator</td><td><span class="chip c-b">P3</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- 13 SCORES & VERDICT -->
+<div class="s" id="verdict">
+  <div class="c">
+    <div class="sh"><div class="sn">Section 13</div><div class="st">Scores & Final Verdict</div><div class="sd">Quantified assessment across four dimensions — with the final signal classification.</div></div>
+
+    <div class="g g4" style="margin-bottom:32px">
+      <div class="m mp"><div class="ml">Customer Clarity</div><div class="mv">82</div><div class="ms">ICP is well-defined & specific</div></div>
+      <div class="m mo"><div class="ml">Problem Severity</div><div class="mv">85</div><div class="ms">Daily pain, high awareness</div></div>
+      <div class="m mg"><div class="ml">PMF Potential</div><div class="mv">72</div><div class="ms">Strong signal, needs D7 validation</div></div>
+      <div class="m mb"><div class="ml">MVP Readiness</div><div class="mv">78</div><div class="ms">Scope clear, buildable in 14 days</div></div>
+    </div>
+
+    <div class="card" style="margin-bottom:28px">
+      <h3>Score Breakdown</h3>
+      <div style="margin-top:14px">
+        <div class="sb"><div class="sb-t"><span class="sb-n">Customer Clarity — ICP, personas, pain points defined</span><span class="sb-v" style="color:var(--purple2)">82</span></div><div class="sb-tr"><div class="sb-f fp" style="width:82%"></div></div></div>
+        <div class="sb"><div class="sb-t"><span class="sb-n">Problem Severity — Pain is daily, intense, unresolved</span><span class="sb-v" style="color:var(--orange)">85</span></div><div class="sb-tr"><div class="sb-f fo" style="width:85%"></div></div></div>
+        <div class="sb"><div class="sb-t"><span class="sb-n">PMF Potential — Solution-problem fit, differentiation</span><span class="sb-v" style="color:var(--green)">72</span></div><div class="sb-tr"><div class="sb-f fg" style="width:72%"></div></div></div>
+        <div class="sb"><div class="sb-t"><span class="sb-n">MVP Readiness — Scope, tech feasibility, timeline</span><span class="sb-v" style="color:var(--blue2)">78</span></div><div class="sb-tr"><div class="sb-f fb" style="width:78%"></div></div></div>
+      </div>
+    </div>
+
+    <div class="vrd vrd-go" style="margin-bottom:28px">
+      <div class="vrd-l">Final Verdict</div>
+      <div class="vrd-s" style="color:var(--green)">79</div>
+      <div class="vrd-u">WEIGHTED AVERAGE · OUT OF 100</div>
+      <div class="vrd-t" style="color:var(--green)">🟢 Strong Demand Signal</div>
+      <div class="vrd-d">The customer is clearly defined. The problem is daily and painful. The solution (pod accountability + Grind Score) is differentiated and behaviorally sound. The MVP scope is tight and buildable in 14 days with MERN. <strong>Proceed to build after completing the WhatsApp pod experiment and 15 user interviews.</strong></div>
+    </div>
+
+    <div class="g g2">
+      <div class="card">
+        <h3>Why 🟢 Strong (Not 🟡 Promising)</h3>
+        <ul>
+          <li>Problem frequency: <strong>daily</strong> (not weekly/monthly)</li>
+          <li>Pain intensity: <strong>9/10</strong> — students actively know they're wasting time</li>
+          <li>Cultural fit: <strong>India's competitive student culture</strong> is native to the pod + leaderboard model</li>
+          <li>Founder IS the ICP — rare authenticity advantage</li>
+          <li>No direct competitor in India-first social accountability</li>
+          <li>Multiple revenue paths (B2C + B2B) reduce binary risk</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3>What Could Downgrade to 🟡</h3>
+        <ul>
+          <li>If <strong>D7 retention &lt;25%</strong> — core loop isn't compelling</li>
+          <li>If <strong>&lt;40% of signups form pods</strong> — pod model is friction-heavy</li>
+          <li>If <strong>waitlist &lt;100 in 14 days</strong> — demand signal is weak</li>
+          <li>If <strong>interviews reveal</strong> students don't actually want peer visibility</li>
+          <li>If <strong>WhatsApp pod experiment</strong> dies within 5 days</li>
+          <li>If <strong>pricing survey</strong> shows cliff below ₹49/month</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<div class="foot">
+  <div class="c">
+    <p>GrindOS Customer & MVP Blueprint <span class="dv">|</span> Prepared in Product Manager Mode</p>
+    <p>For <a href="#">Tarunj Gupta</a> <span class="dv">|</span> ABES Engineering College, Ghaziabad</p>
+    <p><a href="#">#60DayClaudeChallenge</a> <span class="dv">|</span> Day 23 (Continuation of Day 22) <span class="dv">|</span> June 2026</p>
+    <p style="margin-top:10px;color:var(--text4);font-size:10px">Based on Day 22 Startup Validation Report (76/100 Conditional GO). This blueprint is for internal strategy use only.</p>
+  </div>
+</div>
+
+<!-- CHARTS -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<script>
+Chart.defaults.color='#5A6B86';Chart.defaults.borderColor='#1B2840';Chart.defaults.font.family="'JetBrains Mono',monospace";Chart.defaults.font.size=10;
+
+new Chart(document.getElementById('riskChart'),{
+  type:'radar',
+  data:{
+    labels:['Pod Adoption','D7 Retention','Price Sensitivity','Founder Burnout','Competition Fatigue'],
+    datasets:[{label:'Risk Severity',data:[8,9,7,6,5],backgroundColor:'rgba(139,92,246,0.1)',borderColor:'#8B5CF6',borderWidth:2,pointBackgroundColor:'#8B5CF6',pointRadius:4}]
+  },
+  options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{r:{beginAtZero:true,max:10,grid:{color:'rgba(27,40,64,0.5)'},angleLines:{color:'rgba(27,40,64,0.3)'},pointLabels:{font:{size:9}},ticks:{display:false}}}}
+});
+
+new Chart(document.getElementById('mitigationChart'),{
+  type:'bar',
+  data:{
+    labels:['Pod Adoption','D7 Retention','Price\nSensitivity','Solo Founder','Competition\nFatigue'],
+    datasets:[{label:'Risk (Before)',data:[8,9,7,6,5],backgroundColor:'rgba(239,68,68,0.2)',borderColor:'#EF4444',borderWidth:1.5,borderRadius:6,borderSkipped:false},{label:'Risk (After Mitigation)',data:[4,5,4,4,3],backgroundColor:'rgba(16,185,129,0.2)',borderColor:'#10B981',borderWidth:1.5,borderRadius:6,borderSkipped:false}]
+  },
+  options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{font:{size:10},boxWidth:12}}},scales:{y:{beginAtZero:true,max:10,grid:{color:'rgba(27,40,64,0.4)'}},x:{grid:{display:false}}}}
+});
+
+// Smooth scroll
+document.querySelectorAll('a[href^="#"]').forEach(a=>{a.addEventListener('click',e=>{e.preventDefault();const el=document.querySelector(a.getAttribute('href'));if(el)el.scrollIntoView({behavior:'smooth',block:'start'})})});
+
+// Scroll animations
+const obs=new IntersectionObserver(entries=>{entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('anim');obs.unobserve(e.target)}})},{threshold:0.1});
+document.querySelectorAll('.sh,.card,.m,.vrd,.per,.pain,.tk,.mos').forEach(el=>obs.observe(el));
+</script>
+</body>
+</html>
